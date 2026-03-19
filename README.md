@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# XORing — Landing Page
+
+World's first social smart ring. Product landing page built with Next.js + Tailwind CSS.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Static Export)
+- **UI**: React 19 + Tailwind CSS v4
+- **Animation**: GSAP 3 + ScrollTrigger
+- **Carousel**: Swiper 12
+- **Styling**: Tailwind utilities (반응형) + SCSS (커스텀)
+- **Font**: Pretendard
+- **Deploy**: 정적 호스팅 (`out/`) / 테스트 Vercel
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build & Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build     # Generates out/ for static hosting
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`out/` 디렉토리를 웹 호스팅 서버에 업로드하거나 Vercel로 배포.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/
+├── app/
+│   ├── page.tsx          # Section assembly
+│   ├── layout.tsx        # Root layout + font
+│   └── globals.scss      # Tailwind import + global styles
+├── components/           # One file per section
+├── styles/
+│   ├── _variables.scss   # CSS/SCSS variables
+│   └── components/       # Component-specific SCSS
+└── lib/
+    └── utils.ts          # cn() utility
+design/                   # Design reference images (not deployed)
+public/
+└── images/               # Section assets
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design Reference
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+디자인 스틸 컷은 `design/` 폴더 참고.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `section - hero 1.jpg` / `section - hero 2.jpg` — Hero
+- `section - 01.jpg` ~ `section - 09.jpg` — Body sections
+- `footer.jpg` — Footer
+- `XORING_full.jpg` — Full page overview
