@@ -96,25 +96,25 @@ export default function HeroSection() {
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
 				<div className="absolute inset-0 bg-[#f5f5f7]">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">
-						<div className="flex w-full items-center gap-14 justify-between lg:gap-6">
-							<div ref={introLeftRef} className="flex flex-col items-start justify-center gap-8 lg:gap-10">
+						<div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:gap-12 lg:flex-row lg:justify-between lg:gap-6">
+							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10">
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="h-auto w-[min(68vw,427px)]" />
+									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="h-auto w-[min(56vw,280px)] md:w-[min(48vw,340px)] lg:w-[min(68vw,427px)]" />
 								</div>
-								<div className="flex items-center justify-center w-full">
+								<div className="flex w-full items-center justify-center lg:justify-start">
 									<StoreButtons
 										variant="light"
 										googleFirst
-										className="gap-4"
+										className="gap-4 flex-col sm:flex-row"
 										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
 									/>
 								</div>
 							</div>
 
-							<div ref={introRingRef} className="relative flex w-full max-w-[760px] items-center justify-center lg:justify-end">
-								<RingArtwork className="w-[78vw] max-w-[760px] lg:w-full" />
+							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0">
+								<RingArtwork className="w-[72vw] max-w-[400px] md:w-[56vw] md:max-w-[480px] lg:w-[45vw] lg:max-w-[760px]" />
 							</div>
 						</div>
 					</SectionContainer>
