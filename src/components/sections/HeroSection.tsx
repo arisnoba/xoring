@@ -101,7 +101,7 @@ export default function HeroSection() {
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="h-auto w-[min(56vw,280px)] md:w-[min(48vw,300px)] lg:w-[min(68vw,427px)]" />
+									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="hero-section__logo h-auto" />
 								</div>
 								<div className="flex w-full items-center justify-center">
 									<StoreButtons
@@ -113,8 +113,8 @@ export default function HeroSection() {
 								</div>
 							</div>
 
-							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0">
-								<RingArtwork className="w-[72vw] max-w-[400px] md:w-[50vw] md:max-w-[480px] lg:w-[45vw] lg:max-w-[760px]" />
+							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end ">
+								<RingArtwork className="hero-section__artwork" />
 							</div>
 						</div>
 					</SectionContainer>

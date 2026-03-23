@@ -14,6 +14,15 @@
 	@include fluid.fluid-type($type-section-copy-min, $type-section-copy-wide-max, $fluid-viewport-min, $fluid-viewport-max);
 }
 
+.hero-section__logo {
+	@include fluid.fluid-space(width, 210, 427, $fluid-viewport-min, 1280);
+}
+
+.hero-section__artwork {
+	max-width: 100%;
+	@include fluid.fluid-space(width, 270, 660, $fluid-viewport-min, 1920);
+}
+
 .poc-section__title {
 	@include fluid.fluid-type(53, 98, $fluid-viewport-min, $fluid-viewport-max);
 }
