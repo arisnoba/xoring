@@ -97,13 +97,13 @@ export default function HeroSection() {
 				<div className="absolute inset-0 bg-[#f5f5f7]">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">
 						<div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:gap-12 lg:flex-row lg:justify-between lg:gap-6">
-							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10">
+							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10 xl:min-w-[424px]">
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="h-auto w-[min(56vw,280px)] md:w-[min(48vw,300px)] lg:w-[min(68vw,427px)]" />
 								</div>
-								<div className="flex w-full items-center justify-center lg:justify-start">
+								<div className="flex w-full items-center justify-center">
 									<StoreButtons
 										variant="light"
 										googleFirst

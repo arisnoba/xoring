@@ -45,14 +45,14 @@ export default function AIAgentSection() {
 					<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance text-[#2d2d31]">{AI_AGENT.subtext}</p>
 				</div>
 
-				<div className="mt-16 flex flex-col md:flex-row justify-center gap-10">
+				<div className="mt-16 grid grid-cols-2 justify-center gap-x-8 gap-y-16 min-[769px]:flex min-[769px]:grid-cols-none min-[769px]:flex-row min-[769px]:gap-10">
 					{agents.map(agent => (
-						<div key={agent.title} className="flex flex-col items-center gap-7">
-							<h3 className="text-center text-[1.05rem] font-semibold tracking-tight text-[#1e1e1f]">{agent.title}</h3>
+						<div key={agent.title} className="flex flex-col items-center gap-6">
+							<h3 className="text-center section-copy font-semibold tracking-tight text-[#1e1e1f]">{agent.title}</h3>
 							<div className="relative w-full max-w-[220px]">
 								<Image src={agent.image} alt={agent.title} width={440} height={880} className="h-auto w-full object-contain" />
 							</div>
-							<div className="max-w-[250px] rounded-[24px] bg-white/86 px-5 py-5 text-center shadow-[0_18px_40px_rgba(17,24,39,0.08)]">
+							<div className="max-w-[250px] rounded-[10px] md:rounded-[20px] bg-white/86 px-5 py-5 text-center shadow-[0_18px_40px_rgba(17,24,39,0.08)]">
 								<p className="text-[0.98rem] font-medium leading-[1.55] text-[#44454a]">{agent.description}</p>
 							</div>
 						</div>
