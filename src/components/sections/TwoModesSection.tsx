@@ -5,7 +5,7 @@ import Image from 'next/image';
 import SectionContainer from '@/components/shared/SectionContainer';
 
 export default function TwoModesSection() {
-	const [mode, setMode] = useState<'O' | 'X'>('X');
+	const [mode, setMode] = useState<'O' | 'X'>('O');
 
 	return (
 		<section id="modes" data-header-theme="dark" className="relative overflow-hidden bg-[#171717] text-white">
@@ -17,22 +17,25 @@ export default function TwoModesSection() {
 					</p>
 				</div>
 
-				<div className="relative mt-14 flex w-full max-w-[760px] items-center justify-center md:mt-16">
-					<div className="absolute h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] rounded-full transition-colors duration-500" style={{ backgroundColor: mode === 'O' ? '#5BCD5B' : '#2F43C8' }} />
-					<div className="relative z-10 w-[72vw] max-w-[460px]">
+				<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
+					<div
+						className="absolute h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] top-[21px] rounded-full transition-colors duration-500"
+						style={{ backgroundColor: mode === 'O' ? '#5BCD5B' : '#2F43C8' }}
+					/>
+					<div className="relative z-10 w-[72vw] max-w-[310px]">
 						<Image
 							src="/assets/images/ring-0.png"
 							alt="O Mode Ring"
 							width={460}
 							height={460}
-							className={`absolute left-0 top-0 h-auto w-full transition-opacity duration-500 ${mode === 'O' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+							className={`absolute left-0 top-0 h-auto w-full transition-all duration-500 ease-in-out ${mode === 'O' ? 'translate-x-0 opacity-100 pointer-events-auto' : '-translate-x-full opacity-0 pointer-events-none'}`}
 						/>
 						<Image
 							src="/assets/images/ring-x.png"
 							alt="X Mode Ring"
 							width={460}
 							height={460}
-							className={`h-auto w-full transition-opacity duration-500 ${mode === 'X' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+							className={`h-auto w-full transition-all duration-500 ease-in-out ${mode === 'X' ? 'translate-x-0 opacity-100 pointer-events-auto' : 'translate-x-full opacity-0 pointer-events-none'}`}
 						/>
 					</div>
 				</div>
