@@ -1,6 +1,7 @@
+import React from 'react';
 import Image from 'next/image';
-import { ArrowDown, ArrowRight, Coins, Dumbbell, FileText, Smartphone } from 'lucide-react';
-import PhoneMockup from '@/components/shared/PhoneMockup';
+import { ChevronRight } from 'lucide-react';
+import SectionBackground from '@/components/shared/SectionBackground';
 import SectionContainer from '@/components/shared/SectionContainer';
 
 const topCards = [
@@ -34,16 +35,16 @@ const bottomCards = [
 ];
 
 const steps = [
-	{ icon: Dumbbell, label: 'Wear XORing' },
-	{ icon: Smartphone, label: 'Collect Activity Data' },
-	{ icon: FileText, label: 'Proof of Contribution' },
-	{ icon: Coins, label: 'Mine AIOS' },
+	{ label: 'Wear XORing', icon: '/assets/images/poc/icon-01.svg' },
+	{ label: 'Collect Activity Data', icon: '/assets/images/poc/icon-02.svg' },
+	{ label: 'Proof of Contribution', icon: '/assets/images/poc/icon-03.svg' },
+	{ label: 'Mine AIOS', icon: '/assets/images/poc/icon-04.svg' },
 ];
 
 export default function PocSection() {
 	return (
 		<section className="relative isolate overflow-hidden bg-[#070707] text-white">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-05.jpg')] bg-cover bg-center bg-no-repeat opacity-15 section-bg"></div>
+			<SectionBackground desktopSrc="/assets/images/poc/bg-desk.jpg" mobileSrc="/assets/images/poc/bg-mo.jpg" />
 			<SectionContainer className="relative max-w-[1280px]!">
 				<div className="mx-auto max-w-[940px] text-center">
 					<p className="text-[1rem] font-bold tracking-[0.08em] text-white/55">AIOS · PoC</p>
@@ -53,7 +54,7 @@ export default function PocSection() {
 					</p>
 				</div>
 
-				<div className="mt-14 flex items-center gap-6 justify-center">
+				<div className="mt-14 flex flex-col md:flex-row items-center gap-11 justify-center">
 					{/* Card 1: XORing */}
 					<div className="relative rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
 						<div className="aspect-[1.37] overflow-hidden rounded-[12px]">
@@ -87,26 +88,24 @@ export default function PocSection() {
 					If a computer can prove its value by solving complex puzzles, human movement can prove its value, too.
 				</p>
 
-				<div className="mt-14 grid gap-6 md:grid-cols-4">
-					{steps.map((step, index) => {
-						const Icon = step.icon;
-						return (
-							<div key={step.label} className="flex flex-col items-center gap-5 text-center">
-								<div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/8 text-white/92">
-									<Icon size={34} strokeWidth={1.8} />
-								</div>
-								<div className="space-y-1">
-									<p className="text-sm font-medium text-white/78">{step.label}</p>
-								</div>
+				<div className="mt-14 flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-[24px]">
+					{steps.map((step, index) => (
+						<React.Fragment key={step.label}>
+							<div className="flex w-[155px] shrink-0 flex-col items-center gap-[20px] text-center">
+								<Image src={step.icon} alt={step.label} width={100} height={100} className="h-[100px] w-[100px] object-contain" />
+								<p className="text-[14px] leading-normal text-white">{step.label}</p>
 							</div>
-						);
-					})}
+							{index < steps.length - 1 && (
+								<ChevronRight className="hidden md:block h-[32px] w-[32px] text-white shrink-0" strokeWidth={2} />
+							)}
+						</React.Fragment>
+					))}
 				</div>
 
-				<div className="mt-16 grid gap-5 lg:grid-cols-3">
+				<div className="mt-16 flex flex-col md:flex-row gap-3 md:gap-6 justify-center">
 					{bottomCards.map(card => (
-						<article key={card.title} className="rounded-[24px] border border-white/10 bg-white/7 px-6 py-7">
-							<h3 className="text-[24px] font-bold tracking-tight">{card.title}</h3>
+						<article key={card.title} className="rounded-[24px] bg-[#333]/50 px-6 py-7 max-w-[310px]">
+							<h3 className="section-copy font-bold tracking-tight">{card.title}</h3>
 							<p className="mt-4 text-[14px] font-medium leading-[1.7] text-white/72">{card.body}</p>
 						</article>
 					))}

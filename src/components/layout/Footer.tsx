@@ -23,7 +23,7 @@ export default function Footer() {
 				</div>
 
 				<div className="flex min-w-[260px] flex-col items-start gap-6 lg:items-end">
-					<Image src="/assets/images/logo.svg" alt="XO RING" width={236} height={64} className="h-auto w-[180px] opacity-20" unoptimized />
+					<Image src="/assets/images/logo.svg" alt="XO RING" width={236} height={64} className="h-auto w-[180px] opacity-20 invert" unoptimized />
 				</div>
 			</div>
 		</footer>

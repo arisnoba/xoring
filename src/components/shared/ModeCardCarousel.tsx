@@ -18,11 +18,11 @@ interface ModeCardCarouselProps {
 function ModeCard({ title, description, image, variant }: CardData & { image: string; variant: "light" | "dark" }) {
 	if (variant === "light") {
 		return (
-			<article className="overflow-hidden rounded-[26px] border border-white/60 bg-white shadow-[0_24px_60px_rgba(17,24,39,0.08)]">
+			<article className="flex h-full w-full flex-col overflow-hidden rounded-[26px] border border-white/60 bg-white">
 				<div className="relative aspect-[1.42] w-full overflow-hidden">
 					<Image src={image} alt={title} fill className="object-cover" unoptimized />
 				</div>
-				<div className="space-y-3 px-6 py-6">
+				<div className="flex-1 space-y-3 px-6 py-6">
 					<h3 className="text-[1.15rem] font-bold tracking-tight text-[#171717]">{title}</h3>
 					<p className="text-[0.98rem] font-medium leading-[1.65] text-[#4e4e53]">{description}</p>
 				</div>
@@ -31,11 +31,11 @@ function ModeCard({ title, description, image, variant }: CardData & { image: st
 	}
 
 	return (
-		<article className="overflow-hidden rounded-[26px] border border-white/10 bg-[rgba(29,29,31,0.72)] shadow-[0_26px_70px_rgba(0,0,0,0.24)] backdrop-blur-md">
+		<article className="flex h-full w-full flex-col overflow-hidden rounded-[26px] border border-white/10 bg-[rgba(29,29,31,0.72)] backdrop-blur-md">
 			<div className="relative aspect-[1.42] w-full overflow-hidden">
 				<Image src={image} alt={title} fill className="object-cover" unoptimized />
 			</div>
-			<div className="space-y-3 px-6 py-6">
+			<div className="flex-1 space-y-3 px-6 py-6">
 				<h3 className="text-[1.15rem] font-bold tracking-tight text-white">{title}</h3>
 				<p className="text-[0.98rem] font-medium leading-[1.65] text-white/80">{description}</p>
 			</div>
@@ -65,6 +65,7 @@ export default function ModeCardCarousel({ cards, images, variant }: ModeCardCar
 	return (
 		<div ref={wrapperRef}>
 			<Swiper
+				className="[&_.swiper-wrapper]:items-stretch"
 				grabCursor
 				breakpointsBase="window"
 				slidesPerView={1.2}
@@ -77,7 +78,7 @@ export default function ModeCardCarousel({ cards, images, variant }: ModeCardCar
 				}}
 			>
 				{cards.map((card, index) => (
-					<SwiperSlide key={card.title}>
+					<SwiperSlide key={card.title} className="flex !h-auto">
 						<ModeCard title={card.title} description={card.description} image={images[index % images.length]} variant={variant} />
 					</SwiperSlide>
 				))}

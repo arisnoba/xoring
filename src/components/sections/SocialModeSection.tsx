@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import SectionBadge from '@/components/shared/SectionBadge';
+import SectionBackground from '@/components/shared/SectionBackground';
 import SectionContainer from '@/components/shared/SectionContainer';
 import ModeCardCarousel from '@/components/shared/ModeCardCarousel';
 import { SOCIAL_MODE } from '@/lib/constants';
@@ -9,7 +10,7 @@ const socialSlides = ['/assets/images/social/slide-01.jpg', '/assets/images/soci
 export default function SocialModeSection() {
 	return (
 		<section id="ring" className="relative isolate bg-white text-[#111]">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-02.jpg')] bg-cover bg-center bg-no-repeat opacity-15 section-bg"></div>
+			<SectionBackground desktopSrc="/assets/images/social/bg-desk.jpg" />
 			<SectionContainer className="relative min-h-[1400px]">
 				<div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
 					<div className="lg:sticky lg:top-28">
@@ -20,7 +21,7 @@ export default function SocialModeSection() {
 					</div>
 
 					<div className="pt-4">
-						<div className="max-w-[780px]">
+						<div className="">
 							<h2 className="section-title section-title--tight text-balance text-[#151515]">
 								{SOCIAL_MODE.headline.split('\n').map((line, index, arr) => (
 									<span key={line}>
@@ -29,7 +30,7 @@ export default function SocialModeSection() {
 									</span>
 								))}
 							</h2>
-							<p className="section-copy section-copy--tight mt-8 max-w-[760px] text-[#252525]">{SOCIAL_MODE.subtext}</p>
+							<p className="section-copy section-copy--tight mt-8 whitespace-pre-line text-[#252525]">{SOCIAL_MODE.subtext}</p>
 						</div>
 
 						<div className="mt-20">

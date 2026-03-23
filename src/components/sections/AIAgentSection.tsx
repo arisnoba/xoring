@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import SectionBackground from '@/components/shared/SectionBackground';
 import SectionContainer from '@/components/shared/SectionContainer';
 import { AI_AGENT } from '@/lib/constants';
 
@@ -28,7 +29,7 @@ const agents = [
 export default function AIAgentSection() {
 	return (
 		<section id="aios" className="relative isolate overflow-hidden bg-[#efefec] text-[#111]">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-04.jpg')] bg-cover bg-center bg-no-repeat opacity-30 section-bg"></div>
+			<SectionBackground desktopSrc="/assets/images/aiagent/bg-desk.jpg" mobileSrc="/assets/images/aiagent/bg-mo.jpg" opacity={0.3} />
 
 			<SectionContainer className="relative">
 				<div className="mx-auto max-w-[920px] text-center">

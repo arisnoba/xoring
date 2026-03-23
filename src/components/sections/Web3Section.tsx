@@ -1,4 +1,5 @@
 import SectionContainer from '@/components/shared/SectionContainer';
+import SectionBackground from '@/components/shared/SectionBackground';
 
 const paragraphs = [
 	'Not just another smart device.',
@@ -9,7 +10,7 @@ const paragraphs = [
 export default function Web3Section() {
 	return (
 		<section className="relative isolate overflow-hidden bg-[#041007] text-white">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-01.jpg')] bg-cover bg-center bg-no-repeat opacity-30 section-bg"></div>
+			<SectionBackground desktopSrc="/assets/images/web3/bg-desk.jpg" mobileSrc="/assets/images/web3/bg-mo.jpg" />
 
 			<SectionContainer className="relative flex items-center justify-center text-center">
 				<div className="max-w-[860px]">

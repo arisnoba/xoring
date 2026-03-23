@@ -1,4 +1,5 @@
 import SectionContainer from '@/components/shared/SectionContainer';
+import SectionBackground from '@/components/shared/SectionBackground';
 import { BEYOND_SCREEN } from '@/lib/constants';
 
 const paragraphs = [
@@ -10,12 +11,12 @@ const paragraphs = [
 export default function BeyondScreenSection() {
 	return (
 		<section id="beyond-screen" className="relative isolate min-h-screen overflow-hidden bg-[#0b0908] text-white">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-01.jpg')] bg-cover bg-center bg-no-repeat opacity-30 section-bg"></div>
+			<SectionBackground desktopSrc="/assets/images/beyondscreen/bg-desk.jpg" mobileSrc="/assets/images/beyondscreen/bg-mo.jpg" opacity={0.3} />
 			<SectionContainer className="relative flex items-center">
 				<div className="max-w-[840px]">
 					<h2 className="section-title text-balance text-white">{BEYOND_SCREEN.headline}</h2>
 
-					<div className="section-copy section-copy--wide mt-14 space-y-10 text-white/95">
+					<div className="section-copy section-copy--wide mt-14 space-y-4 lg:space-y-8 text-white/95">
 						{paragraphs.map((paragraph, index) => (
 							<p key={index} className="text-balance">
 								{paragraph.map(line => (
