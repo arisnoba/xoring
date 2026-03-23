@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import 'lenis/dist/lenis.css';
+import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import "./globals.css";
 import "./globals.scss";
 
@@ -15,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased font-sans">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      </body>
     </html>
   );
 }

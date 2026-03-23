@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
+import { useLenis } from 'lenis/react';
 import { cn } from '@/lib/utils';
 import { RippleButton } from '@/components/ui/ripple-button';
 
@@ -15,6 +16,7 @@ const navLinks = [
 type HeaderTheme = 'light' | 'dark';
 
 export default function Header() {
+	const lenis = useLenis();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeTheme, setActiveTheme] = useState<HeaderTheme>('light');
@@ -56,6 +58,12 @@ export default function Header() {
 
 	const scrollTo = (href: string) => {
 		setMenuOpen(false);
+
+		if (lenis) {
+			lenis.scrollTo(href);
+			return;
+		}
+
 		const el = document.querySelector(href);
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
@@ -77,6 +85,12 @@ export default function Header() {
 					className="flex items-center gap-2"
 					onClick={e => {
 						e.preventDefault();
+
+						if (lenis) {
+							lenis.scrollTo(0);
+							return;
+						}
+
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					}}>
 					<Image src="/assets/images/logo.svg" alt="XO RING" width={120} height={32} className={cn(themeTransitionClassName, logoClassName)} unoptimized />
