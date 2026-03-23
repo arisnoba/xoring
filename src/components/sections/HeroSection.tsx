@@ -120,7 +120,7 @@ export default function HeroSection() {
 					</SectionContainer>
 				</div>
 
-				<div ref={overlayRef} className="absolute inset-0 overflow-hidden bg-black/90 backdrop-blur-[2px] pointer-events-none">
+				<div ref={overlayRef} className="pointer-events-none absolute inset-0 overflow-hidden bg-black/90 opacity-0 backdrop-blur-[2px]">
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">

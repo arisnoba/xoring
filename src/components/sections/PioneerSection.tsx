@@ -16,7 +16,7 @@ export default function PioneerSection() {
 				</div>
 
 				<div className="mx-auto max-w-[760px] text-center">
-					<h2 className="pioneer-section__title section-title section-title--compact text-balance text-[#35363a]">The 500 Pioneers</h2>
+					<h2 className="section-title text-balance text-[#35363a]">The 500 Pioneers</h2>
 
 					<div className="section-copy mt-10 space-y-10 text-[#3a3b3f]">
 						<p>
@@ -40,8 +40,7 @@ export default function PioneerSection() {
 							href={PLACEHOLDER_LINKS.waitlist}
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)] transition-all duration-200 hover:bg-[#2c2c2e] hover:shadow-[0_22px_55px_rgba(17,24,39,0.2)] active:scale-[0.97] active:-translate-y-px"
-						>
+							className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)] transition-all duration-200 hover:bg-[#2c2c2e] hover:shadow-[0_22px_55px_rgba(17,24,39,0.2)] active:scale-[0.97] active:-translate-y-px">
 							Coming Soon
 						</a>
 					</div>
