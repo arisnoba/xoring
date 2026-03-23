@@ -113,7 +113,7 @@ export default function HeroSection() {
 								</div>
 							</div>
 
-							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end ">
+							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0">
 								<RingArtwork className="hero-section__artwork" />
 							</div>
 						</div>
