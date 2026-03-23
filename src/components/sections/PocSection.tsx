@@ -41,33 +41,11 @@ export default function PocSection() {
 					</div>
 
 					<div className="mt-14 flex flex-col md:flex-row items-center gap-8 xl:gap-11 justify-center">
-						{/* Card 1: XORing */}
-						{/* <div className="relative rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
-							<div className="aspect-[1.37] overflow-hidden rounded-[12px]">
-								<Image src={topCards[0].image} alt={topCards[0].imageAlt} width={274} height={200} className="h-full w-full object-cover" unoptimized />
-							</div>
-							<div className="py-6">
-								<h3 className="mt-4 text-2xl font-semibold">{topCards[0].title}</h3>
-								<p className="mt-2 text-sm font-normal leading-normal text-white/72">{topCards[0].body}</p>
-							</div>
-						</div> */}
-
 						{/* Phone */}
-						<div className="w-full max-w-[1200px]">
-							<Image src="/assets/images/poc/01-desk.png" alt="Activity Data Interface" width={410} height={820} className="hidden h-auto w-full object-contain lg:block" unoptimized />
-							<Image src="/assets/images/poc/01-mo.png" alt="Activity Data Interface" width={410} height={820} className="h-auto w-full object-contain lg:hidden" unoptimized />
+						<div className="w-full max-w-[1200px] px-4 sm:px-0 mx-auto">
+							<Image src="/assets/images/poc/01-desk.webp" alt="Activity Data Interface" width={1200} height={600} className="hidden h-auto w-full object-contain sm:block" unoptimized />
+							<Image src="/assets/images/poc/01-mo.webp" alt="Activity Data Interface" width={410} height={820} className="h-auto w-full object-contain sm:hidden" unoptimized />
 						</div>
-
-						{/* Card 2: AIOS Network */}
-						{/* <div className="rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
-							<div className="aspect-[1.37] overflow-hidden rounded-[12px]">
-								<Image src={topCards[1].image} alt={topCards[1].imageAlt} width={274} height={200} className="h-full w-full object-cover" unoptimized />
-							</div>
-							<div className="py-6">
-								<h3 className="mt-4 text-2xl font-semibold">{topCards[1].title}</h3>
-								<p className="mt-2 text-sm font-normal leading-normal text-white/72">{topCards[1].body}</p>
-							</div>
-						</div> */}
 					</div>
 				</div>
 
@@ -76,21 +54,30 @@ export default function PocSection() {
 						If a computer can prove its value by solving complex puzzles, human movement can prove its value, too.
 					</p>
 
-					<div className="mt-14 flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-[24px]">
+					<div className="mt-14 grid grid-cols-[1fr_auto_1fr] items-center justify-items-center gap-x-2 gap-y-6 lg:flex lg:flex-row lg:justify-center lg:gap-[24px]">
 						{steps.map((step, index) => (
 							<React.Fragment key={step.label}>
-								<div className="flex w-[155px] shrink-0 flex-col items-center gap-[20px] text-center">
-									<Image src={step.icon} alt={step.label} width={100} height={100} className="h-[100px] w-[100px] object-contain" />
-									<p className="text-[14px] leading-normal text-white">{step.label}</p>
+								<div className="flex w-[140px] md:w-[155px] shrink-0 flex-col items-center gap-[16px] md:gap-[20px] text-center">
+									<Image src={step.icon} alt={step.label} width={100} height={100} className="h-[80px] w-[80px] md:h-[100px] md:w-[100px] object-contain" />
+									<p className="text-[13px] md:text-[14px] leading-normal text-white text-balance">{step.label}</p>
 								</div>
-								{index < steps.length - 1 && <ChevronRight className="hidden md:block h-[32px] w-[32px] text-white shrink-0" strokeWidth={2} />}
+
+								{index < steps.length - 1 && (
+									<>
+										{/* Desktop Arrow */}
+										<ChevronRight className="hidden lg:block h-[32px] w-[32px] text-white shrink-0" strokeWidth={2} />
+
+										{/* Mobile Arrow */}
+										{index % 2 === 0 && <ChevronRight className="lg:hidden h-[24px] w-[24px] text-white shrink-0" strokeWidth={2} />}
+									</>
+								)}
 							</React.Fragment>
 						))}
 					</div>
 
-					<div className="mt-16 flex flex-col md:flex-row gap-3 md:gap-6 justify-center">
+					<div className="mt-16 flex flex-col items-center md:flex-row md:items-stretch gap-4 md:gap-6 justify-center">
 						{bottomCards.map(card => (
-							<article key={card.title} className="rounded-[24px] bg-[#333]/50 px-6 py-7 max-w-[310px]">
+							<article key={card.title} className="w-full rounded-[24px] bg-[#333]/50 px-6 py-7 max-w-[310px]">
 								<h3 className="section-copy font-bold tracking-tight">{card.title}</h3>
 								<p className="mt-4 text-[14px] font-medium leading-[1.7] text-white/72">{card.body}</p>
 							</article>

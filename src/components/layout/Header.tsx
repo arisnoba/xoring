@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
 import { cn } from '@/lib/utils';
-import { RippleButton } from '@/components/ui/ripple-button';
+import { PLACEHOLDER_LINKS } from '@/lib/site';
 
 const navLinks = [
 	{ label: 'RING', href: '#ring' },
@@ -93,40 +92,57 @@ export default function Header() {
 
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					}}>
-					<Image src="/assets/images/logo.svg" alt="XO RING" width={120} height={32} className={cn(themeTransitionClassName, logoClassName)} unoptimized />
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src="/assets/images/logo.svg" alt="XO RING" width={120} height={27} className={cn(themeTransitionClassName, logoClassName)} />
 				</a>
 
 				{/* Desktop Nav */}
-				<nav className="hidden md:flex items-center gap-8">
+				<nav className="hidden md:flex items-center gap-8" aria-label="Primary">
 					{navLinks.map(link => (
 						<button key={link.label} onClick={() => scrollTo(link.href)} className={cn('text-sm font-bold tracking-[0.15em] cursor-pointer', themeTransitionClassName, navClassName)}>
 							{link.label}
 						</button>
 					))}
 
-					<RippleButton
+					<a
+						href={PLACEHOLDER_LINKS.buyNow}
+						target="_blank"
+						rel="noreferrer"
 						className={cn('px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] cursor-pointer', themeTransitionClassName, desktopButtonClassName)}
-						rippleColor={isDarkTheme ? '#111111' : '#ffffff'}>
+					>
 						Buy Now
-					</RippleButton>
+					</a>
 				</nav>
 
 				{/* Mobile hamburger */}
-				<button className={cn('md:hidden p-2 rounded-lg', themeTransitionClassName, mobileToggleClassName)} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+				<button
+					className={cn('md:hidden p-2 rounded-lg', themeTransitionClassName, mobileToggleClassName)}
+					onClick={() => setMenuOpen(!menuOpen)}
+					aria-label="Toggle menu"
+					aria-expanded={menuOpen}
+					aria-controls="mobile-menu"
+				>
 					{menuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 			</div>
 
 			{/* Mobile menu */}
 			{menuOpen && (
-				<div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-[#e5e5e5] py-6 px-4">
-					<nav className="flex flex-col gap-4">
+				<div id="mobile-menu" className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-[#e5e5e5] py-6 px-4">
+					<nav className="flex flex-col gap-4" aria-label="Mobile">
 						{navLinks.map(link => (
 							<button key={link.label} onClick={() => scrollTo(link.href)} className="text-sm font-bold tracking-[0.15em] text-[#1d1d1f] hover:text-[#3d3df5] py-2">
 								{link.label}
 							</button>
 						))}
-						<RippleButton className="mt-2 w-full px-6 py-3 border-none rounded-full bg-[#1d1d1f] text-white text-sm font-bold">Buy Now</RippleButton>
+						<a
+							href={PLACEHOLDER_LINKS.buyNow}
+							target="_blank"
+							rel="noreferrer"
+							className="mt-2 w-full px-6 py-3 border-none rounded-full bg-[#1d1d1f] text-white text-sm font-bold text-center"
+						>
+							Buy Now
+						</a>
 					</nav>
 				</div>
 			)}

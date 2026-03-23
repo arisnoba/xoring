@@ -11,12 +11,11 @@ export default function ApplicationSection() {
 					<div className="relative flex items-center justify-center">
 						<div className="relative w-full max-w-[720px]">
 							<Image
-								src="/assets/images/application/phones.png"
+								src="/assets/images/application/phones.webp"
 								alt="Mobile App Interface"
 								width={1080}
 								height={1200}
 								className="h-auto w-full object-contain drop-shadow-[0_32px_90px_rgba(17,24,39,0.18)]"
-								priority
 							/>
 						</div>
 					</div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import RingArtwork from '@/components/shared/RingArtwork';
@@ -101,7 +100,8 @@ export default function HeroSection() {
 							<div ref={introLeftRef} className="flex flex-col items-start justify-center gap-8 lg:gap-10">
 								<div>
 									<h1 className="sr-only">XO RING</h1>
-									<Image src="/assets/images/logo-v.svg" alt="XO" width={427} height={345} className="h-auto w-[min(68vw,427px)]" priority unoptimized />
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="h-auto w-[min(68vw,427px)]" />
 								</div>
 								<div className="flex items-center justify-center w-full">
 									<StoreButtons
