@@ -4,7 +4,7 @@
 .section-title {
 	@include fluid.fluid-type($type-section-title-min, $type-section-title-max, $fluid-viewport-min, $fluid-viewport-max);
 	font-weight: 800;
-	letter-spacing: -0.04em;
+	letter-spacing: -0.025em;
 	line-height: 1.2;
 }
 
