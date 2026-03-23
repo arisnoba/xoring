@@ -22,25 +22,19 @@ export default function TwoModesSection() {
 						className="absolute h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] top-[21px] rounded-full transition-colors duration-500"
 						style={{ backgroundColor: mode === 'O' ? '#5BCD5B' : '#2F43C8' }}
 					/>
-					<div className="relative z-10 w-[72vw] max-w-[310px]">
-						<Image
-							src="/assets/images/ring-0.png"
-							alt="O Mode Ring"
-							width={460}
-							height={460}
-							className={`absolute left-0 top-0 h-auto w-full transition-all duration-500 ease-in-out ${mode === 'O' ? 'translate-x-0 opacity-100 pointer-events-auto' : '-translate-x-full opacity-0 pointer-events-none'}`}
-						/>
-						<Image
-							src="/assets/images/ring-x.png"
-							alt="X Mode Ring"
-							width={460}
-							height={460}
-							className={`h-auto w-full transition-all duration-500 ease-in-out ${mode === 'X' ? 'translate-x-0 opacity-100 pointer-events-auto' : 'translate-x-full opacity-0 pointer-events-none'}`}
-						/>
+					<div className="relative z-10 w-[50vw] max-w-[310px]">
+						<div className="flex w-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(${mode === 'O' ? '0' : '-100%'})` }}>
+							<div className={`w-full shrink-0 transition-opacity duration-250 ease-out ${mode === 'O' ? 'opacity-100' : 'opacity-0'}`}>
+								<Image src="/assets/images/ring-0.png" alt="O Mode Ring" width={460} height={460} className="h-auto w-full" />
+							</div>
+							<div className={`w-full shrink-0 transition-opacity duration-250 ease-out ${mode === 'X' ? 'opacity-100' : 'opacity-0'}`}>
+								<Image src="/assets/images/ring-x.png" alt="X Mode Ring" width={460} height={460} className="h-auto w-full" />
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<div className="mt-14 grid w-full max-w-[520px] grid-cols-[1fr_auto_1fr] items-start gap-5 md:mt-16 md:max-w-[580px]">
+				<div className="mt-14 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-5 md:mt-16 md:max-w-[580px]">
 					<button
 						onClick={() => setMode('O')}
 						className="flex flex-col items-center gap-5 pt-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 w-full"
