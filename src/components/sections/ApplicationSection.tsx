@@ -36,7 +36,7 @@ export default function ApplicationSection() {
 						<StoreButtons
 							variant="light"
 							googleFirst
-							className="mt-10 lg:mt-20 justify-center gap-2 md:gap-3"
+							className="mt-10 lg:mt-20 justify-center gap-2 md:gap-3 min-w-[200px] inline-flex"
 							buttonClassName="px-6 py-3 shadow-[0_18px_40px_rgba(17,24,39,0.08)] justify-center"
 						/>
 						<p className="mt-10 text-sm font-medium text-[#a0a0a5]">* Some features may be limited when using the app without XORing.</p>

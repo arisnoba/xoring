@@ -55,9 +55,9 @@ export default function PocSection() {
 						</p>
 					</div>
 
-					<div className="mt-14 flex flex-col md:flex-row items-center gap-11 justify-center">
+					<div className="mt-14 flex flex-col md:flex-row items-center gap-8 xl:gap-11 justify-center">
 						{/* Card 1: XORing */}
-						<div className="relative rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
+						{/* <div className="relative rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
 							<div className="aspect-[1.37] overflow-hidden rounded-[12px]">
 								<Image src={topCards[0].image} alt={topCards[0].imageAlt} width={274} height={200} className="h-full w-full object-cover" unoptimized />
 							</div>
@@ -65,16 +65,16 @@ export default function PocSection() {
 								<h3 className="mt-4 text-2xl font-semibold">{topCards[0].title}</h3>
 								<p className="mt-2 text-sm font-normal leading-normal text-white/72">{topCards[0].body}</p>
 							</div>
-						</div>
+						</div> */}
 
 						{/* Phone */}
-						<div className="w-full max-w-[482px]">
-							<Image src="/assets/images/poc/phone-01-pc.png" alt="Activity Data Interface" width={410} height={820} className="hidden h-auto w-full object-contain xl:block" unoptimized />
-							<Image src="/assets/images/poc/phone-01-mo.png" alt="Activity Data Interface" width={410} height={820} className="h-auto w-full object-contain xl:hidden" unoptimized />
+						<div className="w-full max-w-[1200px]">
+							<Image src="/assets/images/poc/01-desk.png" alt="Activity Data Interface" width={410} height={820} className="hidden h-auto w-full object-contain lg:block" unoptimized />
+							<Image src="/assets/images/poc/01-mo.png" alt="Activity Data Interface" width={410} height={820} className="h-auto w-full object-contain lg:hidden" unoptimized />
 						</div>
 
 						{/* Card 2: AIOS Network */}
-						<div className="rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
+						{/* <div className="rounded-[20px] bg-[rgba(52,52,52,0.5)] p-[10px] max-w-[300px] aspect-2/3">
 							<div className="aspect-[1.37] overflow-hidden rounded-[12px]">
 								<Image src={topCards[1].image} alt={topCards[1].imageAlt} width={274} height={200} className="h-full w-full object-cover" unoptimized />
 							</div>
@@ -82,7 +82,7 @@ export default function PocSection() {
 								<h3 className="mt-4 text-2xl font-semibold">{topCards[1].title}</h3>
 								<p className="mt-2 text-sm font-normal leading-normal text-white/72">{topCards[1].body}</p>
 							</div>
-						</div>
+						</div> */}
 					</div>
 				</div>
 

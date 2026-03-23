@@ -20,15 +20,11 @@ function ModeCard({ title, description, image, variant }: CardData & { image: st
 	const isLight = variant === 'light';
 
 	return (
-		<article
-			className={cn(
-				'flex h-full w-full flex-col overflow-hidden rounded-[20px] border',
-				isLight ? 'border-white/60 bg-white' : 'border-white/10 bg-[rgba(29,29,31,0.72)]'
-			)}>
-			<div className="relative aspect-[1.42] w-full overflow-hidden">
+		<article className={cn('flex h-full w-full flex-col overflow-hidden rounded-[20px] border p-3', isLight ? 'border-white/60 bg-white' : 'border-white/5 bg-[#333]/50')}>
+			<div className="relative aspect-[1.42] w-full overflow-hidden rounded-lg">
 				<Image src={image} alt={title} fill className="object-cover" unoptimized />
 			</div>
-			<div className="flex-1 space-y-3 px-6 py-6">
+			<div className="flex-1 space-y-3 px-2 py-8">
 				<h3 className={cn('text-[1.15rem] font-bold tracking-tight', isLight ? 'text-[#171717]' : 'text-white')}>{title}</h3>
 				<p className={cn('text-[0.98rem] font-medium leading-[1.65]', isLight ? 'text-[#4e4e53]' : 'text-white/80')}>{description}</p>
 			</div>

@@ -9,7 +9,7 @@ export default function PioneerSection() {
 			<SectionContainer className="relative grid items-center gap-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
 				<div className="flex flex-col items-center justify-center gap-10">
 					<div className="w-full max-w-[560px]">
-						<RingArtwork tone="dark" mark="x" className="w-full" />
+						<RingArtwork className="w-[50vw] max-w-[500px] lg:w-full m-auto" />
 					</div>
 					<Image src="/assets/images/logo.svg" alt="XO RING" width={320} height={220} className="h-auto w-[min(52vw,320px)]" unoptimized />
 				</div>

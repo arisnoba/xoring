@@ -35,9 +35,16 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 	const orderedStores = googleFirst ? [stores[1], stores[0]] : stores;
 
 	return (
-		<div className={cn('flex flex-col sm:flex-row gap-3', className)}>
+		<div className={cn('flex flex-row gap-3', className)}>
 			{orderedStores.map(store => (
-				<button key={store.key} className={cn('flex items-center gap-3 px-5 py-3 rounded-full transition-all duration-200 hover:opacity-80 active:scale-[0.97] active:-translate-y-px cursor-pointer', bg, border, buttonClassName)}>
+				<button
+					key={store.key}
+					className={cn(
+						'flex items-center gap-3 px-5 py-3 rounded-full transition-all duration-200 hover:opacity-80 active:scale-[0.97] active:-translate-y-px cursor-pointer',
+						bg,
+						border,
+						buttonClassName
+					)}>
 					{store.icon}
 					<div className="text-left">
 						<div className="text-[10px] opacity-70 leading-none">{store.eyebrow}</div>

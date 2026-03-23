@@ -45,7 +45,7 @@ export default function AIAgentSection() {
 					<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance text-[#2d2d31]">{AI_AGENT.subtext}</p>
 				</div>
 
-				<div className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-4 xl:gap-7">
+				<div className="mt-16 flex flex-col md:flex-row justify-center gap-10">
 					{agents.map(agent => (
 						<div key={agent.title} className="flex flex-col items-center gap-7">
 							<h3 className="text-center text-[1.05rem] font-semibold tracking-tight text-[#1e1e1f]">{agent.title}</h3>
