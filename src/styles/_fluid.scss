@@ -1,69 +1,46 @@
-@use "sass:math";
+@use 'sass:math';
 
 @function _normalize-px($value) {
-  @if math.is-unitless($value) {
-    @return $value;
-  }
+	@if math.is-unitless($value) {
+		@return $value;
+	}
 
-  @if math.unit($value) == "px" {
-    @return math.div($value, 1px);
-  }
+	@if math.unit($value) == 'px' {
+		@return math.div($value, 1px);
+	}
 
-  @error "fluid-clamp() only supports unitless numbers or px values.";
+	@error "fluid-clamp() only supports unitless numbers or px values.";
 }
 
 @function _to-rem($value, $base-font-size: 16) {
-  @return #{math.div($value, $base-font-size)}rem;
+	@return #{math.div($value, $base-font-size)}rem;
 }
 
-@function fluid-clamp(
-  $min-size,
-  $max-size,
-  $min-vw: 375,
-  $max-vw: 1640,
-  $base-font-size: 16
-) {
-  $min-size-px: _normalize-px($min-size);
-  $max-size-px: _normalize-px($max-size);
-  $min-vw-px: _normalize-px($min-vw);
-  $max-vw-px: _normalize-px($max-vw);
-  $base-font-size-px: _normalize-px($base-font-size);
+@function fluid-clamp($min-size, $max-size, $min-vw: 375, $max-vw: 1640, $base-font-size: 16) {
+	$min-size-px: _normalize-px($min-size);
+	$max-size-px: _normalize-px($max-size);
+	$min-vw-px: _normalize-px($min-vw);
+	$max-vw-px: _normalize-px($max-vw);
+	$base-font-size-px: _normalize-px($base-font-size);
 
-  @if $max-vw-px <= $min-vw-px {
-    @error "fluid-clamp() requires $max-vw to be greater than $min-vw.";
-  }
+	@if $max-vw-px <= $min-vw-px {
+		@error "fluid-clamp() requires $max-vw to be greater than $min-vw.";
+	}
 
-  @if $max-size-px < $min-size-px {
-    @error "fluid-clamp() requires $max-size to be greater than or equal to $min-size.";
-  }
+	@if $max-size-px < $min-size-px {
+		@error "fluid-clamp() requires $max-size to be greater than or equal to $min-size.";
+	}
 
-  $slope: math.div($max-size-px - $min-size-px, $max-vw-px - $min-vw-px);
-  $intercept: $min-size-px - ($slope * $min-vw-px);
+	$slope: math.div($max-size-px - $min-size-px, $max-vw-px - $min-vw-px);
+	$intercept: $min-size-px - ($slope * $min-vw-px);
 
-  @return clamp(
-    #{_to-rem($min-size-px, $base-font-size-px)},
-    calc(#{_to-rem($intercept, $base-font-size-px)} + #{$slope * 100}vw),
-    #{_to-rem($max-size-px, $base-font-size-px)}
-  );
+	@return clamp(#{_to-rem($min-size-px, $base-font-size-px)}, calc(#{_to-rem($intercept, $base-font-size-px)} + #{$slope * 100}vw), #{_to-rem($max-size-px, $base-font-size-px)});
 }
 
-@mixin fluid-type(
-  $min-size,
-  $max-size,
-  $min-vw: 375,
-  $max-vw: 1640,
-  $base-font-size: 16
-) {
-  font-size: fluid-clamp($min-size, $max-size, $min-vw, $max-vw, $base-font-size);
+@mixin fluid-type($min-size, $max-size, $min-vw: 375, $max-vw: 1640, $base-font-size: 16) {
+	font-size: fluid-clamp($min-size, $max-size, $min-vw, $max-vw, $base-font-size);
 }
 
-@mixin fluid-space(
-  $property,
-  $min-size,
-  $max-size,
-  $min-vw: 375,
-  $max-vw: 1640,
-  $base-font-size: 16
-) {
-  #{$property}: fluid-clamp($min-size, $max-size, $min-vw, $max-vw, $base-font-size);
+@mixin fluid-space($property, $min-size, $max-size, $min-vw: 375, $max-vw: 1640, $base-font-size: 16) {
+	#{$property}: fluid-clamp($min-size, $max-size, $min-vw, $max-vw, $base-font-size);
 }

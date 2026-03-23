@@ -6,7 +6,7 @@
 	min-height: 100vh;
 	margin-inline: auto;
 	// padding-inline: #{$section-padding-inline}px;
-	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, $fluid-viewport-min, $fluid-viewport-max);
+	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, 768, $fluid-viewport-max);
 	@include fluid.fluid-space(padding-block, $section-padding-block-min, $section-padding-block-max, $fluid-viewport-min, $fluid-viewport-max);
 }
 
