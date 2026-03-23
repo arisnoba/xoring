@@ -5,14 +5,9 @@
 	max-width: $container-max-width;
 	min-height: 100vh;
 	margin-inline: auto;
-	padding-inline: #{$section-padding-inline}px;
-	@include fluid.fluid-space(
-		padding-block,
-		$section-padding-block-min,
-		$section-padding-block-max,
-		$fluid-viewport-min,
-		$fluid-viewport-max
-	);
+	// padding-inline: #{$section-padding-inline}px;
+	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, $fluid-viewport-min, $fluid-viewport-max);
+	@include fluid.fluid-space(padding-block, $section-padding-block-min, $section-padding-block-max, $fluid-viewport-min, $fluid-viewport-max);
 }
 
 .hero-section__copy {
@@ -31,5 +26,7 @@
 	letter-spacing: -0.025em;
 	@include fluid.fluid-type(24, 36);
 }
-
-
+.footer-section {
+	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, $fluid-viewport-min, $fluid-viewport-max);
+	@include fluid.fluid-space(padding-block, 64, 120, $fluid-viewport-min, $fluid-viewport-max);
+}

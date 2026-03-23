@@ -69,7 +69,7 @@ export default function Header() {
 				<div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-[#e5e5e5] py-6 px-4">
 					<nav className="flex flex-col gap-4">
 						{navLinks.map(link => (
-							<button key={link.label} onClick={() => scrollTo(link.href)} className="text-sm font-bold tracking-[0.15em] text-[#1d1d1f] hover:text-[#3d3df5] py-2 text-left">
+							<button key={link.label} onClick={() => scrollTo(link.href)} className="text-sm font-bold tracking-[0.15em] text-[#1d1d1f] hover:text-[#3d3df5] py-2">
 								{link.label}
 							</button>
 						))}

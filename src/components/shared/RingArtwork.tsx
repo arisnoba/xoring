@@ -8,9 +8,15 @@ interface RingArtworkProps {
   mark?: "none" | "x";
 }
 
+const RING_SRC: Record<NonNullable<RingArtworkProps["mark"]>, string> = {
+  none: "/assets/images/ring-xo.png",
+  x: "/assets/images/ring-x.png",
+};
+
 export default function RingArtwork({
   className,
   blurred = false,
+  mark = "none",
 }: RingArtworkProps) {
   return (
     <div
@@ -21,20 +27,9 @@ export default function RingArtwork({
       )}
       aria-hidden="true"
     >
-      {/* 
-        TODO: 추후 업데이트에서 비디오로 변경 시 아래 Image 컴포넌트를 video 태그로 교체하세요.
-        예시:
-        <video
-          src="/assets/videos/ring-xo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-contain"
-        />
-      */}
+      {/* TODO: 추후 업데이트에서 비디오로 변경 시 Image를 video 태그로 교체 */}
       <Image
-        src="/assets/images/ring-xo.png"
+        src={RING_SRC[mark]}
         alt="Ring Artwork"
         fill
         sizes="(max-width: 768px) 100vw, 50vw"

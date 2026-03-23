@@ -35,7 +35,7 @@ export default function PioneerSection() {
 					<div className="mt-12">
 						<p className="text-[1.1rem] font-medium text-[#a0a0a5]">Global Limited 500 Pieces</p>
 						<p className="text-[clamp(4rem,7vw,6.4rem)] font-black tracking-tight text-[#6a6b70]">$499</p>
-						<button className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)]">
+						<button className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)] transition-all duration-200 hover:bg-[#2c2c2e] hover:shadow-[0_22px_55px_rgba(17,24,39,0.2)] active:scale-[0.97] active:-translate-y-px">
 							Coming Soon
 						</button>
 					</div>

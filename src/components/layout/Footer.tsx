@@ -7,8 +7,8 @@ const policyLines = [
 
 export default function Footer() {
 	return (
-		<footer className="bg-black text-white">
-			<div className="mx-auto grid max-w-[1680px] gap-14 px-[20px] py-16 md:py-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+		<footer className="bg-black text-white footer-section">
+			<div className="mx-auto grid max-w-[1680px] gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
 				<div className="max-w-[980px]">
 					<h3 className="footer-section__title section-title section-title--footer text-white/55">Policy &amp; Community Guidelines</h3>
 
@@ -22,7 +22,7 @@ export default function Footer() {
 					</div>
 				</div>
 
-				<div className="flex min-w-[260px] flex-col items-start gap-6 lg:items-end">
+				<div className="flex min-w-[260px] flex-col items-center md:items-start gap-6 lg:items-end">
 					<Image src="/assets/images/logo.svg" alt="XO RING" width={236} height={64} className="h-auto w-[180px] opacity-20 invert" unoptimized />
 				</div>
 			</div>

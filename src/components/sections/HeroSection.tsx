@@ -74,7 +74,7 @@ export default function HeroSection() {
 
 	return (
 		<section id="hero" ref={sectionRef} className="relative h-[220vh] bg-[#f5f5f7]">
-			<div className="sticky top-0 h-screen overflow-hidden">
+			<div className="sticky top-0 h-[100dvh] overflow-hidden">
 				<div className="absolute inset-0 bg-[#f5f5f7]">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">
 						<div className="grid w-full items-center gap-14 pb-10 pt-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
