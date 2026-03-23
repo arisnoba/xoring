@@ -60,13 +60,13 @@ export default function ModeCardCarousel({ cards, images, variant }: ModeCardCar
 				slidesPerView={1.2}
 				spaceBetween={16}
 				breakpoints={{
-					640: { slidesPerView: 1.8, spaceBetween: 20 },
-					1024: { slidesPerView: 2.3, spaceBetween: 20 },
-					1280: { slidesPerView: 3, spaceBetween: 24 },
-					1700: { slidesPerView: 3.3, spaceBetween: 24 },
+					640: { slidesPerView: 1.8 },
+					1024: { slidesPerView: 1.5 },
+					1280: { slidesPerView: 2.5 },
+					1700: { slidesPerView: 3.3 },
 				}}>
 				{cards.map((card, index) => (
-					<SwiperSlide key={card.title} className="flex !h-auto">
+					<SwiperSlide key={card.title} className="flex h-auto!">
 						<ModeCard title={card.title} description={card.description} image={images[index % images.length]} variant={variant} />
 					</SwiperSlide>
 				))}

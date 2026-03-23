@@ -10,7 +10,7 @@ export default function Footer() {
 				<div className="max-w-[980px]">
 					<h3 className="footer-section__title section-title section-title--footer">Policy &amp; Community Guidelines</h3>
 
-					<div className="mt-12 space-y-8 text-[1.02rem] font-medium leading-[1.8]">
+					<div className="mt-12 space-y-8 text-sm font-medium leading-[1.8]">
 						{policyLines.map((line, index) => (
 							<div key={index} className="flex gap-2">
 								<span className="shrink-0 opacity-50">—</span>

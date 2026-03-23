@@ -54,25 +54,45 @@ export default function PocSection() {
 						If a computer can prove its value by solving complex puzzles, human movement can prove its value, too.
 					</p>
 
-					<div className="mt-14 grid grid-cols-[1fr_auto_1fr] items-center justify-items-center gap-x-2 gap-y-6 lg:flex lg:flex-row lg:justify-center lg:gap-[24px]">
+					{/* Desktop: 1-row flex */}
+					<div className="mt-14 hidden md:flex flex-row justify-center items-center gap-[24px]">
 						{steps.map((step, index) => (
 							<React.Fragment key={step.label}>
-								<div className="flex w-[140px] md:w-[155px] shrink-0 flex-col items-center gap-[16px] md:gap-[20px] text-center">
-									<Image src={step.icon} alt={step.label} width={100} height={100} className="h-[80px] w-[80px] md:h-[100px] md:w-[100px] object-contain" />
-									<p className="text-[13px] md:text-[14px] leading-normal text-white text-balance">{step.label}</p>
+								<div className="flex max-w-[155px] shrink-0 flex-col items-center gap-[20px] text-center">
+									<Image src={step.icon} alt={step.label} width={100} height={100} className="h-[100px] w-[100px] object-contain" />
+									<p className="text-[14px] leading-normal text-white text-balance">{step.label}</p>
 								</div>
-
-								{index < steps.length - 1 && (
-									<>
-										{/* Desktop Arrow */}
-										<ChevronRight className="hidden lg:block h-[32px] w-[32px] text-white shrink-0" strokeWidth={2} />
-
-										{/* Mobile Arrow */}
-										{index % 2 === 0 && <ChevronRight className="lg:hidden h-[24px] w-[24px] text-white shrink-0" strokeWidth={2} />}
-									</>
-								)}
+								{index < steps.length - 1 && <ChevronRight className="h-[32px] w-[32px] text-white shrink-0" strokeWidth={2} />}
 							</React.Fragment>
 						))}
+					</div>
+
+					{/* Mobile: Z-pattern 2x2 grid */}
+					<div className="mt-14 grid grid-cols-[1fr_auto_1fr] items-center justify-items-center gap-x-3 gap-y-4 md:hidden">
+						{/* Row 1: Step1 → Step2 */}
+						<div className="flex flex-col items-center gap-[16px] text-center" style={{ gridRow: 1, gridColumn: 1 }}>
+							<Image src={steps[0].icon} alt={steps[0].label} width={100} height={100} className="h-[80px] w-[80px] object-contain" />
+							<p className="text-[13px] leading-normal text-white text-balance">{steps[0].label}</p>
+						</div>
+						<ChevronRight className="h-[24px] w-[24px] text-white/60" strokeWidth={2} style={{ gridRow: 1, gridColumn: 2 }} />
+						<div className="flex flex-col items-center gap-[16px] text-center" style={{ gridRow: 1, gridColumn: 3 }}>
+							<Image src={steps[1].icon} alt={steps[1].label} width={100} height={100} className="h-[80px] w-[80px] object-contain" />
+							<p className="text-[13px] leading-normal text-white text-balance">{steps[1].label}</p>
+						</div>
+
+						{/* Row 2: ↓ arrow (right-aligned under Step2) */}
+						<ChevronRight className="h-[24px] w-[24px] text-white/60 rotate-90" strokeWidth={2} style={{ gridRow: 2, gridColumn: 3 }} />
+
+						{/* Row 3: Step4 ← Step3 */}
+						<div className="flex flex-col items-center gap-[16px] text-center" style={{ gridRow: 3, gridColumn: 1 }}>
+							<Image src={steps[3].icon} alt={steps[3].label} width={100} height={100} className="h-[80px] w-[80px] object-contain" />
+							<p className="text-[13px] leading-normal text-white text-balance">{steps[3].label}</p>
+						</div>
+						<ChevronRight className="h-[24px] w-[24px] text-white/60 rotate-180" strokeWidth={2} style={{ gridRow: 3, gridColumn: 2 }} />
+						<div className="flex flex-col items-center gap-[16px] text-center" style={{ gridRow: 3, gridColumn: 3 }}>
+							<Image src={steps[2].icon} alt={steps[2].label} width={100} height={100} className="h-[80px] w-[80px] object-contain" />
+							<p className="text-[13px] leading-normal text-white text-balance">{steps[2].label}</p>
+						</div>
 					</div>
 
 					<div className="mt-16 flex flex-col items-center md:flex-row md:items-stretch gap-4 md:gap-6 justify-center">
@@ -88,7 +108,7 @@ export default function PocSection() {
 				<div className="mt-20 text-center">
 					<p className="section-copy mx-auto max-w-[860px] text-balance text-white/94">Prove your value with just the XORing app. Wear the ring to capture richer data and boost your rewards.</p>
 
-					<div className="mx-auto mt-12 flex w-fit flex-col items-center max-w-[512px]">
+					<div className="mx-auto mt-12 flex flex-col items-center w-[75vw] max-w-[512px]">
 						<Image src="/assets/images/poc/phone.png" alt="XO App Interface" width={500} height={1000} className="h-auto w-full object-contain" />
 					</div>
 				</div>
