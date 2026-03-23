@@ -55,7 +55,7 @@ export default function PrivateModeSection() {
 
           <div className="pt-4">
             <div className="max-w-[760px]">
-              <h2 className="text-balance text-[clamp(3.1rem,7vw,6rem)] font-black tracking-tight leading-[0.95] text-white">
+              <h2 className="section-title text-balance text-white">
                 {PRIVATE_MODE.headline.split("\n").map((line, index, arr) => (
                   <span key={line}>
                     {line}
@@ -63,7 +63,7 @@ export default function PrivateModeSection() {
                   </span>
                 ))}
               </h2>
-              <p className="mt-8 max-w-[700px] text-[clamp(1.12rem,2vw,1.42rem)] font-semibold leading-[1.45] text-white/92">
+              <p className="section-copy section-copy--tight mt-8 max-w-[700px] text-white/92">
                 {PRIVATE_MODE.subtext}
               </p>
             </div>

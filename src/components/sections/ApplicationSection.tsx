@@ -56,11 +56,11 @@ export default function ApplicationSection() {
             <p className="text-[1rem] font-bold tracking-[0.08em] text-[#9a9a9d]">
               APPLICATION
             </p>
-            <h2 className="mt-4 text-balance text-[clamp(3.2rem,6.8vw,6rem)] font-black tracking-tight leading-[0.94] text-[#171717]">
+            <h2 className="section-title section-title--tight mt-4 text-balance text-[#171717]">
               <span className="block">Every experience</span>
               <span className="block">in your hand</span>
             </h2>
-            <p className="mt-8 text-balance text-[clamp(1.15rem,2vw,1.42rem)] font-semibold leading-[1.5] text-[#2b2b31]">
+            <p className="section-copy mt-8 text-balance text-[#2b2b31]">
               All your XORing data is seamlessly synced to the app.
               <br className="hidden md:block" />
               You can even use the app without the ring.

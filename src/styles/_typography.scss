@@ -1,0 +1,68 @@
+@use "./fluid" as fluid;
+@use "./variables" as *;
+
+.section-title {
+  @include fluid.fluid-type(
+    $type-section-title-min,
+    $type-section-title-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.section-title--tight {
+  line-height: 0.94;
+}
+
+.section-title--hero {
+  @include fluid.fluid-type(48, 100, $fluid-viewport-min, $fluid-viewport-max);
+  line-height: 0.96;
+}
+
+.section-title--compact {
+  @include fluid.fluid-type(
+    $type-section-title-min,
+    $type-section-title-compact-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+}
+
+.section-title--footer {
+  @include fluid.fluid-type(
+    $type-section-title-footer-min,
+    $type-section-title-footer-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.section-copy {
+  @include fluid.fluid-type(
+    $type-section-copy-min,
+    $type-section-copy-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.section-copy--tight {
+  line-height: 1.45;
+}
+
+.section-copy--wide {
+  @include fluid.fluid-type(
+    $type-section-copy-min,
+    $type-section-copy-wide-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+}

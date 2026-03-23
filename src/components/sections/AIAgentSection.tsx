@@ -95,7 +95,7 @@ export default function AIAgentSection() {
           <p className="text-[1rem] font-bold tracking-[0.08em] text-[#8a8a8a]">
             AI AGENT
           </p>
-          <h2 className="mt-4 text-balance text-[clamp(3.3rem,7vw,6.2rem)] font-black tracking-tight leading-[0.94] text-[#171717]">
+          <h2 className="section-title section-title--tight mt-4 text-balance text-[#171717]">
             {AI_AGENT.headline.split("\n").map((line, index, arr) => (
               <span key={line}>
                 {line}
@@ -103,7 +103,7 @@ export default function AIAgentSection() {
               </span>
             ))}
           </h2>
-          <p className="mx-auto mt-8 max-w-[980px] text-balance text-[clamp(1.16rem,2vw,1.42rem)] font-semibold leading-[1.5] text-[#2d2d31]">
+          <p className="section-copy mx-auto mt-8 max-w-[980px] text-balance text-[#2d2d31]">
             {AI_AGENT.subtext}
           </p>
         </div>

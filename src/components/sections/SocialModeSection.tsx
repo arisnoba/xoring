@@ -60,7 +60,7 @@ export default function SocialModeSection() {
 
           <div className="pt-4">
             <div className="max-w-[780px]">
-              <h2 className="text-balance text-[clamp(3.2rem,7vw,6.2rem)] font-black tracking-tight leading-[0.94] text-[#151515]">
+              <h2 className="section-title section-title--tight text-balance text-[#151515]">
                 {SOCIAL_MODE.headline.split("\n").map((line, index, arr) => (
                   <span key={line}>
                     {line}
@@ -68,7 +68,7 @@ export default function SocialModeSection() {
                   </span>
                 ))}
               </h2>
-              <p className="mt-8 max-w-[760px] text-[clamp(1.15rem,2vw,1.45rem)] font-semibold leading-[1.45] text-[#252525]">
+              <p className="section-copy section-copy--tight mt-8 max-w-[760px] text-[#252525]">
                 {SOCIAL_MODE.subtext}
               </p>
             </div>

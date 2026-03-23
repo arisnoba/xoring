@@ -22,11 +22,11 @@ export default function PioneerSection() {
         </div>
 
         <div className="mx-auto max-w-[760px] text-center lg:text-left">
-          <h2 className="text-balance text-[clamp(3.1rem,6.4vw,5.8rem)] font-black tracking-tight leading-[0.95] text-[#35363a]">
+          <h2 className="pioneer-section__title section-title section-title--compact text-balance text-[#35363a]">
             The 500 Pioneers
           </h2>
 
-          <div className="mt-10 space-y-10 text-[clamp(1.14rem,1.9vw,1.38rem)] font-semibold leading-[1.55] text-[#3a3b3f]">
+          <div className="section-copy mt-10 space-y-10 text-[#3a3b3f]">
             <p>We don&apos;t do mass production. Not just to be scarce.</p>
             <p>
               Instead of wasting electricity, we are looking for 500

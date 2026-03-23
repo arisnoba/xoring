@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="bg-black text-white">
       <SectionContainer className="grid gap-14 py-16 md:py-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
         <div className="max-w-[980px]">
-          <h2 className="text-[clamp(2rem,4vw,3.1rem)] font-medium tracking-tight text-white/55">
+          <h2 className="footer-section__title section-title section-title--footer text-white/55">
             Policy &amp; Community Guidelines
           </h2>
 

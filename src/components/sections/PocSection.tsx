@@ -48,10 +48,10 @@ export default function PocSection() {
           <p className="text-[1rem] font-bold tracking-[0.08em] text-white/55">
             AIOS · PoC
           </p>
-          <h2 className="mt-4 text-balance text-[clamp(3.3rem,7vw,6.1rem)] font-black tracking-tight leading-[0.95]">
+          <h2 className="poc-section__title section-title mt-4 text-balance text-white">
             The Value of Sweat
           </h2>
-          <p className="mx-auto mt-8 max-w-[820px] text-balance text-[clamp(1.14rem,2vw,1.38rem)] font-semibold leading-[1.55] text-white/92">
+          <p className="section-copy mx-auto mt-8 max-w-[820px] text-balance text-white/92">
             The sweat from your walks and runs becomes real value. Get fairly
             rewarded for your time and consistency.
           </p>
@@ -122,7 +122,7 @@ export default function PocSection() {
           </div>
         </div>
 
-        <p className="mx-auto mt-16 max-w-[760px] text-balance text-center text-[clamp(1.12rem,1.9vw,1.42rem)] font-semibold leading-[1.6] text-white/92">
+        <p className="section-copy mx-auto mt-16 max-w-[760px] text-balance text-center text-white/92">
           If a computer can prove its value by solving complex puzzles, human
           movement can prove its value, too.
         </p>
@@ -168,7 +168,7 @@ export default function PocSection() {
         </div>
 
         <div className="mt-20 text-center">
-          <p className="mx-auto max-w-[860px] text-balance text-[clamp(1.14rem,2vw,1.42rem)] font-semibold leading-[1.6] text-white/94">
+          <p className="section-copy mx-auto max-w-[860px] text-balance text-white/94">
             Prove your value with just the XORing app. Wear the ring to capture
             richer data and boost your rewards.
           </p>

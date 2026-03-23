@@ -1,0 +1,28 @@
+@use "../fluid" as fluid;
+@use "../variables" as *;
+
+.hero-section__copy {
+  @include fluid.fluid-type(
+    $type-section-copy-min,
+    $type-section-copy-wide-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+}
+
+.poc-section__title {
+  @include fluid.fluid-type(53, 98, $fluid-viewport-min, $fluid-viewport-max);
+}
+
+.pioneer-section__title {
+  @include fluid.fluid-type(
+    $type-section-title-min,
+    $type-section-title-compact-max,
+    $fluid-viewport-min,
+    $fluid-viewport-max
+  );
+}
+
+.footer-section__title {
+  letter-spacing: -0.025em;
+}

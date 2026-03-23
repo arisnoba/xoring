@@ -16,12 +16,12 @@ export default function Web3Section() {
 
       <SectionContainer className="relative flex min-h-screen items-center justify-center py-24 text-center">
         <div className="max-w-[860px]">
-          <h2 className="text-balance text-[clamp(3.2rem,7vw,6.2rem)] font-black tracking-tight leading-[0.94]">
+          <h2 className="section-title section-title--tight text-balance text-white">
             <span className="block">A New Identity</span>
             <span className="block">for the Web3.0 Era</span>
           </h2>
 
-          <div className="mx-auto mt-10 max-w-[620px] space-y-10 text-[clamp(1.15rem,2vw,1.42rem)] font-semibold leading-[1.55] text-white/94">
+          <div className="section-copy mx-auto mt-10 max-w-[620px] space-y-10 text-white/94">
             {paragraphs.map((paragraph) => (
               <p key={paragraph} className="text-balance">
                 {paragraph}

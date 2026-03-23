@@ -26,10 +26,33 @@ $color-accent-blue: #3d3df5;
 $container-max-width: 1680px;
 $section-padding-x: clamp(1rem, 4vw, 4rem);
 $section-padding-y: clamp(4rem, 8vw, 8rem);
+$fluid-viewport-min: 375;
+$fluid-viewport-max: 1640;
 
 // Typography
-$font-family: "Pretendard Variable", "Pretendard", -apple-system,
-  BlinkMacSystemFont, system-ui, sans-serif;
+$font-family:
+	'Pretendard Variable',
+	'Pretendard',
+	-apple-system,
+	BlinkMacSystemFont,
+	system-ui,
+	sans-serif;
+// 전 섹션 h2의 최소 뷰포트 기준 시작 크기.
+$type-section-title-min: 38;
+// 전 섹션 h2의 최대 뷰포트 기준 기본 최대 크기.
+$type-section-title-max: 80;
+// 시각 밀도가 높은 섹션에 쓰는 compact h2 최대 크기.
+$type-section-title-compact-max: 93;
+// Footer 제목의 최소 크기.
+$type-section-title-footer-min: 32;
+// Footer 제목의 최대 크기.
+$type-section-title-footer-max: 50;
+// 섹션 intro/body 공통 카피의 최소 크기.
+$type-section-copy-min: 12;
+// 섹션 intro/body 공통 카피의 기본 최대 크기.
+$type-section-copy-max: 24;
+// 넓은 레이아웃에서 쓰는 카피 최대 크기.
+$type-section-copy-wide-max: 24;
 
 // Border radius
 $radius-card: 24px;
