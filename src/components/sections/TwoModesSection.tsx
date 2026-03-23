@@ -7,7 +7,7 @@ export default function TwoModesSection() {
       id="modes"
       className="relative overflow-hidden bg-[#171717] text-white"
     >
-      <SectionContainer className="flex min-h-screen flex-col items-center justify-center py-28 md:py-32">
+      <SectionContainer className="flex flex-col items-center justify-center">
         <div className="max-w-[860px] text-center">
           <p className="text-balance text-[clamp(3.1rem,7vw,6.5rem)] font-black tracking-tight leading-[0.94]">
             <span className="block">One ring,</span>

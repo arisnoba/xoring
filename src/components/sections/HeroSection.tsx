@@ -76,7 +76,7 @@ export default function HeroSection() {
 		<section id="hero" ref={sectionRef} className="relative h-[220vh] bg-[#f5f5f7]">
 			<div className="sticky top-0 h-screen overflow-hidden">
 				<div className="absolute inset-0 bg-[#f5f5f7]">
-					<SectionContainer className="flex h-full items-center">
+					<SectionContainer className="flex h-full min-h-0 items-center py-0">
 						<div className="grid w-full items-center gap-14 pb-10 pt-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
 							<div ref={introLeftRef} className="flex flex-col items-start justify-center gap-8 lg:gap-10">
 								<div>
@@ -96,7 +96,7 @@ export default function HeroSection() {
 				<div ref={overlayRef} className="absolute inset-0 overflow-hidden bg-black/70 backdrop-blur-[2px] pointer-events-none">
 					{/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_44%,rgba(0,0,0,0.28),transparent_30%),radial-gradient(circle_at_32%_20%,rgba(255,255,255,0.12),transparent_42%),linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_100%)]" /> */}
 
-					<SectionContainer className="relative flex h-full items-center justify-center">
+					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
 								{MANIFESTO.headline.split('\n').map((line, index) => (

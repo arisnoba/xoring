@@ -10,8 +10,8 @@ const paragraphs = [
 export default function BeyondScreenSection() {
 	return (
 		<section id="beyond-screen" className="relative isolate min-h-screen overflow-hidden bg-[#0b0908] text-white">
-			<div className="absolute h-full w-full bg-[url('/assets/images/bg-01.jpg')] bg-cover bg-center bg-no-repeat opacity-30"></div>
-			<SectionContainer className="relative flex min-h-screen items-center py-24 md:py-28">
+			<div className="absolute h-full w-full bg-[url('/assets/images/bg-01.jpg')] bg-cover bg-center bg-no-repeat opacity-30 section-bg"></div>
+			<SectionContainer className="relative flex items-center">
 				<div className="max-w-[840px]">
 					<h2 className="section-title text-balance text-white">{BEYOND_SCREEN.headline}</h2>
 

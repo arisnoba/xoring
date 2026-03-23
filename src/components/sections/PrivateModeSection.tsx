@@ -1,6 +1,4 @@
-"use client";
-
-import RingArtwork from "@/components/shared/RingArtwork";
+import Image from "next/image";
 import SectionBadge from "@/components/shared/SectionBadge";
 import SectionContainer from "@/components/shared/SectionContainer";
 import { PRIVATE_MODE } from "@/lib/constants";
@@ -44,12 +42,19 @@ export default function PrivateModeSection() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_54%_12%,rgba(15,67,73,0.4),transparent_22%),linear-gradient(180deg,rgba(3,18,19,0.88),rgba(4,10,11,0.92))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_74%,rgba(107,65,33,0.26),transparent_18%),radial-gradient(circle_at_72%_28%,rgba(35,102,111,0.2),transparent_18%),repeating-linear-gradient(90deg,rgba(255,255,255,0.015)_0,rgba(255,255,255,0.015)_7px,transparent_7px,transparent_18px)] opacity-90" />
 
-      <SectionContainer className="relative min-h-[1450px] py-24 md:py-28">
+      <SectionContainer className="relative min-h-[1450px]">
         <div className="grid items-start gap-10 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
           <div className="lg:sticky lg:top-28">
             <SectionBadge label="PRIVATE MODE" icon="x" variant="dark" />
             <div className="mt-8 max-w-[250px]">
-              <RingArtwork tone="dark" mark="x" className="w-full" />
+              <Image
+                src="/assets/images/ring-x.png"
+                alt="XORing Private Mode"
+                width={500}
+                height={500}
+                className="h-auto w-full object-contain"
+                unoptimized
+              />
             </div>
           </div>
 

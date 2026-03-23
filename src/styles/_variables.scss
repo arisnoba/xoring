@@ -24,8 +24,9 @@ $color-accent-blue: #3d3df5;
 
 // Layout
 $container-max-width: 1680px;
-$section-padding-x: clamp(1rem, 4vw, 4rem);
-$section-padding-y: clamp(4rem, 8vw, 8rem);
+$section-padding-inline: 20;
+$section-padding-block-min: 72;
+$section-padding-block-max: 200;
 $fluid-viewport-min: 375;
 $fluid-viewport-max: 1640;
 

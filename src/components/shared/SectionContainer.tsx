@@ -9,9 +9,5 @@ export default function SectionContainer({
   children,
   className,
 }: SectionContainerProps) {
-  return (
-    <div className={cn("max-w-[1680px] mx-auto px-4 md:px-8 lg:px-16", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("section-container", className)}>{children}</div>;
 }
