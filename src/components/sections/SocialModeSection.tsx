@@ -1,19 +1,15 @@
-import Image from "next/image";
-import SectionBadge from "@/components/shared/SectionBadge";
-import SectionContainer from "@/components/shared/SectionContainer";
-import ModeCardCarousel from "@/components/shared/ModeCardCarousel";
-import { SOCIAL_MODE } from "@/lib/constants";
+import Image from 'next/image';
+import SectionBadge from '@/components/shared/SectionBadge';
+import SectionContainer from '@/components/shared/SectionContainer';
+import ModeCardCarousel from '@/components/shared/ModeCardCarousel';
+import { SOCIAL_MODE } from '@/lib/constants';
 
-const socialSlides = [
-	"/assets/images/social/slide-01.jpg",
-	"/assets/images/social/slide-02.jpg",
-	"/assets/images/social/slide-03.jpg",
-	"/assets/images/social/slide-04.jpg",
-];
+const socialSlides = ['/assets/images/social/slide-01.jpg', '/assets/images/social/slide-02.jpg', '/assets/images/social/slide-03.jpg', '/assets/images/social/slide-04.jpg'];
 
 export default function SocialModeSection() {
 	return (
 		<section id="ring" className="relative isolate bg-white text-[#111]">
+			<div className="absolute h-full w-full bg-[url('/assets/images/bg-02.jpg')] bg-cover bg-center bg-no-repeat opacity-15 section-bg"></div>
 			<SectionContainer className="relative min-h-[1400px]">
 				<div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
 					<div className="lg:sticky lg:top-28">
@@ -26,7 +22,7 @@ export default function SocialModeSection() {
 					<div className="pt-4">
 						<div className="max-w-[780px]">
 							<h2 className="section-title section-title--tight text-balance text-[#151515]">
-								{SOCIAL_MODE.headline.split("\n").map((line, index, arr) => (
+								{SOCIAL_MODE.headline.split('\n').map((line, index, arr) => (
 									<span key={line}>
 										{line}
 										{index < arr.length - 1 && <br />}
