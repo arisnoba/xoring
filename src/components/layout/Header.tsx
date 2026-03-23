@@ -61,12 +61,8 @@ export default function Header() {
 	};
 
 	const isDarkTheme = activeTheme === 'dark';
-	const themeTransitionClassName = 'transition-[background-color,color,box-shadow,filter] duration-700 ease-out';
-	const headerSurfaceClassName = scrolled
-		? isDarkTheme
-			? 'bg-black/18 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
-			: 'bg-white/18 backdrop-blur-md shadow-[0_10px_30px_rgba(15,23,42,0.07)]'
-		: 'bg-transparent shadow-none';
+	const themeTransitionClassName = 'transition-[background-color,color,box-shadow,filter] duration-900 ease-in-out';
+	const headerSurfaceClassName = scrolled ? (isDarkTheme ? 'bg-black/10 backdrop-blur-sm ' : 'bg-white/10 backdrop-blur-sm ') : 'bg-transparent shadow-none';
 	const logoClassName = isDarkTheme ? 'invert' : 'invert-0';
 	const navClassName = isDarkTheme ? 'text-white hover:text-white/72' : 'text-[#242424] hover:text-[#444]';
 	const desktopButtonClassName = isDarkTheme ? 'bg-white/92 text-[#111] hover:bg-white/82' : 'bg-[#2f2f31]/92 text-white hover:bg-[#232325]';

@@ -113,7 +113,7 @@ export default function HeroSection() {
 					</SectionContainer>
 				</div>
 
-				<div ref={overlayRef} className="absolute inset-0 overflow-hidden bg-black/70 backdrop-blur-[2px] pointer-events-none">
+				<div ref={overlayRef} className="absolute inset-0 overflow-hidden bg-black/90 backdrop-blur-[2px] pointer-events-none">
 					{/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_44%,rgba(0,0,0,0.28),transparent_30%),radial-gradient(circle_at_32%_20%,rgba(255,255,255,0.12),transparent_42%),linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_100%)]" /> */}
 
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
