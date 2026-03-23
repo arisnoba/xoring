@@ -69,7 +69,7 @@ export default function HeroSection() {
 
 			timeline
 				.to(overlay, { opacity: 1 }, 0)
-				.to(introLeft, { opacity: 0.14, y: -28 }, 0)
+				.to(introLeft, { opacity: 0 }, 0)
 				.to(
 					introRing,
 					{
@@ -97,16 +97,23 @@ export default function HeroSection() {
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
 				<div className="absolute inset-0 bg-[#f5f5f7]">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">
-						<div className="grid w-full items-center gap-14 pb-10 pt-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
+						<div className="flex w-full items-center gap-14 justify-between lg:gap-6">
 							<div ref={introLeftRef} className="flex flex-col items-start justify-center gap-8 lg:gap-10">
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									<Image src="/assets/images/logo-v.svg" alt="XO" width={427} height={345} className="h-auto w-[min(68vw,427px)]" priority unoptimized />
 								</div>
-								<StoreButtons variant="light" googleFirst className="gap-4" buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]" />
+								<div className="flex items-center justify-center w-full">
+									<StoreButtons
+										variant="light"
+										googleFirst
+										className="gap-4"
+										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+									/>
+								</div>
 							</div>
 
-							<div ref={introRingRef} className="relative mx-auto flex w-full max-w-[760px] items-center justify-center lg:justify-end">
+							<div ref={introRingRef} className="relative flex w-full max-w-[760px] items-center justify-center lg:justify-end">
 								<RingArtwork className="w-[78vw] max-w-[760px] lg:w-full" />
 							</div>
 						</div>
@@ -114,8 +121,6 @@ export default function HeroSection() {
 				</div>
 
 				<div ref={overlayRef} className="absolute inset-0 overflow-hidden bg-black/90 backdrop-blur-[2px] pointer-events-none">
-					{/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_44%,rgba(0,0,0,0.28),transparent_30%),radial-gradient(circle_at_32%_20%,rgba(255,255,255,0.12),transparent_42%),linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_100%)]" /> */}
-
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
