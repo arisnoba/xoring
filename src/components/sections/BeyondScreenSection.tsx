@@ -10,7 +10,7 @@ const paragraphs = [
 
 export default function BeyondScreenSection() {
 	return (
-		<section id="beyond-screen" className="relative isolate min-h-screen overflow-hidden bg-[#0b0908] text-white">
+		<section id="beyond-screen" data-header-theme="dark" className="relative isolate min-h-screen overflow-hidden bg-[#0b0908] text-white">
 			<SectionBackground desktopSrc="/assets/images/beyondscreen/bg-desk.jpg" mobileSrc="/assets/images/beyondscreen/bg-mo.jpg" opacity={0.3} />
 			<SectionContainer className="relative flex items-center">
 				<div className="max-w-[840px]">

@@ -7,7 +7,7 @@ const policyLines = [
 
 export default function Footer() {
 	return (
-		<footer className="bg-black text-white footer-section">
+		<footer data-header-theme="dark" className="bg-black text-white footer-section">
 			<div className="mx-auto grid max-w-[1680px] gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
 				<div className="max-w-[980px]">
 					<h3 className="footer-section__title section-title section-title--footer text-white/55">Policy &amp; Community Guidelines</h3>

@@ -21,6 +21,8 @@ const overlayCopy = [
 	'the world’s first social smart ring.',
 ];
 
+const HERO_DARK_THEME_THRESHOLD = 0.18;
+
 export default function HeroSection() {
 	const sectionRef = useRef<HTMLElement>(null);
 	const overlayRef = useRef<HTMLDivElement>(null);
@@ -37,6 +39,17 @@ export default function HeroSection() {
 
 		if (!section || !overlay || !overlayText || !introLeft || !introRing) return;
 
+		let heroHeaderTheme: 'light' | 'dark' = 'light';
+		const syncHeroHeaderTheme = (nextTheme: 'light' | 'dark') => {
+			if (heroHeaderTheme === nextTheme) return;
+			heroHeaderTheme = nextTheme;
+			document.documentElement.dataset.heroHeaderTheme = nextTheme;
+			window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
+		};
+
+		document.documentElement.dataset.heroHeaderTheme = 'light';
+		window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
+
 		const ctx = gsap.context(() => {
 			gsap.set(overlay, { opacity: 0 });
 			gsap.set(overlayText, { opacity: 0, y: 56 });
@@ -48,6 +61,9 @@ export default function HeroSection() {
 					start: 'top top',
 					end: 'bottom bottom',
 					scrub: true,
+					onUpdate: self => {
+						syncHeroHeaderTheme(self.progress >= HERO_DARK_THEME_THRESHOLD ? 'dark' : 'light');
+					},
 				},
 			});
 
@@ -69,11 +85,15 @@ export default function HeroSection() {
 				.to(overlayText, { opacity: 1, y: 0 }, 0.18);
 		}, section);
 
-		return () => ctx.revert();
+		return () => {
+			ctx.revert();
+			delete document.documentElement.dataset.heroHeaderTheme;
+			window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
+		};
 	}, []);
 
 	return (
-		<section id="hero" ref={sectionRef} className="relative h-[220vh] bg-[#f5f5f7]">
+		<section id="hero" ref={sectionRef} data-header-theme="light" className="relative h-[220vh] bg-[#f5f5f7]">
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
 				<div className="absolute inset-0 bg-[#f5f5f7]">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">

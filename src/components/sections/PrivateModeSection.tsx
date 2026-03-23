@@ -9,7 +9,7 @@ const privateSlides = ['/assets/images/private/slide-01.jpg', '/assets/images/pr
 
 export default function PrivateModeSection() {
 	return (
-		<section className="relative isolate bg-black text-white">
+		<section data-header-theme="dark" className="relative isolate bg-black text-white">
 			<SectionBackground desktopSrc="/assets/images/private/bg-desk.jpg" mobileSrc="/assets/images/private/bg-mo.jpg" />
 
 			<SectionContainer className="relative flex items-center justify-center">

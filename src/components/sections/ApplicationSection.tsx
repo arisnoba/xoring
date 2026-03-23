@@ -4,7 +4,7 @@ import StoreButtons from '@/components/shared/StoreButtons';
 
 export default function ApplicationSection() {
 	return (
-		<section id="app" className="relative isolate overflow-hidden bg-[#f5f5f4] text-[#111]">
+		<section id="app" data-header-theme="light" className="relative isolate overflow-hidden bg-[#f5f5f4] text-[#111]">
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_40%,rgba(255,255,255,0.62),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.65),rgba(245,245,244,0.95))]" />
 			<SectionContainer className="relative flex items-center justify-center">
 				<div className="w-full grid items-center justify-items-center gap-16 lg:grid-cols-2 lg:gap-20">

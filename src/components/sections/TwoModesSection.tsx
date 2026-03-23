@@ -8,7 +8,7 @@ export default function TwoModesSection() {
 	const [mode, setMode] = useState<'O' | 'X'>('X');
 
 	return (
-		<section id="modes" className="relative overflow-hidden bg-[#171717] text-white">
+		<section id="modes" data-header-theme="dark" className="relative overflow-hidden bg-[#171717] text-white">
 			<SectionContainer className="flex flex-col items-center justify-center">
 				<div className="max-w-[860px] text-center">
 					<p className="text-balance text-[clamp(3.1rem,7vw,6.5rem)] font-black tracking-tight leading-[0.94]">

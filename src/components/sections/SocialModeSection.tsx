@@ -9,7 +9,7 @@ const socialSlides = ['/assets/images/social/slide-01.jpg', '/assets/images/soci
 
 export default function SocialModeSection() {
 	return (
-		<section id="ring" className="relative isolate bg-white text-[#111]">
+		<section id="ring" data-header-theme="light" className="relative isolate bg-white text-[#111]">
 			<SectionBackground desktopSrc="/assets/images/social/bg-desk.jpg" />
 			<SectionContainer className="relative min-h-[1400px]">
 				<div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">

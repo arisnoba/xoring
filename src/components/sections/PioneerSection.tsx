@@ -4,7 +4,7 @@ import SectionContainer from '@/components/shared/SectionContainer';
 
 export default function PioneerSection() {
 	return (
-		<section className="relative isolate overflow-hidden bg-[#f6f6f4] text-[#111]">
+		<section data-header-theme="light" className="relative isolate overflow-hidden bg-[#f6f6f4] text-[#111]">
 			<div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.52),rgba(255,255,255,0.2))]" />
 			<SectionContainer className="relative grid items-center gap-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
 				<div className="flex flex-col items-center justify-center gap-10">

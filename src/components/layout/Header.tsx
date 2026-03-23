@@ -12,14 +12,46 @@ const navLinks = [
 	{ label: 'AIOS', href: '#aios' },
 ];
 
+type HeaderTheme = 'light' | 'dark';
+
 export default function Header() {
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [activeTheme, setActiveTheme] = useState<HeaderTheme>('light');
 
 	useEffect(() => {
-		const onScroll = () => setScrolled(window.scrollY > 20);
-		window.addEventListener('scroll', onScroll, { passive: true });
-		return () => window.removeEventListener('scroll', onScroll);
+		const resolveSectionTheme = (): HeaderTheme => {
+			const stack = document.elementsFromPoint(window.innerWidth / 2, 1);
+			const themedContainer = stack.find((element): element is HTMLElement => {
+				if (!(element instanceof HTMLElement)) return false;
+				return Boolean(element.closest('section[data-header-theme], footer[data-header-theme]'));
+			});
+			const themedSection = themedContainer?.closest<HTMLElement>('section[data-header-theme], footer[data-header-theme]');
+			const sectionTheme = themedSection?.dataset.headerTheme === 'dark' ? 'dark' : 'light';
+
+			if (themedSection?.id === 'hero') {
+				return document.documentElement.dataset.heroHeaderTheme === 'dark' ? 'dark' : 'light';
+			}
+
+			return sectionTheme;
+		};
+
+		const syncHeaderState = () => {
+			setScrolled(window.scrollY > 20);
+			setActiveTheme(resolveSectionTheme());
+		};
+
+		syncHeaderState();
+
+		window.addEventListener('scroll', syncHeaderState, { passive: true });
+		window.addEventListener('resize', syncHeaderState);
+		window.addEventListener('xoring:hero-header-theme-change', syncHeaderState as EventListener);
+
+		return () => {
+			window.removeEventListener('scroll', syncHeaderState);
+			window.removeEventListener('resize', syncHeaderState);
+			window.removeEventListener('xoring:hero-header-theme-change', syncHeaderState as EventListener);
+		};
 	}, []);
 
 	const scrollTo = (href: string) => {
@@ -28,8 +60,20 @@ export default function Header() {
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
+	const isDarkTheme = activeTheme === 'dark';
+	const themeTransitionClassName = 'transition-[background-color,color,box-shadow,filter] duration-700 ease-out';
+	const headerSurfaceClassName = scrolled
+		? isDarkTheme
+			? 'bg-black/18 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+			: 'bg-white/18 backdrop-blur-md shadow-[0_10px_30px_rgba(15,23,42,0.07)]'
+		: 'bg-transparent shadow-none';
+	const logoClassName = isDarkTheme ? 'invert' : 'invert-0';
+	const navClassName = isDarkTheme ? 'text-white hover:text-white/72' : 'text-[#242424] hover:text-[#444]';
+	const desktopButtonClassName = isDarkTheme ? 'bg-white/92 text-[#111] hover:bg-white/82' : 'bg-[#2f2f31]/92 text-white hover:bg-[#232325]';
+	const mobileToggleClassName = isDarkTheme ? 'text-white' : 'text-[#1d1d1f]';
+
 	return (
-		<header className={cn('fixed top-0 left-0 right-0 z-50 h-16 lg:h-20 transition-all duration-300', scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent')}>
+		<header className={cn('fixed top-0 left-0 right-0 z-50 h-16 lg:h-20', themeTransitionClassName, headerSurfaceClassName)}>
 			<div className="max-w-[1680px] mx-auto px-4 md:px-8 lg:px-16 h-full flex items-center justify-between">
 				{/* Logo */}
 				<a
@@ -39,27 +83,26 @@ export default function Header() {
 						e.preventDefault();
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					}}>
-					<Image src="/assets/images/logo.svg" alt="XO RING" width={120} height={32} className="transition-all duration-300 invert-0" unoptimized />
+					<Image src="/assets/images/logo.svg" alt="XO RING" width={120} height={32} className={cn(themeTransitionClassName, logoClassName)} unoptimized />
 				</a>
 
 				{/* Desktop Nav */}
 				<nav className="hidden md:flex items-center gap-8">
 					{navLinks.map(link => (
-						<button
-							key={link.label}
-							onClick={() => scrollTo(link.href)}
-							className={cn('text-sm font-bold tracking-[0.15em] transition-colors duration-200 cursor-pointer', 'text-[#242424] hover:text-[#444]')}>
+						<button key={link.label} onClick={() => scrollTo(link.href)} className={cn('text-sm font-bold tracking-[0.15em] cursor-pointer', themeTransitionClassName, navClassName)}>
 							{link.label}
 						</button>
 					))}
 
-					<RippleButton className="px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] transition-all duration-200 bg-[#313131] text-white hover:bg-[#000000] cursor-pointer">
+					<RippleButton
+						className={cn('px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] cursor-pointer', themeTransitionClassName, desktopButtonClassName)}
+						rippleColor={isDarkTheme ? '#111111' : '#ffffff'}>
 						Buy Now
 					</RippleButton>
 				</nav>
 
 				{/* Mobile hamburger */}
-				<button className="md:hidden p-2 rounded-lg text-[#1d1d1f] transition-colors" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+				<button className={cn('md:hidden p-2 rounded-lg', themeTransitionClassName, mobileToggleClassName)} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
 					{menuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 			</div>

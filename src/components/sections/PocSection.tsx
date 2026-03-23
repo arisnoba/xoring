@@ -4,21 +4,6 @@ import { ChevronRight } from 'lucide-react';
 import SectionBackground from '@/components/shared/SectionBackground';
 import SectionContainer from '@/components/shared/SectionContainer';
 
-const topCards = [
-	{
-		title: 'XORing',
-		body: 'Workout and behavioral data collected via XORing and the app are logged and submitted to the AIOS network for PoC.',
-		image: '/assets/images/poc/XORing.png',
-		imageAlt: 'XORing smart ring',
-	},
-	{
-		title: 'AIOS Network',
-		body: 'The network generates activity blocks at fixed intervals and fairly distributes rewards based on data verification.',
-		image: '/assets/images/poc/AIOS%20Network.png',
-		imageAlt: 'AIOS Network',
-	},
-];
-
 const bottomCards = [
 	{
 		title: 'From PoW to PoC',
@@ -43,7 +28,7 @@ const steps = [
 
 export default function PocSection() {
 	return (
-		<section className="relative isolate overflow-hidden bg-[#070707] text-white">
+		<section data-header-theme="dark" className="relative isolate overflow-hidden bg-[#070707] text-white">
 			<SectionBackground desktopSrc="/assets/images/poc/bg-desk.jpg" mobileSrc="/assets/images/poc/bg-mo.jpg" />
 			<SectionContainer className="relative max-w-[1280px]! space-y-30 section-container__poc">
 				<div>
