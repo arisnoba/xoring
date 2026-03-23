@@ -1,0 +1,151 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RingArtwork from "@/components/shared/RingArtwork";
+import SectionContainer from "@/components/shared/SectionContainer";
+import StoreButtons from "@/components/shared/StoreButtons";
+import { MANIFESTO } from "@/lib/constants";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const overlayCopy = [
+  "Not just another smart ring",
+  "that tracks your health.",
+  "The more you breathe and move,",
+  "the deeper you connect.",
+  "",
+  "Meet XORing,",
+  "the world’s first social smart ring.",
+];
+
+export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayTextRef = useRef<HTMLDivElement>(null);
+  const introLeftRef = useRef<HTMLDivElement>(null);
+  const introRingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const overlay = overlayRef.current;
+    const overlayText = overlayTextRef.current;
+    const introLeft = introLeftRef.current;
+    const introRing = introRingRef.current;
+
+    if (!section || !overlay || !overlayText || !introLeft || !introRing) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(overlay, { opacity: 0 });
+      gsap.set(overlayText, { opacity: 0, y: 56 });
+
+      const timeline = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+        },
+      });
+
+      timeline
+        .to(overlay, { opacity: 1 }, 0)
+        .to(introLeft, { opacity: 0.14, y: -28 }, 0)
+        .to(
+          introRing,
+          {
+            opacity: 0.42,
+            scale: 0.96,
+            x: -24,
+            y: 10,
+            rotate: -6,
+            filter: "blur(18px)",
+          },
+          0
+        )
+        .to(overlayText, { opacity: 1, y: 0 }, 0.18);
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative h-[220vh] bg-[#f5f5f7]"
+    >
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="absolute inset-0 bg-[#f5f5f7]">
+          <SectionContainer className="flex h-full items-center">
+            <div className="grid w-full items-center gap-14 pb-10 pt-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
+              <div
+                ref={introLeftRef}
+                className="flex flex-col items-start justify-center gap-8 lg:gap-10"
+              >
+                <h1 className="sr-only">XO RING</h1>
+                <Image
+                  src="/assets/images/logo.svg"
+                  alt="XO RING"
+                  width={427}
+                  height={345}
+                  className="h-auto w-[min(68vw,427px)]"
+                  priority
+                  unoptimized
+                />
+                <StoreButtons
+                  variant="light"
+                  googleFirst
+                  className="gap-4"
+                  buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+                />
+              </div>
+
+              <div
+                ref={introRingRef}
+                className="relative mx-auto flex w-full max-w-[760px] items-center justify-center lg:justify-end"
+              >
+                <RingArtwork className="w-[78vw] max-w-[760px] lg:w-full" />
+              </div>
+            </div>
+          </SectionContainer>
+        </div>
+
+        <div
+          ref={overlayRef}
+          className="absolute inset-0 overflow-hidden bg-[#666666]/88 backdrop-blur-[2px]"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_44%,rgba(0,0,0,0.28),transparent_30%),radial-gradient(circle_at_32%_20%,rgba(255,255,255,0.12),transparent_42%),linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_100%)]" />
+
+          <SectionContainer className="relative flex h-full items-center justify-center">
+            <div
+              ref={overlayTextRef}
+              className="flex max-w-[860px] flex-col items-center text-center text-white"
+            >
+              <h2 className="text-balance text-[clamp(3rem,7vw,6.25rem)] font-black tracking-tight leading-[0.96]">
+                {MANIFESTO.headline.split("\n").map((line, index) => (
+                  <span key={line}>
+                    {line}
+                    {index < MANIFESTO.headline.split("\n").length - 1 && <br />}
+                  </span>
+                ))}
+              </h2>
+
+              <p className="mt-10 text-balance text-[clamp(1.125rem,2vw,1.5rem)] font-semibold leading-[1.55] text-white/92">
+                {overlayCopy.map((line, index) => (
+                  <span key={`${line}-${index}`}>
+                    {line || <span className="block h-5" aria-hidden="true" />}
+                    {line && <br />}
+                  </span>
+                ))}
+              </p>
+            </div>
+          </SectionContainer>
+        </div>
+      </div>
+    </section>
+  );
+}

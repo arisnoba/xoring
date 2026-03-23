@@ -1,19 +1,31 @@
-import SocialModeSection from "@/components/SocialModeSection";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import AIAgentSection from "@/components/sections/AIAgentSection";
+import ApplicationSection from "@/components/sections/ApplicationSection";
+import BeyondScreenSection from "@/components/sections/BeyondScreenSection";
+import HeroSection from "@/components/sections/HeroSection";
+import PocSection from "@/components/sections/PocSection";
+import PrivateModeSection from "@/components/sections/PrivateModeSection";
+import PioneerSection from "@/components/sections/PioneerSection";
+import TwoModesSection from "@/components/sections/TwoModesSection";
+import SocialModeSection from "@/components/sections/SocialModeSection";
+import Web3Section from "@/components/sections/Web3Section";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Spacer header to force scrolling for testing */}
-      <header className="h-[50vh] flex items-center justify-center bg-[#f5f5f7]">
-        <h1 className="text-4xl font-bold text-gray-400">Scroll Down for Social Mode</h1>
-      </header>
-      
+    <main className="min-h-screen bg-[#f5f5f7]">
+      <Header />
+      <HeroSection />
+      <BeyondScreenSection />
+      <TwoModesSection />
       <SocialModeSection />
-
-      {/* Spacer footer to force scrolling for testing */}
-      <footer className="h-[100vh] flex items-center justify-center bg-zinc-900">
-        <h2 className="text-4xl font-bold text-zinc-700">Footer Area</h2>
-      </footer>
+      <PrivateModeSection />
+      <AIAgentSection />
+      <ApplicationSection />
+      <PocSection />
+      <Web3Section />
+      <PioneerSection />
+      <Footer />
     </main>
   );
 }
