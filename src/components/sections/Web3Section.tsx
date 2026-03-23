@@ -14,7 +14,7 @@ export default function Web3Section() {
 
 			<SectionContainer className="relative flex items-center justify-center text-center">
 				<div className="max-w-[860px]">
-					<h2 className="section-title section-title--tight text-balance text-white">
+					<h2 className="section-title text-balance text-white">
 						<span className="block">A New Identity</span>
 						<span className="block">for the Web3.0 Era</span>
 					</h2>

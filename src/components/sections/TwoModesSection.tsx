@@ -11,7 +11,7 @@ export default function TwoModesSection() {
 		<section id="modes" data-header-theme="dark" className="relative overflow-hidden bg-[#171717] text-white">
 			<SectionContainer className="flex flex-col items-center justify-center">
 				<div className="max-w-[860px] text-center">
-					<p className="text-balance text-[clamp(3.1rem,7vw,6.5rem)] font-black tracking-tight leading-[0.94]">
+					<p className="text-balance section-title font-black">
 						<span className="block">One ring,</span>
 						<span className="block">Two Modes.</span>
 					</p>
