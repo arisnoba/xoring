@@ -50,17 +50,6 @@
 	letter-spacing: -0.025em;
 	@include fluid.fluid-type(24, 36);
 }
-@media (prefers-reduced-motion: reduce) {
-	.two-modes-section {
-		height: auto !important;
-
-		.sticky {
-			position: relative !important;
-			height: auto !important;
-		}
-	}
-}
-
 .footer-section {
 	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, $fluid-viewport-min, $fluid-viewport-max);
 	@include fluid.fluid-space(padding-block, 64, 120, $fluid-viewport-min, $fluid-viewport-max);
