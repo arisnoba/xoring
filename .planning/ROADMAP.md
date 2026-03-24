@@ -28,7 +28,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. 개발자는 공통 모션 프리셋을 import해 섹션마다 같은 리듬의 reveal을 적용할 수 있다.
   3. reduced motion 환경에서는 reveal 대상 콘텐츠가 애니메이션 없이 즉시 보인다.
   4. 기존 서버 컴포넌트 섹션은 reveal 추가만으로 불필요하게 클라이언트 컴포넌트로 바뀌지 않는다.
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 01-01-PLAN.md — 공통 reveal preset, `RevealOnScroll`, 서버 경계 guardrail을 구현한다
 **UI hint**: yes
 
 ### Phase 2: Static Section Reveal
@@ -72,7 +74,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Motion Foundation | 0/TBD | Not started | - |
+| 1. Motion Foundation | 0/1 | Not started | - |
 | 2. Static Section Reveal | 0/TBD | Not started | - |
 | 3. Interactive Section Safeguards | 0/TBD | Not started | - |
 | 4. Hero Intro & Release Readiness | 0/TBD | Not started | - |

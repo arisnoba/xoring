@@ -8,7 +8,8 @@
     "dev:webpack": "WATCHPACK_POLLING=true next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:motion-foundation": "node scripts/verify-motion-foundation.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
