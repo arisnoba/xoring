@@ -41,7 +41,12 @@ Plans:
   1. 사용자는 `BeyondScreen`, `Web3`, `Pioneer` 섹션 진입 시 동일한 계열의 reveal 모션을 본다.
   2. 사용자는 `AIAgent`, `Application`, `Poc` 섹션에서 계획 문서에 맞는 블록 단위 reveal 흐름을 본다.
   3. `Poc` 섹션의 상단, 중단, 하단 블록은 각 블록이 뷰포트에 들어올 때 독립적으로 reveal 된다.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 02-01-PLAN.md — BeyondScreen, Web3, Pioneer에 SECT-01 reveal 적용
+- [ ] 02-02-PLAN.md — AIAgent, Application에 블록형 SECT-03 reveal 적용
+- [ ] 02-03-PLAN.md — Poc 3블록 reveal 구조와 brownfield 경계 검증
+- [ ] 02-04-PLAN.md — Phase 2 lint/build 및 데스크톱·모바일 수동 검증
 **UI hint**: yes
 
 ### Phase 3: Interactive Section Safeguards
@@ -52,7 +57,10 @@ Plans:
   1. 사용자는 `SocialMode`와 `PrivateMode` 섹션에서 sticky 레이아웃이 유지된 상태로 reveal 모션을 본다.
   2. 사용자는 `SocialMode`와 `PrivateMode` 섹션에서 reveal 이후에도 캐러셀을 정상적으로 넘길 수 있다.
   3. 사용자는 `TwoModes` 섹션에서 초기 reveal 이후에도 O/X 모드 전환을 정상적으로 사용할 수 있다.
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — SocialMode/PrivateMode에 sticky-safe reveal wrapper를 추가하고 ModeCardCarousel 보호 규칙을 고정한다
+- [ ] 03-02-PLAN.md — TwoModes에 초기 reveal을 추가하면서 O/X 모드 토글과 버튼 시맨틱을 유지한다
 **UI hint**: yes
 
 ### Phase 4: Hero Intro & Release Readiness

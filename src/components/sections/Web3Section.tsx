@@ -1,5 +1,7 @@
+import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import SectionContainer from '@/components/shared/SectionContainer';
 import SectionBackground from '@/components/shared/SectionBackground';
+import { fadeUp } from '@/lib/motion';
 
 const paragraphs = [
 	'Not just another smart device.',
@@ -14,21 +16,25 @@ export default function Web3Section() {
 
 			<SectionContainer className="relative flex items-center justify-center text-center">
 				<div className="max-w-[860px]">
-					<h2 className="section-title text-balance text-white">
-						<span className="block">A New Identity</span>
-						<span className="block">for the Web3.0 Era</span>
-					</h2>
+					<RevealOnScroll variants={fadeUp}>
+						<h2 className="section-title text-balance text-white">
+							<span className="block">A New Identity</span>
+							<span className="block">for the Web3.0 Era</span>
+						</h2>
+					</RevealOnScroll>
 
 					<div className="section-copy mx-auto mt-10 max-w-[620px] space-y-10 text-white/94">
 						{paragraphs.map((paragraph, index) => (
-							<p key={index} className="text-balance">
-								{paragraph.split('\n').map((line, i) => (
-									<span key={i}>
-										{line}
-										{i < paragraph.split('\n').length - 1 && <br />}
-									</span>
-								))}
-							</p>
+							<RevealOnScroll key={index} variants={fadeUp} delay={0.12 * index}>
+								<p className="text-balance">
+									{paragraph.split('\n').map((line, i) => (
+										<span key={i}>
+											{line}
+											{i < paragraph.split('\n').length - 1 && <br />}
+										</span>
+									))}
+								</p>
+							</RevealOnScroll>
 						))}
 					</div>
 				</div>

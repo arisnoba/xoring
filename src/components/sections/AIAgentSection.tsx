@@ -1,7 +1,9 @@
 import Image from 'next/image';
+import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import SectionBackground from '@/components/shared/SectionBackground';
 import SectionContainer from '@/components/shared/SectionContainer';
 import { AI_AGENT } from '@/lib/constants';
+import { fadeUp, scaleUp } from '@/lib/motion';
 
 const agents = [
 	{
@@ -33,28 +35,34 @@ export default function AIAgentSection() {
 
 			<SectionContainer className="relative section-content-space">
 				<div className="mx-auto max-w-[920px] text-center">
-					<p className="text-[1rem] font-bold tracking-[0.08em] text-[#8a8a8a]">AI AGENT</p>
-					<h2 className="section-title section-title--tight mt-4 text-balance text-[#171717]">
-						{AI_AGENT.headline.split('\n').map((line, index, arr) => (
-							<span key={line}>
-								{line}
-								{index < arr.length - 1 && <br />}
-							</span>
-						))}
-					</h2>
-					<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance lg:text-wrap text-[#2d2d31]">
-						{AI_AGENT.subtext.split('\n').map((line, index, arr) => (
-							<span key={index}>
-								{line}
-								{index < arr.length - 1 && <br />}
-							</span>
-						))}
-					</p>
+					<RevealOnScroll variants={fadeUp}>
+						<p className="text-[1rem] font-bold tracking-[0.08em] text-[#8a8a8a]">AI AGENT</p>
+					</RevealOnScroll>
+					<RevealOnScroll variants={fadeUp} delay={0.1}>
+						<h2 className="section-title section-title--tight mt-4 text-balance text-[#171717]">
+							{AI_AGENT.headline.split('\n').map((line, index, arr) => (
+								<span key={line}>
+									{line}
+									{index < arr.length - 1 && <br />}
+								</span>
+							))}
+						</h2>
+					</RevealOnScroll>
+					<RevealOnScroll variants={fadeUp} delay={0.15}>
+						<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance lg:text-wrap text-[#2d2d31]">
+							{AI_AGENT.subtext.split('\n').map((line, index, arr) => (
+								<span key={index}>
+									{line}
+									{index < arr.length - 1 && <br />}
+								</span>
+							))}
+						</p>
+					</RevealOnScroll>
 				</div>
 
 				<div className="mt-16 grid grid-cols-1 justify-center gap-y-16 min-[769px]:flex min-[769px]:grid-cols-none min-[769px]:flex-row min-[769px]:gap-10">
-					{agents.map(agent => (
-						<div key={agent.title} className="flex flex-col items-center gap-6">
+					{agents.map((agent, index) => (
+						<RevealOnScroll key={agent.title} variants={scaleUp} delay={0.1 * index} className="flex flex-col items-center gap-6">
 							<h3 className="text-center section-copy font-semibold tracking-tight text-[#1e1e1f]">{agent.title}</h3>
 							<div className="relative w-full max-w-[220px]">
 								<Image src={agent.image} alt={agent.title} width={440} height={880} className="h-auto w-full object-contain" />
@@ -62,7 +70,7 @@ export default function AIAgentSection() {
 							<div className="max-w-[250px] rounded-[10px] md:rounded-[20px] bg-white/86 px-5 py-5 text-center shadow-[0_18px_40px_rgba(17,24,39,0.08)]">
 								<p className="text-[0.98rem] font-medium leading-[1.55] text-[#44454a]">{agent.description}</p>
 							</div>
-						</div>
+						</RevealOnScroll>
 					))}
 				</div>
 			</SectionContainer>

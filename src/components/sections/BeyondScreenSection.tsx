@@ -1,5 +1,7 @@
+import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import SectionContainer from '@/components/shared/SectionContainer';
 import SectionBackground from '@/components/shared/SectionBackground';
+import { fadeUp } from '@/lib/motion';
 import { BEYOND_SCREEN } from '@/lib/constants';
 
 const paragraphs = [
@@ -14,17 +16,21 @@ export default function BeyondScreenSection() {
 			<SectionBackground desktopSrc="/assets/images/beyondscreen/bg-desk.jpg" mobileSrc="/assets/images/beyondscreen/bg-mo.jpg" opacity={0.3} />
 			<SectionContainer className="relative flex items-center">
 				<div className="max-w-[840px]">
-					<h2 className="section-title text-balance text-white">{BEYOND_SCREEN.headline}</h2>
+					<RevealOnScroll variants={fadeUp}>
+						<h2 className="section-title text-balance text-white">{BEYOND_SCREEN.headline}</h2>
+					</RevealOnScroll>
 
 					<div className="section-copy section-copy--wide mt-14 space-y-4 lg:space-y-8 text-white/95">
 						{paragraphs.map((paragraph, index) => (
-							<p key={index} className="text-balance">
-								{paragraph.map(line => (
-									<span key={line} className="block">
-										{line}
-									</span>
-								))}
-							</p>
+							<RevealOnScroll key={index} variants={fadeUp} delay={0.1 * index}>
+								<p className="text-balance">
+									{paragraph.map(line => (
+										<span key={line} className="block">
+											{line}
+										</span>
+									))}
+								</p>
+							</RevealOnScroll>
 						))}
 					</div>
 				</div>
