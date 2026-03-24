@@ -9,7 +9,7 @@ export default function ApplicationSection() {
 			<SectionContainer className="relative flex items-center justify-center">
 				<div className="w-full grid items-center justify-items-center gap-16 lg:grid-cols-2 lg:gap-20">
 					<div className="relative flex items-center justify-center">
-						<div className="relative w-full max-w-[70vw] lg:max-w-[720px]">
+						<div className="relative w-full max-w-[75vw] lg:max-w-[720px]">
 							<Image
 								src="/assets/images/application/phones.webp"
 								alt="Mobile App Interface"

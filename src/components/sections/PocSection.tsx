@@ -28,7 +28,7 @@ const steps = [
 
 export default function PocSection() {
 	return (
-		<section data-header-theme="dark" className="relative isolate overflow-hidden bg-[#070707] text-white">
+		<section id="aios" data-header-theme="dark" className="relative isolate overflow-hidden bg-[#070707] text-white">
 			<SectionBackground desktopSrc="/assets/images/poc/bg-desk.jpg" mobileSrc="/assets/images/poc/bg-mo.jpg" />
 			<SectionContainer className="relative max-w-[1280px]! space-y-30 section-container__poc">
 				<div>

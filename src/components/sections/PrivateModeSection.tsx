@@ -13,10 +13,10 @@ export default function PrivateModeSection() {
 			<SectionBackground desktopSrc="/assets/images/private/bg-desk.jpg" mobileSrc="/assets/images/private/bg-mo.jpg" />
 
 			<SectionContainer className="relative flex items-center justify-center">
-				<div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
+				<div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)]">
 					<div className="lg:sticky lg:top-28">
 						<SectionBadge label="PRIVATE MODE" icon="x" variant="dark" />
-						<div className="mt-8 max-w-[250px]">
+						<div className="mt-8 mode-ring">
 							<Image src="/assets/images/ring-x.png" alt="XORing Private Mode" width={500} height={500} className="h-auto w-full object-contain" unoptimized />
 						</div>
 					</div>

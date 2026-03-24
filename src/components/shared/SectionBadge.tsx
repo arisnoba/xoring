@@ -13,19 +13,19 @@ export default function SectionBadge({ label, icon = 'none', variant = 'dark', c
 	const borderColor = variant === 'dark' ? 'border-[#8a8a8a]' : 'border-[#555]';
 
 	return (
-		<div className={cn('flex items-center gap-4 text-xs md:text-sm font-bold tracking-[0.2em] uppercase', textColor, className)}>
+		<div className={cn('flex items-center gap-2 lg:gap-4 font-bold uppercase section-badge', textColor, className)}>
 			{icon === 'o' && (
-				<span className={cn('flex items-center justify-center w-12 h-12', borderColor)}>
+				<span className={cn('flex items-center justify-center section-badge__label', borderColor)}>
 					<Image src="/assets/images/icon-o.svg" alt="O" width={48} height={48} unoptimized />
 				</span>
 			)}
 			{icon === 'x' && (
-				<span className={cn('flex items-center justify-center w-12 h-12', borderColor)}>
+				<span className={cn('flex items-center justify-center section-badge__label', borderColor)}>
 					<Image src="/assets/images/icon-x.svg" alt="X" width={48} height={48} unoptimized className="invert" />
 				</span>
 			)}
 			{icon === 'none' && (
-				<span className={cn('flex items-center justify-center w-7 h-7 rounded-full border-2', borderColor)}>
+				<span className={cn('flex items-center justify-center w-7 h-7 rounded-full border-2 section-badge__label', borderColor)}>
 					<span className="w-2 h-2 rounded-full bg-current" />
 				</span>
 			)}

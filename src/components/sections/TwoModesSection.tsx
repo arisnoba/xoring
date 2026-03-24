@@ -34,9 +34,9 @@ export default function TwoModesSection() {
 				<div className="mt-12 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-2 px-2 sm:max-w-[420px] sm:gap-4 md:mt-16 md:max-w-[580px] md:gap-5 md:px-0">
 					<button
 						onClick={() => setMode('O')}
-						className="flex w-full flex-col items-center gap-3 pt-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5"
+						className="flex w-full flex-col items-center gap-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5 cursor-pointer"
 						aria-pressed={mode === 'O'}>
-						<div className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
+						<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
 							<Image
 								src="/assets/images/icon-o.svg"
 								alt=""
@@ -46,28 +46,28 @@ export default function TwoModesSection() {
 								style={{ filter: mode === 'O' ? 'brightness(0) invert(1)' : 'none' }}
 								className="h-auto w-full transition-all duration-500"
 							/>
-						</div>
-						<p
-							className={`text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'O' ? 'text-white' : 'text-white/65'}`}>
+						</span>
+						<span
+							className={`block text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'O' ? 'text-white' : 'text-white/65'}`}>
 							<span className="block">Connect with</span>
 							<span className="block">the world</span>
-						</p>
+						</span>
 					</button>
 
 					<button
-						className="flex cursor-pointer flex-col items-center gap-2 pt-1 text-center text-white transition-opacity hover:opacity-80 md:gap-3"
+						className="flex h-[64px] w-[64px] cursor-pointer flex-col items-center gap-2 text-center text-white transition-opacity hover:opacity-80 md:gap-3 sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]"
 						onClick={() => setMode(mode === 'O' ? 'X' : 'O')}
 						aria-label="Twist to switch mode">
-						<div className="h-5 w-px bg-white/80 sm:h-7 md:h-9" />
-						<p className="whitespace-nowrap text-[0.65rem] font-medium text-white/95 sm:text-[0.8rem] md:text-[1.05rem]">Twist to switch</p>
-						<div className="h-5 w-px bg-white/80 sm:h-7 md:h-9" />
+						<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
+						<span className="block whitespace-nowrap text-[0.65rem] font-medium text-white/95 sm:text-[0.8rem] md:text-[1.05rem]">Twist to switch</span>
+						<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
 					</button>
 
 					<button
 						onClick={() => setMode('X')}
-						className="flex w-full flex-col items-center gap-3 pt-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5"
+						className="flex w-full flex-col items-center gap-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5 cursor-pointer"
 						aria-pressed={mode === 'X'}>
-						<div className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
+						<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
 							<Image
 								src="/assets/images/icon-x.svg"
 								alt=""
@@ -77,12 +77,12 @@ export default function TwoModesSection() {
 								style={{ filter: mode === 'X' ? 'brightness(0) invert(1)' : 'none' }}
 								className="h-auto w-full transition-all duration-500"
 							/>
-						</div>
-						<p
-							className={`text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'X' ? 'text-white' : 'text-white/65'}`}>
+						</span>
+						<span
+							className={`block text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'X' ? 'text-white' : 'text-white/65'}`}>
 							<span className="block">Focus on</span>
 							<span className="block">yourself</span>
-						</p>
+						</span>
 					</button>
 				</div>
 			</SectionContainer>

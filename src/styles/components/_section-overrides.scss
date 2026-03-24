@@ -9,7 +9,19 @@
 	@include fluid.fluid-space(padding-inline, $section-padding-inline-min, $section-padding-inline-max, 768, $fluid-viewport-max);
 	@include fluid.fluid-space(padding-block, $section-padding-block-min, $section-padding-block-max, $fluid-viewport-min, $fluid-viewport-max);
 }
+.section-content-space {
+	display: flex;
+	flex-direction: column;
 
+	@include fluid.fluid-space(gap, 50, 100, $fluid-viewport-min, $fluid-viewport-max);
+}
+
+.section-badge {
+	@include fluid.fluid-space(font-size, 14, 24, $fluid-viewport-min, $fluid-viewport-max);
+	&__label {
+		@include fluid.fluid-space(width, 24, 48, $fluid-viewport-min, $fluid-viewport-max);
+	}
+}
 .hero-section__copy {
 	@include fluid.fluid-type($type-section-copy-min, $type-section-copy-wide-max, $fluid-viewport-min, $fluid-viewport-max);
 }

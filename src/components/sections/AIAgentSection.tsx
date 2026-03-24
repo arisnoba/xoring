@@ -28,10 +28,10 @@ const agents = [
 
 export default function AIAgentSection() {
 	return (
-		<section id="aios" data-header-theme="light" className="relative isolate overflow-hidden bg-[#efefec] text-[#111]">
+		<section data-header-theme="light" className="relative isolate overflow-hidden bg-[#efefec] text-[#111]">
 			<SectionBackground desktopSrc="/assets/images/aiagent/bg-desk.jpg" mobileSrc="/assets/images/aiagent/bg-mo.jpg" opacity={0.3} />
 
-			<SectionContainer className="relative">
+			<SectionContainer className="relative section-content-space">
 				<div className="mx-auto max-w-[920px] text-center">
 					<p className="text-[1rem] font-bold tracking-[0.08em] text-[#8a8a8a]">AI AGENT</p>
 					<h2 className="section-title section-title--tight mt-4 text-balance text-[#171717]">
@@ -42,7 +42,14 @@ export default function AIAgentSection() {
 							</span>
 						))}
 					</h2>
-					<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance text-[#2d2d31]">{AI_AGENT.subtext}</p>
+					<p className="section-copy mx-auto mt-8 max-w-[980px] text-balance lg:text-wrap text-[#2d2d31]">
+						{AI_AGENT.subtext.split('\n').map((line, index, arr) => (
+							<span key={index}>
+								{line}
+								{index < arr.length - 1 && <br />}
+							</span>
+						))}
+					</p>
 				</div>
 
 				<div className="mt-16 grid grid-cols-1 justify-center gap-y-16 min-[769px]:flex min-[769px]:grid-cols-none min-[769px]:flex-row min-[769px]:gap-10">

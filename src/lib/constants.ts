@@ -96,7 +96,7 @@ export const PRIVATE_MODE = {
 export const AI_AGENT = {
 	badge: 'O LIFESTYLE PACEMAKER',
 	headline: 'Lifestyle\nPacemaker',
-	subtext: 'The moment you put on XORing, your personal AI agent wakes up. Beyond just counting steps, it takes care of your body, mind, and relationships.',
+	subtext: 'The moment you put on XORing, your personal AI agent wakes up.\nBeyond just counting steps, it takes care of your body, mind, and relationships.',
 	agents: [
 		{
 			title: 'AI Health Agent',
