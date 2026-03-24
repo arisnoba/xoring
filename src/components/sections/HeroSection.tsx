@@ -21,12 +21,14 @@ const overlayCopy = [
 	"the world's first social smart ring.",
 ];
 
-// 패널 슬라이드 + 스크롤 이동에 공통으로 쓰이는 시간.
-const HERO_STAGE_DURATION = 1.0;
+// 패널 슬라이드 애니메이션 시간.
+const HERO_STAGE_DURATION = 0.8;
 // 모바일에서 이 거리 이상 스와이프해야 다음 단계 전환으로 해석한다.
 const HERO_TOUCH_THRESHOLD = 28;
 // 현재 스크롤 위치가 각 단계 앵커 근처인지 판정하는 허용 범위.
 const HERO_SCROLL_TOLERANCE = 48;
+// wheel 실수 트리거 방지 최소 delta.
+const HERO_WHEEL_MIN_DELTA = 5;
 
 type HeroStage = 'intro' | 'overlay';
 
@@ -97,7 +99,7 @@ export default function HeroSection() {
 				syncHeroHeaderTheme(nextStage === 'overlay' ? 'dark' : 'light');
 			};
 
-			// CodePen 패턴: gsap.isTweening으로 중복 방지, 아래에서 슬라이드 업
+			// gsap.isTweening으로 중복 방지, 아래에서 슬라이드 업
 			const transitionToStage = (nextStage: HeroStage) => {
 				if (currentStage.value === nextStage) return;
 				if (gsap.isTweening(slider)) return;
@@ -108,10 +110,18 @@ export default function HeroSection() {
 				syncHeroHeaderTheme(isOverlay ? 'dark' : 'light');
 
 				// overlay 패널: 아래에서 올라오거나 아래로 내려감
+				// lenis.scrollTo를 동시에 실행하면 두 힘이 충돌해 snap처럼 느껴짐.
+				// 대신 애니메이션 완료 후 스크롤 위치를 instant하게 보정한다.
 				gsap.to(slider, {
 					y: isOverlay ? '0%' : '100%',
 					duration: HERO_STAGE_DURATION,
-					ease: 'power2.inOut',
+					ease: 'expo.inOut',
+					onComplete: () => {
+						lenis?.scrollTo(isOverlay ? getOverlayAnchor() : getIntroAnchor(), {
+							duration: 0,
+							force: true,
+						});
+					},
 				});
 
 				// overlay 텍스트 fade in (슬라이드 진행 중 등장)
@@ -119,20 +129,13 @@ export default function HeroSection() {
 					gsap.to(overlayText, {
 						opacity: 1,
 						y: 0,
-						duration: HERO_STAGE_DURATION * 0.65,
-						delay: HERO_STAGE_DURATION * 0.25,
-						ease: 'power2.out',
+						duration: HERO_STAGE_DURATION * 0.6,
+						delay: HERO_STAGE_DURATION * 0.3,
+						ease: 'power3.out',
 					});
 				} else {
 					gsap.to(overlayText, { opacity: 0, y: 40, duration: 0.25, ease: 'power2.in' });
 				}
-
-				// 스크롤 위치 동기화 (섹션 exit 타이밍 맞춤)
-				lenis?.scrollTo(isOverlay ? getOverlayAnchor() : getIntroAnchor(), {
-					duration: HERO_STAGE_DURATION,
-					lock: true,
-					force: true,
-				});
 			};
 
 			const shouldMoveToOverlay = () => isHeroActive.value && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor());
@@ -146,11 +149,11 @@ export default function HeroSection() {
 					event.preventDefault();
 					return;
 				}
-				if (event.deltaY > 0 && shouldMoveToOverlay()) {
+				if (event.deltaY > HERO_WHEEL_MIN_DELTA && shouldMoveToOverlay()) {
 					event.preventDefault();
 					transitionToStage('overlay');
 				}
-				if (event.deltaY < 0 && shouldMoveToIntro()) {
+				if (event.deltaY < -HERO_WHEEL_MIN_DELTA && shouldMoveToIntro()) {
 					event.preventDefault();
 					transitionToStage('intro');
 				}
