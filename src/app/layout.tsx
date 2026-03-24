@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/assets/images/kv.png',
+        url: '/assets/images/ogimage.png',
         width: 1200,
         height: 630,
         alt: 'XORing social smart ring hero image',
@@ -39,15 +39,33 @@ export const metadata: Metadata = {
     title: "XORing — World's First Social Smart Ring",
     description:
       "Beyond myself, Connecting us. XORing is the world's first social smart ring — track your health, connect with others, and prove your value.",
-    images: ['/assets/images/kv.png'],
+    images: ['/assets/images/ogimage.png'],
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/assets/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/assets/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/assets/favicon/favicon.ico' },
+    ],
+    apple: [
+      { url: '/assets/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'android-chrome-192x192',
+        url: '/assets/favicon/android-chrome-192x192.png',
+      },
+      {
+        rel: 'android-chrome-512x512',
+        url: '/assets/favicon/android-chrome-512x512.png',
+      },
+    ],
   },
+  manifest: '/assets/favicon/site.webmanifest',
 };
 
 export default function RootLayout({
