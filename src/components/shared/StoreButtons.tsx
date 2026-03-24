@@ -1,3 +1,4 @@
+import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import { cn } from '@/lib/utils';
 import { PLACEHOLDER_LINKS } from '@/lib/site';
 
@@ -40,11 +41,9 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 	return (
 		<div className={cn('flex flex-row gap-3', className)}>
 			{orderedStores.map(store => (
-				<a
+				<PlaceholderLink
 					key={store.key}
 					href={store.href}
-					target="_blank"
-					rel="noreferrer"
 					className={cn(
 						'flex items-center gap-3 px-5 py-3 rounded-full transition-all duration-200 hover:opacity-80 active:scale-[0.97] active:-translate-y-px cursor-pointer',
 						bg,
@@ -56,7 +55,7 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 						<div className="text-[10px] opacity-70 leading-none">{store.eyebrow}</div>
 						<div className="text-sm font-semibold leading-tight">{store.label}</div>
 					</div>
-				</a>
+				</PlaceholderLink>
 			))}
 		</div>
 	);

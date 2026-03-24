@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
+import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import { cn } from '@/lib/utils';
 import { PLACEHOLDER_LINKS } from '@/lib/site';
 
@@ -104,14 +105,12 @@ export default function Header() {
 						</button>
 					))}
 
-					<a
+					<PlaceholderLink
 						href={PLACEHOLDER_LINKS.buyNow}
-						target="_blank"
-						rel="noreferrer"
 						className={cn('px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] cursor-pointer', themeTransitionClassName, desktopButtonClassName)}
 					>
 						Buy Now
-					</a>
+					</PlaceholderLink>
 				</nav>
 
 				{/* Mobile hamburger */}
@@ -135,14 +134,12 @@ export default function Header() {
 								{link.label}
 							</button>
 						))}
-						<a
+						<PlaceholderLink
 							href={PLACEHOLDER_LINKS.buyNow}
-							target="_blank"
-							rel="noreferrer"
 							className="mt-2 w-full px-6 py-3 border-none rounded-full bg-[#1d1d1f] text-white text-sm font-bold text-center"
 						>
 							Buy Now
-						</a>
+						</PlaceholderLink>
 					</nav>
 				</div>
 			)}

@@ -1,5 +1,6 @@
 import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import RingArtwork from '@/components/shared/RingArtwork';
+import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import SectionContainer from '@/components/shared/SectionContainer';
 import { fadeIn, fadeUp, scaleUp } from '@/lib/motion';
 import { PLACEHOLDER_LINKS } from '@/lib/site';
@@ -49,13 +50,11 @@ export default function PioneerSection() {
 							</div>
 						</RevealOnScroll>
 						<RevealOnScroll variants={fadeUp} delay={0.3}>
-							<a
+							<PlaceholderLink
 								href={PLACEHOLDER_LINKS.waitlist}
-								target="_blank"
-								rel="noreferrer"
 								className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)] transition-all duration-200 hover:bg-[#2c2c2e] hover:shadow-[0_22px_55px_rgba(17,24,39,0.2)] active:scale-[0.97] active:-translate-y-px">
 								Coming Soon
-							</a>
+							</PlaceholderLink>
 						</RevealOnScroll>
 					</div>
 				</div>

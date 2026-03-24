@@ -111,7 +111,7 @@ export default function HeroSection() {
 										variant="light"
 										googleFirst
 										className="gap-2 sm:gap-4 flex-row"
-										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-black/10"
 									/>
 								</div>
 							</div>
