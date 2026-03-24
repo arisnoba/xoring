@@ -49,24 +49,24 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MOTN-01 | TBD | Pending |
-| MOTN-02 | TBD | Pending |
-| MOTN-03 | TBD | Pending |
-| SECT-01 | TBD | Pending |
-| SECT-02 | TBD | Pending |
-| SECT-03 | TBD | Pending |
-| SECT-04 | TBD | Pending |
-| HERO-01 | TBD | Pending |
-| HERO-02 | TBD | Pending |
-| QUAL-01 | TBD | Pending |
-| QUAL-02 | TBD | Pending |
-| QUAL-03 | TBD | Pending |
+| MOTN-01 | Phase 1 | Pending |
+| MOTN-02 | Phase 1 | Pending |
+| MOTN-03 | Phase 1 | Pending |
+| SECT-01 | Phase 2 | Pending |
+| SECT-02 | Phase 3 | Pending |
+| SECT-03 | Phase 2 | Pending |
+| SECT-04 | Phase 3 | Pending |
+| HERO-01 | Phase 4 | Pending |
+| HERO-02 | Phase 4 | Pending |
+| QUAL-01 | Phase 1 | Pending |
+| QUAL-02 | Phase 4 | Pending |
+| QUAL-03 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 12 total
-- Mapped to phases: 0
-- Unmapped: 12 ⚠️
+- Mapped to phases: 12
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after initial definition*
+*Last updated: 2026-03-24 after roadmap creation*
