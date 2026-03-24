@@ -23,7 +23,7 @@
 	}
 }
 .mode-ring {
-	@include fluid.fluid-space(width, 250, 310, $fluid-viewport-min, $fluid-viewport-max);
+	@include fluid.fluid-space(width, 200, 250, $fluid-viewport-min, $fluid-viewport-max);
 }
 .hero-section__copy {
 	@include fluid.fluid-type($type-section-copy-min, $type-section-copy-wide-max, $fluid-viewport-min, $fluid-viewport-max);

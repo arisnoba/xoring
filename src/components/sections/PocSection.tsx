@@ -30,7 +30,7 @@ export default function PocSection() {
 	return (
 		<section id="aios" data-header-theme="dark" className="relative isolate overflow-hidden bg-[#070707] text-white">
 			<SectionBackground desktopSrc="/assets/images/poc/bg-desk.jpg" mobileSrc="/assets/images/poc/bg-mo.jpg" />
-			<SectionContainer className="relative max-w-[1280px]! space-y-30 section-container__poc">
+			<SectionContainer className="relative max-w-[1280px]! section-content-space section-container__poc">
 				<div>
 					<div className="mx-auto max-w-[940px] text-center">
 						<p className="text-[1rem] font-bold tracking-[0.08em] text-white/55">AIOS · PoC</p>

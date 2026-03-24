@@ -4,6 +4,8 @@ import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import { SITE_URL } from '@/lib/site';
 import "./globals.css";
 import "./globals.scss";
+import "../styles/_typography.scss";
+import "../styles/components/_section-overrides.scss";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
