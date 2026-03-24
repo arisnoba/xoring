@@ -38,6 +38,10 @@ export default function HeroSection() {
 
 		if (!section || !overlay || !overlayText || !introLeft || !introRing) return;
 
+		const introLogo = introLeft.querySelector<HTMLElement>('.hero-logo');
+		const introStoreButtons = introLeft.querySelector<HTMLElement>('.hero-store-buttons');
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 		let heroHeaderTheme: 'light' | 'dark' = 'light';
 		const syncHeroHeaderTheme = (nextTheme: 'light' | 'dark') => {
 			if (heroHeaderTheme === nextTheme) return;
@@ -52,6 +56,16 @@ export default function HeroSection() {
 		const ctx = gsap.context(() => {
 			gsap.set(overlay, { opacity: 0 });
 			gsap.set(overlayText, { opacity: 0, y: 56 });
+
+			if (!prefersReducedMotion && introLogo && introStoreButtons) {
+				// Intro motion is one-shot only. ScrollTrigger continues to own the scrubbed overlay transition.
+				const introTl = gsap.timeline();
+
+				introTl
+					.from(introLogo, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' })
+					.from(introRing, { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'power2.out' }, 0.15)
+					.from(introStoreButtons, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' }, 0.3);
+			}
 
 			const timeline = gsap.timeline({
 				defaults: { ease: 'none' },
@@ -101,9 +115,9 @@ export default function HeroSection() {
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="hero-section__logo h-auto" />
+									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="hero-logo hero-section__logo h-auto" />
 								</div>
-								<div className="flex w-full items-center justify-center">
+								<div className="hero-store-buttons flex w-full items-center justify-center">
 									<StoreButtons
 										variant="light"
 										googleFirst
