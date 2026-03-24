@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import 'lenis/dist/lenis.css';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import { SITE_URL } from '@/lib/site';
@@ -68,6 +68,12 @@ export const metadata: Metadata = {
   manifest: '/assets/favicon/site.webmanifest',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,7 +84,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-[calc(var(--safe-area-left)+1rem)] focus:top-[calc(var(--safe-area-top)+1rem)] focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-lg"
         >
           Skip to main content
         </a>

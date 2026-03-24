@@ -13,7 +13,7 @@ import Web3Section from '@/components/sections/Web3Section';
 
 export default function Home() {
 	return (
-		<main id="main-content" className="min-h-screen bg-white">
+		<main id="main-content" className="min-h-screen min-h-[100dvh] bg-white">
 			<Header />
 			<HeroSection />
 			<BeyondScreenSection />

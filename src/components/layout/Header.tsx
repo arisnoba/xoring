@@ -76,7 +76,7 @@ export default function Header() {
 	const mobileToggleClassName = isDarkTheme ? 'text-white' : 'text-[#1d1d1f]';
 
 	return (
-		<header className={cn('fixed top-0 left-0 right-0 z-50 h-16 lg:h-20', themeTransitionClassName, headerSurfaceClassName)}>
+		<header className={cn('fixed top-0 left-0 right-0 z-50 h-[var(--header-height-mobile)] pl-[var(--safe-area-left)] pt-[var(--safe-area-top)] pr-[var(--safe-area-right)] lg:h-[var(--header-height-desktop)]', themeTransitionClassName, headerSurfaceClassName)}>
 			<div className="max-w-[1680px] mx-auto px-4 md:px-8 lg:px-16 h-full flex items-center justify-between">
 				{/* Logo */}
 				<a
