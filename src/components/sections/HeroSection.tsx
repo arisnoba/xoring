@@ -110,8 +110,10 @@ export default function HeroSection() {
 				syncHeroHeaderTheme(isOverlay ? 'dark' : 'light');
 
 				// overlay 패널: 아래에서 올라오거나 아래로 내려감
-				// lenis.scrollTo를 동시에 실행하면 두 힘이 충돌해 snap처럼 느껴짐.
-				// 대신 애니메이션 완료 후 스크롤 위치를 instant하게 보정한다.
+				// 빠른 스와이프 시 lenis가 이미 처리한 모멘텀이 계속 스크롤을 밀어
+				// onComplete의 instant 보정이 "틱"으로 보이는 문제 방지.
+				// 애니메이션 시작 시 lenis를 멈추고 완료 후 위치 동기화 + 재개.
+				lenis?.stop();
 				gsap.to(slider, {
 					y: isOverlay ? '0%' : '100%',
 					duration: HERO_STAGE_DURATION,
@@ -121,6 +123,7 @@ export default function HeroSection() {
 							duration: 0,
 							force: true,
 						});
+						lenis?.start();
 					},
 				});
 
@@ -205,6 +208,8 @@ export default function HeroSection() {
 
 			cleanupInteractions = () => {
 				activeTrigger.kill();
+				// 애니메이션 도중 언마운트 시 lenis가 stop 상태로 남지 않도록 보장
+				lenis?.start();
 				window.removeEventListener('wheel', onWheel);
 				window.removeEventListener('touchstart', onTouchStart);
 				window.removeEventListener('touchmove', onTouchMove);
