@@ -5,7 +5,7 @@ milestone_name: milestone
 status: planning
 stopped_at: Phase 1 context gathered
 last_updated: "2026-03-24T06:26:40.135Z"
-last_activity: 2026-03-24 — brownfield 모션 개선 로드맵 생성 및 requirement traceability 매핑 완료
+last_activity: 2026-03-24 - Completed quick task 260324-oex: TwoModesSection 링 체인지를 비디오+GSAP 스크롤로 교체
 progress:
   total_phases: 4
   completed_phases: 0
@@ -69,6 +69,12 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260324-oex | TwoModesSection 링 체인지를 비디오+GSAP 스크롤로 교체 | 2026-03-24 | d7818d7 | [260324-oex-twomodessection-gsap](./quick/260324-oex-twomodessection-gsap/) |
 
 ### Blockers/Concerns
 
