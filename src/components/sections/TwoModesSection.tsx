@@ -13,8 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 const FRAME_COUNT = 73;
 const FRAME_WIDTH = 584;
 const FRAME_HEIGHT = 650;
-const FRAME_POSTER = '/assets/video/change-ring-frames/frame-001.jpg';
-const FRAME_SOURCES = Array.from({ length: FRAME_COUNT }, (_, index) => `/assets/video/change-ring-frames/frame-${String(index + 1).padStart(3, '0')}.jpg`);
+const FRAME_POSTER = '/assets/video/change-ring-frames/frame-001.png';
+const FRAME_SOURCES = Array.from({ length: FRAME_COUNT }, (_, index) => `/assets/video/change-ring-frames/frame-${String(index + 1).padStart(3, '0')}.png`);
 
 export default function TwoModesSection() {
 	const sectionRef = useRef<HTMLElement>(null);
