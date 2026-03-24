@@ -40,6 +40,7 @@ export default function HeroSection() {
 
 		const introLogo = introLeft.querySelector<HTMLElement>('.hero-logo');
 		const introStoreButtons = introLeft.querySelector<HTMLElement>('.hero-store-buttons');
+		const introRingArtwork = introRing.querySelector<HTMLElement>('.hero-section__artwork');
 		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 		let heroHeaderTheme: 'light' | 'dark' = 'light';
@@ -57,13 +58,14 @@ export default function HeroSection() {
 			gsap.set(overlay, { opacity: 0 });
 			gsap.set(overlayText, { opacity: 0, y: 56 });
 
-			if (!prefersReducedMotion && introLogo && introStoreButtons) {
-				// Intro motion is one-shot only. ScrollTrigger continues to own the scrubbed overlay transition.
+			if (!prefersReducedMotion && introLogo && introStoreButtons && introRingArtwork) {
+				// ScrollTrigger owns the outer ring container. The intro animation only touches an inner wrapper
+				// so scrolling back to the hero cannot leave the scrubbed node at an incorrect opacity.
 				const introTl = gsap.timeline();
 
 				introTl
 					.from(introLogo, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' })
-					.from(introRing, { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'power2.out' }, 0.15)
+					.from(introRingArtwork, { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'power2.out' }, 0.15)
 					.from(introStoreButtons, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' }, 0.3);
 			}
 
