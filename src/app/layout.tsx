@@ -81,6 +81,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased font-sans">
+      <head>
+        <link rel="preload" href="/assets/video/hero-ring.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="/assets/video/hero-ring-loop.mp4" as="video" type="video/mp4" />
+      </head>
       <body className="min-h-full flex flex-col">
         <a
           href="#main-content"
