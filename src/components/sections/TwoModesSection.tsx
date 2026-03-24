@@ -102,7 +102,7 @@ export default function TwoModesSection() {
 					</RevealOnScroll>
 
 					<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
-						<div className="relative z-10 w-[50vw] max-w-[410px] -top-[21px]">
+						<div className="relative z-10 w-[50vw] max-w-[310px] -top-[21px]">
 							<video
 								ref={videoRef}
 								src="/assets/video/change-ring_optim.mp4"
