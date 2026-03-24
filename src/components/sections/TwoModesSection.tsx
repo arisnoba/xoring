@@ -13,7 +13,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function TwoModesSection() {
 	const sectionRef = useRef<HTMLElement>(null);
 	const videoRef = useRef<HTMLVideoElement>(null);
-	const colorCircleRef = useRef<HTMLDivElement>(null);
 	const oIndicatorRef = useRef<HTMLDivElement>(null);
 	const xIndicatorRef = useRef<HTMLDivElement>(null);
 	const modeRef = useRef<'O' | 'X'>('O');
@@ -21,11 +20,10 @@ export default function TwoModesSection() {
 	useEffect(() => {
 		const section = sectionRef.current;
 		const video = videoRef.current;
-		const colorCircle = colorCircleRef.current;
 		const oIndicator = oIndicatorRef.current;
 		const xIndicator = xIndicatorRef.current;
 
-		if (!section || !video || !colorCircle || !oIndicator || !xIndicator) return;
+		if (!section || !video || !oIndicator || !xIndicator) return;
 
 		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		if (prefersReducedMotion) return;
@@ -35,7 +33,6 @@ export default function TwoModesSection() {
 
 		const updateModeVisuals = (mode: 'O' | 'X') => {
 			const isO = mode === 'O';
-			gsap.to(colorCircle, { backgroundColor: isO ? '#5BCD5B' : '#2F43C8', duration: 0.3, ease: 'power2.out' });
 			const oText = oIndicator.querySelector<HTMLElement>('.mode-text');
 			const xText = xIndicator.querySelector<HTMLElement>('.mode-text');
 			const oIcon = oIndicator.querySelector<HTMLElement>('.mode-icon');
@@ -47,9 +44,11 @@ export default function TwoModesSection() {
 		};
 
 		let ctx: ReturnType<typeof gsap.context> | null = null;
+		let removeReadyListener: (() => void) | null = null;
 
 		const initScrollScrub = () => {
 			ctx = gsap.context(() => {
+				const scrubEndTime = Math.max(video.duration - 0.001, 0);
 				const tl = gsap.timeline({
 					scrollTrigger: {
 						trigger: section,
@@ -65,17 +64,26 @@ export default function TwoModesSection() {
 						},
 					},
 				});
-				tl.to(video, { currentTime: video.duration, ease: 'none' });
+				tl.to(video, { currentTime: scrubEndTime, ease: 'none' });
 			}, section);
 		};
 
-		if (video.readyState >= 1) {
+		const handleVideoReady = () => {
+			if (ctx) return;
 			initScrollScrub();
+		};
+
+		if (video.readyState >= 3) {
+			handleVideoReady();
 		} else {
-			video.addEventListener('loadedmetadata', initScrollScrub, { once: true });
+			video.addEventListener('canplay', handleVideoReady);
+			removeReadyListener = () => {
+				video.removeEventListener('canplay', handleVideoReady);
+			};
 		}
 
 		return () => {
+			removeReadyListener?.();
 			ctx?.revert();
 		};
 	}, []);
@@ -94,8 +102,7 @@ export default function TwoModesSection() {
 					</RevealOnScroll>
 
 					<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
-						<div ref={colorCircleRef} className="relative h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] rounded-full" style={{ backgroundColor: '#5BCD5B' }} />
-						<div className="absolute z-10 w-[50vw] max-w-[310px] -top-[21px]">
+						<div className="relative z-10 w-[50vw] max-w-[310px] -top-[21px]">
 							<video
 								ref={videoRef}
 								src="/assets/video/change-ring_optim.mp4"
