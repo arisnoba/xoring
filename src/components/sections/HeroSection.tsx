@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import RingArtwork from '@/components/shared/RingArtwork';
+import HeroRingVideo from '@/components/shared/HeroRingVideo';
 import SectionContainer from '@/components/shared/SectionContainer';
 import StoreButtons from '@/components/shared/StoreButtons';
 import { MANIFESTO } from '@/lib/constants';
@@ -17,7 +17,7 @@ const overlayCopy = [
 	'the deeper you connect.',
 	'',
 	'Meet XORing,',
-	'the world’s first social smart ring.',
+	"the world's first social smart ring.",
 ];
 
 const HERO_DARK_THEME_THRESHOLD = 0.18;
@@ -28,14 +28,12 @@ export default function HeroSection() {
 	const overlayTextRef = useRef<HTMLDivElement>(null);
 	const introLeftRef = useRef<HTMLDivElement>(null);
 	const introRingRef = useRef<HTMLDivElement>(null);
-
 	useEffect(() => {
 		const section = sectionRef.current;
 		const overlay = overlayRef.current;
 		const overlayText = overlayTextRef.current;
 		const introLeft = introLeftRef.current;
 		const introRing = introRingRef.current;
-
 		if (!section || !overlay || !overlayText || !introLeft || !introRing) return;
 
 		const introLogo = introLeft.querySelector<HTMLElement>('.hero-logo');
@@ -85,18 +83,7 @@ export default function HeroSection() {
 			timeline
 				.to(overlay, { opacity: 1 }, 0)
 				.to(introLeft, { opacity: 0 }, 0)
-				.to(
-					introRing,
-					{
-						opacity: 0.42,
-						scale: 0.96,
-						x: -24,
-						y: 10,
-						rotate: -6,
-						filter: 'blur(18px)',
-					},
-					0
-				)
+
 				.to(overlayText, { opacity: 1, y: 0 }, 0.18);
 		}, section);
 
@@ -108,9 +95,9 @@ export default function HeroSection() {
 	}, []);
 
 	return (
-		<section id="hero" ref={sectionRef} data-header-theme="light" className="relative h-[220vh] bg-[#f5f5f7]">
+		<section id="hero" ref={sectionRef} data-header-theme="light" className="relative h-[220vh] bg-white">
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
-				<div className="absolute inset-0 bg-[#f5f5f7]">
+				<div className="absolute inset-0 bg-white ">
 					<SectionContainer className="flex h-full min-h-0 items-center py-0">
 						<div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:gap-12 lg:flex-row lg:justify-between lg:gap-6">
 							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10 xl:min-w-[424px]">
@@ -130,13 +117,13 @@ export default function HeroSection() {
 							</div>
 
 							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0">
-								<RingArtwork className="hero-section__artwork" />
+								<HeroRingVideo className="hero-section__artwork" />
 							</div>
 						</div>
 					</SectionContainer>
 				</div>
 
-				<div ref={overlayRef} className="pointer-events-none absolute inset-0 overflow-hidden bg-black/90 opacity-0 backdrop-blur-[2px]">
+				<div ref={overlayRef} className="pointer-events-none absolute inset-0 overflow-hidden bg-black/90 opacity-0 backdrop-blur-[10px]">
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
