@@ -1,48 +1,123 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionContainer from '@/components/shared/SectionContainer';
 import RevealOnScroll from '@/components/shared/RevealOnScroll';
-import { fadeUp, scaleUp } from '@/lib/motion';
+import { fadeUp } from '@/lib/motion';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function TwoModesSection() {
-	const [mode, setMode] = useState<'O' | 'X'>('O');
+	const sectionRef = useRef<HTMLElement>(null);
+	const videoRef = useRef<HTMLVideoElement>(null);
+	const colorCircleRef = useRef<HTMLDivElement>(null);
+	const oIndicatorRef = useRef<HTMLDivElement>(null);
+	const xIndicatorRef = useRef<HTMLDivElement>(null);
+	const modeRef = useRef<'O' | 'X'>('O');
+
+	useEffect(() => {
+		const section = sectionRef.current;
+		const video = videoRef.current;
+		const colorCircle = colorCircleRef.current;
+		const oIndicator = oIndicatorRef.current;
+		const xIndicator = xIndicatorRef.current;
+
+		if (!section || !video || !colorCircle || !oIndicator || !xIndicator) return;
+
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (prefersReducedMotion) return;
+
+		const updateModeVisuals = (mode: 'O' | 'X') => {
+			const isO = mode === 'O';
+			gsap.to(colorCircle, {
+				backgroundColor: isO ? '#5BCD5B' : '#2F43C8',
+				duration: 0.3,
+				ease: 'power2.out',
+			});
+
+			const oText = oIndicator.querySelector<HTMLElement>('.mode-text');
+			const xText = xIndicator.querySelector<HTMLElement>('.mode-text');
+			const oIcon = oIndicator.querySelector<HTMLElement>('.mode-icon');
+			const xIcon = xIndicator.querySelector<HTMLElement>('.mode-icon');
+
+			gsap.to(oText, { opacity: isO ? 1 : 0.45, duration: 0.3, ease: 'power2.out' });
+			gsap.to(xText, { opacity: isO ? 0.45 : 1, duration: 0.3, ease: 'power2.out' });
+			gsap.to(oIcon, {
+				filter: isO ? 'brightness(0) invert(1)' : 'none',
+				duration: 0.3,
+				ease: 'power2.out',
+			});
+			gsap.to(xIcon, {
+				filter: isO ? 'none' : 'brightness(0) invert(1)',
+				duration: 0.3,
+				ease: 'power2.out',
+			});
+		};
+
+		const ctx = gsap.context(() => {
+			ScrollTrigger.create({
+				trigger: section,
+				start: 'top top',
+				end: 'bottom bottom',
+				scrub: true,
+				onUpdate: self => {
+					if (video.duration) {
+						video.currentTime = self.progress * video.duration;
+					}
+					const newMode = self.progress < 0.5 ? 'O' : 'X';
+					if (newMode !== modeRef.current) {
+						modeRef.current = newMode;
+						updateModeVisuals(newMode);
+					}
+				},
+			});
+		}, section);
+
+		return () => {
+			ctx.revert();
+		};
+	}, []);
 
 	return (
-		<section id="modes" data-header-theme="dark" className="relative overflow-hidden bg-[#171717] text-white">
-			<SectionContainer className="flex flex-col items-center justify-center">
-				<RevealOnScroll variants={fadeUp}>
-					<div className="max-w-[860px] text-center">
-						<p className="text-balance section-title font-black">
-							<span className="block">One ring,</span>
-							<span className="block">Two Modes.</span>
-						</p>
-					</div>
-				</RevealOnScroll>
+		<section id="modes" ref={sectionRef} data-header-theme="dark" className="two-modes-section relative bg-[#171717] text-white h-[250vh]">
+			<div className="sticky top-0 h-[100dvh] overflow-hidden">
+				<SectionContainer className="flex flex-col items-center justify-center">
+					<RevealOnScroll variants={fadeUp}>
+						<div className="max-w-[860px] text-center">
+							<p className="text-balance section-title font-black">
+								<span className="block">One ring,</span>
+								<span className="block">Two Modes.</span>
+							</p>
+						</div>
+					</RevealOnScroll>
 
-				<RevealOnScroll variants={scaleUp} delay={0.15}>
 					<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
-						<div className="relative h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] rounded-full transition-colors duration-500" style={{ backgroundColor: mode === 'O' ? '#5BCD5B' : '#2F43C8' }} />
+						<div
+							ref={colorCircleRef}
+							className="relative h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] rounded-full"
+							style={{ backgroundColor: '#5BCD5B' }}
+						/>
 						<div className="absolute z-10 w-[50vw] max-w-[310px] -top-[21px]">
-							<div className="flex w-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(${mode === 'O' ? '0' : '-100%'})` }}>
-								<div className={`w-full shrink-0 transition-opacity duration-250 ease-in ${mode === 'O' ? 'opacity-100' : 'opacity-0'}`}>
-									<Image src="/assets/images/ring-0.png" alt="O Mode Ring" width={460} height={460} className="h-auto w-full" />
-								</div>
-								<div className={`w-full shrink-0 transition-opacity duration-250 ease-in ${mode === 'X' ? 'opacity-100' : 'opacity-0'}`}>
-									<Image src="/assets/images/ring-x.png" alt="X Mode Ring" width={460} height={460} className="h-auto w-full" />
-								</div>
-							</div>
+							<video
+								ref={videoRef}
+								src="/assets/video/change-ring_optim.mp4"
+								poster="/assets/video/change-ring_optim.jpg"
+								muted
+								playsInline
+								preload="auto"
+								aria-hidden="true"
+								className="block w-full h-auto"
+							/>
 						</div>
 					</div>
-				</RevealOnScroll>
 
-				<RevealOnScroll variants={fadeUp} delay={0.3}>
 					<div className="mt-12 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-2 px-2 sm:max-w-[420px] sm:gap-4 md:mt-16 md:max-w-[580px] md:gap-5 md:px-0">
-						<button
-							onClick={() => setMode('O')}
-							className="flex w-full flex-col items-center gap-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5 cursor-pointer"
-							aria-pressed={mode === 'O'}>
+						<div
+							ref={oIndicatorRef}
+							className="flex w-full flex-col items-center gap-3 text-center md:gap-5">
 							<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
 								<Image
 									src="/assets/images/icon-o.svg"
@@ -50,30 +125,25 @@ export default function TwoModesSection() {
 									aria-hidden="true"
 									width={116}
 									height={116}
-									style={{ filter: mode === 'O' ? 'brightness(0) invert(1)' : 'none' }}
-									className="h-auto w-full transition-all duration-500"
+									className="mode-icon h-auto w-full"
+									style={{ filter: 'brightness(0) invert(1)' }}
 								/>
 							</span>
-							<span
-								className={`block text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'O' ? 'text-white' : 'text-white/65'}`}>
+							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] text-white">
 								<span className="block">Connect with</span>
 								<span className="block">the world</span>
 							</span>
-						</button>
+						</div>
 
-						<button
-							className="flex h-[64px] w-[64px] cursor-pointer flex-col items-center gap-2 text-center text-white transition-opacity hover:opacity-80 md:gap-3 sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]"
-							onClick={() => setMode(mode === 'O' ? 'X' : 'O')}
-							aria-label="Twist to switch mode">
+						<div className="flex h-[64px] w-[64px] flex-col items-center gap-2 text-center text-white md:gap-3 sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]" aria-hidden="true">
 							<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
 							<span className="block whitespace-nowrap text-[0.65rem] font-medium text-white/95 sm:text-[0.8rem] md:text-[1.05rem]">Twist to switch</span>
 							<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
-						</button>
+						</div>
 
-						<button
-							onClick={() => setMode('X')}
-							className="flex w-full flex-col items-center gap-3 text-center transition-opacity hover:opacity-80 disabled:opacity-100 md:gap-5 cursor-pointer"
-							aria-pressed={mode === 'X'}>
+						<div
+							ref={xIndicatorRef}
+							className="flex w-full flex-col items-center gap-3 text-center md:gap-5">
 							<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
 								<Image
 									src="/assets/images/icon-x.svg"
@@ -81,19 +151,18 @@ export default function TwoModesSection() {
 									aria-hidden="true"
 									width={116}
 									height={116}
-									style={{ filter: mode === 'X' ? 'brightness(0) invert(1)' : 'none' }}
-									className="h-auto w-full transition-all duration-500"
+									className="mode-icon h-auto w-full"
+									style={{ filter: 'none' }}
 								/>
 							</span>
-							<span
-								className={`block text-balance text-[0.75rem] font-medium leading-[1.15] transition-colors duration-500 sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] ${mode === 'X' ? 'text-white' : 'text-white/65'}`}>
+							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)]" style={{ opacity: 0.45 }}>
 								<span className="block">Focus on</span>
 								<span className="block">yourself</span>
 							</span>
-						</button>
+						</div>
 					</div>
-				</RevealOnScroll>
-			</SectionContainer>
+				</SectionContainer>
+			</div>
 		</section>
 	);
 }
