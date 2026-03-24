@@ -10,32 +10,43 @@ import { fadeUp } from '@/lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const FRAME_COUNT = 73;
+const FRAME_WIDTH = 584;
+const FRAME_HEIGHT = 650;
+const FRAME_POSTER = '/assets/video/change-ring-frames/frame-001.jpg';
+const FRAME_SOURCES = Array.from({ length: FRAME_COUNT }, (_, index) => `/assets/video/change-ring-frames/frame-${String(index + 1).padStart(3, '0')}.jpg`);
+
 export default function TwoModesSection() {
 	const sectionRef = useRef<HTMLElement>(null);
-	const videoRef = useRef<HTMLVideoElement>(null);
-	const colorCircleRef = useRef<HTMLDivElement>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const oIndicatorRef = useRef<HTMLDivElement>(null);
 	const xIndicatorRef = useRef<HTMLDivElement>(null);
 	const modeRef = useRef<'O' | 'X'>('O');
 
 	useEffect(() => {
 		const section = sectionRef.current;
-		const video = videoRef.current;
-		const colorCircle = colorCircleRef.current;
+		const canvas = canvasRef.current;
 		const oIndicator = oIndicatorRef.current;
 		const xIndicator = xIndicatorRef.current;
 
-		if (!section || !video || !colorCircle || !oIndicator || !xIndicator) return;
+		if (!section || !canvas || !oIndicator || !xIndicator) return;
+
+		const context = canvas.getContext('2d');
+		if (!context) return;
 
 		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (prefersReducedMotion) return;
+		const frameImages = FRAME_SOURCES.map((src) => {
+			const image = new window.Image();
+			image.decoding = 'async';
+			image.src = src;
+			return image;
+		});
 
-		video.pause();
-		video.currentTime = 0;
+		let currentFrameIndex = -1;
+		let pendingFrameIndex = 0;
 
 		const updateModeVisuals = (mode: 'O' | 'X') => {
 			const isO = mode === 'O';
-			gsap.to(colorCircle, { backgroundColor: isO ? '#5BCD5B' : '#2F43C8', duration: 0.3, ease: 'power2.out' });
 			const oText = oIndicator.querySelector<HTMLElement>('.mode-text');
 			const xText = xIndicator.querySelector<HTMLElement>('.mode-text');
 			const oIcon = oIndicator.querySelector<HTMLElement>('.mode-icon');
@@ -46,34 +57,55 @@ export default function TwoModesSection() {
 			gsap.to(xIcon, { filter: isO ? 'none' : 'brightness(0) invert(1)', duration: 0.3, ease: 'power2.out' });
 		};
 
-		let ctx: ReturnType<typeof gsap.context> | null = null;
+		const drawFrame = (frameIndex: number) => {
+			const image = frameImages[frameIndex];
+			if (!image) return;
 
-		const initScrollScrub = () => {
-			ctx = gsap.context(() => {
-				const tl = gsap.timeline({
-					scrollTrigger: {
-						trigger: section,
-						start: 'top top',
-						end: 'bottom bottom',
-						scrub: 0.5,
-						onUpdate: self => {
-							const newMode = self.progress < 0.5 ? 'O' : 'X';
-							if (newMode !== modeRef.current) {
-								modeRef.current = newMode;
-								updateModeVisuals(newMode);
-							}
-						},
-					},
-				});
-				tl.to(video, { currentTime: video.duration, ease: 'none' });
-			}, section);
+			pendingFrameIndex = frameIndex;
+			if (!image.complete || image.naturalWidth === 0) return;
+
+			if (currentFrameIndex === frameIndex) return;
+
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.drawImage(image, 0, 0, canvas.width, canvas.height);
+			currentFrameIndex = frameIndex;
 		};
 
-		if (video.readyState >= 1) {
-			initScrollScrub();
-		} else {
-			video.addEventListener('loadedmetadata', initScrollScrub, { once: true });
-		}
+		frameImages.forEach((image, frameIndex) => {
+			image.addEventListener(
+				'load',
+				() => {
+					if (frameIndex === 0 || frameIndex === pendingFrameIndex) {
+						drawFrame(frameIndex);
+					}
+				},
+				{ once: true }
+			);
+		});
+
+		drawFrame(0);
+		updateModeVisuals(modeRef.current);
+
+		if (prefersReducedMotion) return;
+
+		const ctx = gsap.context(() => {
+			ScrollTrigger.create({
+				trigger: section,
+				start: 'top top',
+				end: 'bottom bottom',
+				scrub: 0.5,
+				onUpdate: (self) => {
+					const frameIndex = Math.round(self.progress * (FRAME_COUNT - 1));
+					drawFrame(frameIndex);
+
+					const newMode = self.progress < 0.5 ? 'O' : 'X';
+					if (newMode !== modeRef.current) {
+						modeRef.current = newMode;
+						updateModeVisuals(newMode);
+					}
+				},
+			});
+		}, section);
 
 		return () => {
 			ctx?.revert();
@@ -94,17 +126,17 @@ export default function TwoModesSection() {
 					</RevealOnScroll>
 
 					<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
-						<div ref={colorCircleRef} className="relative h-[58vw] w-[58vw] max-h-[378px] max-w-[378px] rounded-full" style={{ backgroundColor: '#5BCD5B' }} />
-						<div className="absolute z-10 w-[50vw] max-w-[310px] -top-[21px]">
-							<video
-								ref={videoRef}
-								src="/assets/video/change-ring_optim.mp4"
-								poster="/assets/video/change-ring_optim.jpg"
-								muted
-								playsInline
-								preload="auto"
+						<div className="relative z-10 w-[58vw] max-w-[410px] -top-[21px]">
+							<canvas
+								ref={canvasRef}
+								width={FRAME_WIDTH}
+								height={FRAME_HEIGHT}
 								aria-hidden="true"
-								className="block w-full h-auto"
+								className="block h-auto w-full bg-contain bg-center bg-no-repeat"
+								style={{
+									aspectRatio: `${FRAME_WIDTH} / ${FRAME_HEIGHT}`,
+									backgroundImage: `url(${FRAME_POSTER})`,
+								}}
 							/>
 						</div>
 					</div>

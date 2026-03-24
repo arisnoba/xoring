@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/assets/images/kv.png',
+        url: '/assets/images/ogimage.png',
         width: 1200,
         height: 630,
         alt: 'XORing social smart ring hero image',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "XORing — World's First Social Smart Ring",
     description:
       "Beyond myself, Connecting us. XORing is the world's first social smart ring — track your health, connect with others, and prove your value.",
-    images: ['/assets/images/kv.png'],
+    images: ['/assets/images/ogimage.png'],
   },
   robots: {
     index: true,
