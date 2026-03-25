@@ -21,12 +21,10 @@ const overlayCopy = [
 	"the world's first social smart ring.",
 ];
 
-// 패널 슬라이드 애니메이션 시간
-const HERO_STAGE_DURATION = 0.75;
-// 모바일 스와이프 트리거 최소 거리
-const HERO_TOUCH_THRESHOLD = 28;
 // 앵커 근처 판정 허용 범위
-const HERO_SCROLL_TOLERANCE = 48;
+const HERO_SCROLL_TOLERANCE = 80;
+// 모바일 스와이프 트리거 최소 거리
+const HERO_TOUCH_THRESHOLD = 30;
 // 휠 실수 트리거 방지 최소 delta
 const HERO_WHEEL_MIN_DELTA = 5;
 
@@ -64,18 +62,22 @@ export default function HeroSection() {
 		document.documentElement.dataset.heroHeaderTheme = 'light';
 		window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
 
+		const getIntroAnchor = () => section.offsetTop;
+		const getOverlayAnchor = () => section.offsetTop + window.innerHeight;
+		const isNearAnchor = (anchor: number) => Math.abs(window.scrollY - anchor) <= HERO_SCROLL_TOLERANCE;
+
 		const currentStage = { value: 'intro' as HeroStage };
 		const isHeroActive = { value: window.scrollY < section.offsetTop + section.offsetHeight };
 		const touchStartY = { value: null as number | null };
 
-		const getIntroAnchor = () => section.offsetTop;
-		const getOverlayAnchor = () => section.offsetTop + window.innerHeight;
-		const isNearAnchor = (anchor: number) => Math.abs(window.scrollY - anchor) <= HERO_SCROLL_TOLERANCE;
+		// Lenis easing — expo out 느낌
+		const lenisEasing = (t: number) => 1 - Math.pow(1 - t, 4);
+
 		let cleanupInteractions = () => {};
 
 		const ctx = gsap.context(() => {
 			gsap.set(slider, { y: '100%' });
-			gsap.set(overlayText, { opacity: 0, y: 40 });
+			gsap.set(overlayText, { opacity: 0, y: 20 });
 
 			if (!prefersReducedMotion && introLogo && introStoreButtons && introRingArtwork) {
 				gsap.timeline()
@@ -84,122 +86,96 @@ export default function HeroSection() {
 					.from(introStoreButtons, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' }, 0.3);
 			}
 
-			const syncStageWithoutMotion = (nextStage: HeroStage) => {
-				currentStage.value = nextStage;
-				if (!gsap.isTweening(slider)) {
-					gsap.set(slider, { y: nextStage === 'overlay' ? '0%' : '100%' });
-					gsap.set(overlayText, nextStage === 'overlay' ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 });
-				}
-				syncHeroHeaderTheme(nextStage === 'overlay' ? 'dark' : 'light');
-			};
-
-			// 스크롤 감지 즉시 전환 시작 — 멈출 때까지 기다리지 않음
-			const transitionToStage = (nextStage: HeroStage) => {
-				if (currentStage.value === nextStage) return;
-				if (gsap.isTweening(slider)) return;
-
-				currentStage.value = nextStage;
-				const isOverlay = nextStage === 'overlay';
-				syncHeroHeaderTheme(isOverlay ? 'dark' : 'light');
-
-				// lenis 모멘텀 차단 후 애니메이션 시작
-				lenis?.stop();
-				gsap.to(slider, {
-					y: isOverlay ? '0%' : '100%',
-					duration: HERO_STAGE_DURATION,
-					ease: 'expo.inOut',
-					onComplete: () => {
-						// duration: 0 대신 짧은 duration 사용 — 순간 점프에 의한 틱 방지
-						lenis?.scrollTo(isOverlay ? getOverlayAnchor() : getIntroAnchor(), {
-							duration: 0.15,
-							force: true,
-						});
-						lenis?.start();
+			if (prefersReducedMotion) {
+				ScrollTrigger.create({
+					trigger: section,
+					start: 'center center',
+					onEnter: () => {
+						gsap.set(slider, { y: '0%' });
+						gsap.set(overlayText, { opacity: 1, y: 0 });
+						syncHeroHeaderTheme('dark');
 					},
+					onLeaveBack: () => {
+						gsap.set(slider, { y: '100%' });
+						gsap.set(overlayText, { opacity: 0, y: 20 });
+						syncHeroHeaderTheme('light');
+					},
+					onLeave: () => syncHeroHeaderTheme('dark'),
 				});
+				return;
+			}
 
-				if (isOverlay) {
-					gsap.to(overlayText, {
-						opacity: 1,
-						y: 0,
-						duration: HERO_STAGE_DURATION * 0.6,
-						delay: HERO_STAGE_DURATION * 0.3,
-						ease: 'power3.out',
-					});
-				} else {
-					gsap.to(overlayText, { opacity: 0, y: 40, duration: 0.2, ease: 'power2.in' });
-				}
+			// scrub: true — Lenis가 스크롤을 당길 때 애니메이션이 자연스럽게 따라옴
+			// snap 없음 — lenis.scrollTo가 정확한 앵커까지 이동 담당
+			const animTl = gsap.timeline();
+			animTl
+				.to(slider, { y: '0%', ease: 'none', duration: 1 }, 0)
+				.to(overlayText, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 0.5);
+
+			ScrollTrigger.create({
+				trigger: section,
+				start: 'top top',
+				end: () => `+=${window.innerHeight}`,
+				scrub: true,
+				animation: animTl,
+				onUpdate: (self) => {
+					syncHeroHeaderTheme(self.progress > 0.5 ? 'dark' : 'light');
+				},
+				onLeave: () => { isHeroActive.value = false; syncHeroHeaderTheme('dark'); },
+				onLeaveBack: () => { isHeroActive.value = false; syncHeroHeaderTheme('light'); },
+				onEnter: () => { isHeroActive.value = true; },
+				onEnterBack: () => { isHeroActive.value = true; },
+			});
+
+			// lenis.scrollTo로 앵커까지 부드럽게 이동 — 이동 중 scrub이 자연스럽게 따라옴
+			const navigateTo = (stage: HeroStage) => {
+				if (currentStage.value === stage) return;
+				currentStage.value = stage;
+				lenis?.scrollTo(stage === 'overlay' ? getOverlayAnchor() : getIntroAnchor(), {
+					duration: 0.9,
+					easing: lenisEasing,
+				});
 			};
 
-			const shouldMoveToOverlay = () =>
-				isHeroActive.value && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor());
-			const shouldMoveToIntro = () =>
-				currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor());
-
+			// PC: 휠 이벤트로 방향 감지 → lenis가 앵커까지 당김
 			const onWheel = (event: WheelEvent) => {
-				if (prefersReducedMotion) return;
-				if (gsap.isTweening(slider)) {
+				if (prefersReducedMotion || !isHeroActive.value) return;
+				if (event.deltaY > HERO_WHEEL_MIN_DELTA && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor())) {
 					event.preventDefault();
-					return;
-				}
-				if (event.deltaY > HERO_WHEEL_MIN_DELTA && shouldMoveToOverlay()) {
+					navigateTo('overlay');
+				} else if (event.deltaY < -HERO_WHEEL_MIN_DELTA && currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor())) {
 					event.preventDefault();
-					transitionToStage('overlay');
-				} else if (event.deltaY < -HERO_WHEEL_MIN_DELTA && shouldMoveToIntro()) {
-					event.preventDefault();
-					transitionToStage('intro');
+					navigateTo('intro');
 				}
 			};
 
+			// 모바일: touchend에서 방향 판정 → lenis가 앵커까지 당김
+			// touchmove에는 개입 안 함 — Lenis가 자연스럽게 처리
 			const onTouchStart = (event: TouchEvent) => {
 				if (prefersReducedMotion) return;
 				touchStartY.value = event.touches[0]?.clientY ?? null;
 			};
 
-			const onTouchMove = (event: TouchEvent) => {
-				if (prefersReducedMotion || touchStartY.value === null) return;
-				if (gsap.isTweening(slider)) {
-					event.preventDefault();
-					return;
-				}
-				const currentY = event.touches[0]?.clientY;
-				if (typeof currentY !== 'number') return;
-				const deltaY = touchStartY.value - currentY;
-				if (Math.abs(deltaY) < HERO_TOUCH_THRESHOLD) return;
-				if (deltaY > 0 && shouldMoveToOverlay()) {
-					event.preventDefault();
-					touchStartY.value = null;
-					transitionToStage('overlay');
-				} else if (deltaY < 0 && shouldMoveToIntro()) {
-					event.preventDefault();
-					touchStartY.value = null;
-					transitionToStage('intro');
+			const onTouchEnd = (event: TouchEvent) => {
+				if (prefersReducedMotion || touchStartY.value === null || !isHeroActive.value) return;
+				const endY = event.changedTouches[0]?.clientY ?? touchStartY.value;
+				const deltaY = touchStartY.value - endY;
+				touchStartY.value = null;
+
+				if (deltaY > HERO_TOUCH_THRESHOLD && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor())) {
+					navigateTo('overlay');
+				} else if (deltaY < -HERO_TOUCH_THRESHOLD && currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor())) {
+					navigateTo('intro');
 				}
 			};
 
-			const onTouchEnd = () => { touchStartY.value = null; };
-
-			const activeTrigger = ScrollTrigger.create({
-				trigger: section,
-				start: 'top top',
-				end: 'bottom bottom',
-				onEnter: () => { isHeroActive.value = true; },
-				onEnterBack: () => { isHeroActive.value = true; },
-				onLeave: () => { isHeroActive.value = false; syncStageWithoutMotion('overlay'); },
-				onLeaveBack: () => { isHeroActive.value = false; syncStageWithoutMotion('intro'); },
-			});
-
 			window.addEventListener('wheel', onWheel, { passive: false });
 			window.addEventListener('touchstart', onTouchStart, { passive: true });
-			window.addEventListener('touchmove', onTouchMove, { passive: false });
-			window.addEventListener('touchend', onTouchEnd);
+			window.addEventListener('touchend', onTouchEnd, { passive: true });
 
 			cleanupInteractions = () => {
-				activeTrigger.kill();
-				lenis?.start();
 				window.removeEventListener('wheel', onWheel);
 				window.removeEventListener('touchstart', onTouchStart);
-				window.removeEventListener('touchmove', onTouchMove);
 				window.removeEventListener('touchend', onTouchEnd);
 			};
 		}, section);
@@ -243,7 +219,7 @@ export default function HeroSection() {
 				</div>
 
 				{/* 패널 1: Overlay — 아래에서 슬라이드 업, 반투명 유리 효과 */}
-				<div ref={sliderRef} className="absolute inset-0 overflow-hidden bg-black/50 backdrop-blur-3xl will-change-transform">
+				<div ref={sliderRef} style={{ transform: 'translateY(100%)' }} className="absolute inset-0 overflow-hidden bg-black/50 backdrop-blur-3xl will-change-transform">
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
