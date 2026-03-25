@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLenis } from 'lenis/react';
+import { FlickeringGrid } from '@/components/ui/flickering-grid-hero';
 import HeroRingVideo from '@/components/shared/HeroRingVideo';
 import SectionContainer from '@/components/shared/SectionContainer';
 import StoreButtons from '@/components/shared/StoreButtons';
@@ -29,6 +30,39 @@ const HERO_TOUCH_THRESHOLD = 30;
 const HERO_WHEEL_MIN_DELTA = 5;
 
 type HeroStage = 'intro' | 'overlay';
+
+// Base64 encoded SVG
+const LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODQiIGhlaWdodD0iODQiIHZpZXdCb3g9IjAgMCA4NCA4NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMgMzJDMTMgMjAuOTU0MyAyMS45NTQzIDEyIDMzIDEyQzQ0LjA0NTcgMTIgNTMgMjAuOTU0MyA1MyAzMkM1MyA0My4wNDU3IDQ0LjUgNDcuNSAzMyA1Mkg1M0M1MyA2My4wNDU3IDQ0LjA0NTcgNzIgMzMgNzJDMjEuOTU0MyA3MiAxMyA2My4wNDU3IDEzIDUyQzEzIDQwLjk1NDMgMjIuNSAzNCAzMyAzMkgxM1oiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTUzIDcyQzY0LjczMjQgNjcuMDk3NyA3MyA1NS41MTE3IDczIDQyQzczIDI4LjQ4ODMgNjQuNzMyNCAxNi45MDIzIDUzIDEyVjcyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=";
+
+// 마스크 스타일
+const maskStyle = {
+	WebkitMaskImage: `url('${LOGO_BASE64}')`,
+	WebkitMaskSize: '100vw',
+	WebkitMaskPosition: 'center',
+	WebkitMaskRepeat: 'no-repeat',
+	maskImage: `url('${LOGO_BASE64}')`,
+	maskSize: '100vw',
+	maskPosition: 'center',
+	maskRepeat: 'no-repeat',
+} as const;
+
+// 그리드 애니메이션 설정
+const GRID_CONFIG = {
+	background: {
+		color: "#6D28D9",
+		maxOpacity: 0.15,
+		flickerChance: 0.12,
+		squareSize: 4,
+		gridGap: 4,
+	},
+	logo: {
+		color: "#7C3AED",
+		maxOpacity: 0.65,
+		flickerChance: 0.18,
+		squareSize: 3,
+		gridGap: 6,
+	},
+} as const;
 
 export default function HeroSection() {
 	const lenis = useLenis();
@@ -190,36 +224,9 @@ export default function HeroSection() {
 
 	return (
 		<section id="hero" ref={sectionRef} data-header-theme="light" className="relative h-[200vh] bg-white">
-			<div className="sticky top-0 h-dvh overflow-hidden">
-				{/* 패널 0: Intro — 정적 배경 */}
-				<div className="absolute inset-0 bg-white">
-					<SectionContainer className="flex h-full min-h-0 items-center py-0">
-						<div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:gap-12 lg:flex-row lg:justify-between lg:gap-6">
-							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10 xl:min-w-[424px]">
-								<div>
-									<h1 className="sr-only">XO RING</h1>
-									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src="/assets/images/common/logo-v.svg" alt="XO" width={427} height={310} className="hero-logo hero-section__logo h-auto" />
-								</div>
-								<div className="hero-store-buttons flex w-full items-center justify-center">
-									<StoreButtons
-										variant="light"
-										googleFirst
-										className="gap-2 sm:gap-4 flex-row"
-										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-black/10"
-									/>
-								</div>
-							</div>
-
-							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0">
-								<HeroRingVideo className="hero-section__artwork" />
-							</div>
-						</div>
-					</SectionContainer>
-				</div>
-
-				{/* 패널 1: Overlay — 아래에서 슬라이드 업, 반투명 유리 효과 */}
-				<div ref={sliderRef} style={{ transform: 'translateY(100%)' }} className="absolute inset-0 overflow-hidden bg-black/50 backdrop-blur-3xl will-change-transform">
+			<div className="sticky top-0 h-dvh overflow-hidden bg-white">
+				{/* 패널 1: Overlay — 가장 위 (z-30), 스크롤로 위로 올라옴 */}
+				<div ref={sliderRef} style={{ transform: 'translateY(100%)' }} className="absolute inset-0 z-30 overflow-hidden bg-black/50 backdrop-blur-3xl will-change-transform">
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
@@ -239,6 +246,50 @@ export default function HeroSection() {
 									</span>
 								))}
 							</p>
+						</div>
+					</SectionContainer>
+				</div>
+
+				{/* 패널 0.5: Flickering Grid — 중간 (z-20, mix-blend-multiply) */}
+				<div className="absolute inset-0 z-20 flex w-full h-full justify-center items-center pointer-events-none mix-blend-multiply">
+					<FlickeringGrid
+						className={`absolute inset-0 z-0 mask-[radial-gradient(1000px_circle_at_center,white,transparent)] motion-safe:animate-pulse`}
+						{...GRID_CONFIG.background}
+					/>
+					<div 
+						className="absolute inset-0 z-0 translate-y-[2vh] motion-safe:animate-fade-in" 
+						style={{
+							...maskStyle,
+							animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+						}}
+					>
+						<FlickeringGrid {...GRID_CONFIG.logo} />
+					</div>
+				</div>
+
+				{/* 패널 0: Intro — 가장 아래 (z-10) */}
+				<div className="absolute inset-0 z-10 pointer-events-none">
+					<SectionContainer className="flex h-full min-h-0 items-center py-0">
+						<div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:gap-12 lg:flex-row lg:justify-between lg:gap-6">
+							<div ref={introLeftRef} className="flex flex-col items-center justify-center gap-8 lg:items-start lg:gap-10 xl:min-w-[424px] pointer-events-auto">
+								<div>
+									<h1 className="sr-only">XO RING</h1>
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src="/assets/images/common/logo-v.svg" alt="XO" width={427} height={310} className="hero-logo hero-section__logo h-auto" />
+								</div>
+								<div className="hero-store-buttons flex w-full items-center justify-center">
+									<StoreButtons
+										variant="light"
+										googleFirst
+										className="gap-2 sm:gap-4 flex-row"
+										buttonClassName="min-w-[150px] justify-center border-white/70 px-6 py-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-black/10"
+									/>
+								</div>
+							</div>
+
+							<div ref={introRingRef} className="relative flex w-full items-center justify-center lg:justify-end lg:-mr-12 xl:mr-0 pointer-events-auto">
+								<HeroRingVideo className="hero-section__artwork" />
+							</div>
 						</div>
 					</SectionContainer>
 				</div>
