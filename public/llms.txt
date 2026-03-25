@@ -1,0 +1,21 @@
+# XORing
+
+> XORing is a social smart ring that combines wearable biometrics, AI agents, and Web3 identity features.
+
+XORing operates in two modes:
+- Social Mode: connects users through shared activity, partner matching, community features, and location-based experiences.
+- Private Mode: pauses social sharing and focuses on personal health, focus, and secure daily utility.
+
+Key product points:
+- Smart ring form factor with iOS and Android companion app
+- AI health, emotion, social, and behavior agent concepts
+- Proof of Contribution model tied to the AIOS Network
+- Hardware key and tap-to-pay style utility positioning
+
+Availability:
+- Status: Coming Soon
+- Price: $499 Pioneer tier
+- Quantity: limited to 500 units globally
+
+Official website:
+https://xoring.ai

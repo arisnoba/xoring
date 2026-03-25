@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import 'lenis/dist/lenis.css';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import { SITE_URL } from '@/lib/site';
+import { structuredData } from '@/lib/schema';
 import "./globals.css";
 import "./globals.scss";
 import "../styles/_typography.scss";
@@ -84,6 +85,13 @@ export default function RootLayout({
       <head>
         <link rel="preload" href="/assets/video/hero-ring.mp4" as="video" type="video/mp4" />
         <link rel="preload" href="/assets/video/hero-ring-loop.mp4" as="video" type="video/mp4" />
+        {structuredData.map((schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </head>
       <body className="min-h-full flex flex-col">
         <a
