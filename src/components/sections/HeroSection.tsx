@@ -21,13 +21,13 @@ const overlayCopy = [
 	"the world's first social smart ring.",
 ];
 
-// 패널 슬라이드 애니메이션 시간.
-const HERO_STAGE_DURATION = 0.8;
-// 모바일에서 이 거리 이상 스와이프해야 다음 단계 전환으로 해석한다.
+// 패널 슬라이드 애니메이션 시간
+const HERO_STAGE_DURATION = 0.75;
+// 모바일 스와이프 트리거 최소 거리
 const HERO_TOUCH_THRESHOLD = 28;
-// 현재 스크롤 위치가 각 단계 앵커 근처인지 판정하는 허용 범위.
+// 앵커 근처 판정 허용 범위
 const HERO_SCROLL_TOLERANCE = 48;
-// wheel 실수 트리거 방지 최소 delta.
+// 휠 실수 트리거 방지 최소 delta
 const HERO_WHEEL_MIN_DELTA = 5;
 
 type HeroStage = 'intro' | 'overlay';
@@ -65,7 +65,6 @@ export default function HeroSection() {
 		window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
 
 		const currentStage = { value: 'intro' as HeroStage };
-		// 페이지 로드 시 hero 섹션이 이미 뷰포트에 있으면 즉시 활성화 (Lenis/ScrollTrigger 초기화 딜레이 방지)
 		const isHeroActive = { value: window.scrollY < section.offsetTop + section.offsetHeight };
 		const touchStartY = { value: null as number | null };
 
@@ -75,21 +74,16 @@ export default function HeroSection() {
 		let cleanupInteractions = () => {};
 
 		const ctx = gsap.context(() => {
-			// 초기 상태: overlay는 아래에 대기 (y: 100%), 텍스트 숨김
 			gsap.set(slider, { y: '100%' });
 			gsap.set(overlayText, { opacity: 0, y: 40 });
 
-			// 페이지 진입 시 intro 요소 등장 애니메이션
 			if (!prefersReducedMotion && introLogo && introStoreButtons && introRingArtwork) {
-				const introTl = gsap.timeline();
-				introTl
+				gsap.timeline()
 					.from(introLogo, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' })
 					.from(introRingArtwork, { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'power2.out' }, 0.15)
 					.from(introStoreButtons, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' }, 0.3);
 			}
 
-			// 애니메이션 없이 즉시 상태 동기화 (scroll jump 등)
-			// gsap.isTweening 중이면 진행 중인 슬라이드 애니메이션을 끊지 않도록 skip
 			const syncStageWithoutMotion = (nextStage: HeroStage) => {
 				currentStage.value = nextStage;
 				if (!gsap.isTweening(slider)) {
@@ -99,35 +93,31 @@ export default function HeroSection() {
 				syncHeroHeaderTheme(nextStage === 'overlay' ? 'dark' : 'light');
 			};
 
-			// gsap.isTweening으로 중복 방지, 아래에서 슬라이드 업
+			// 스크롤 감지 즉시 전환 시작 — 멈출 때까지 기다리지 않음
 			const transitionToStage = (nextStage: HeroStage) => {
 				if (currentStage.value === nextStage) return;
 				if (gsap.isTweening(slider)) return;
 
 				currentStage.value = nextStage;
 				const isOverlay = nextStage === 'overlay';
-
 				syncHeroHeaderTheme(isOverlay ? 'dark' : 'light');
 
-				// overlay 패널: 아래에서 올라오거나 아래로 내려감
-				// 빠른 스와이프 시 lenis가 이미 처리한 모멘텀이 계속 스크롤을 밀어
-				// onComplete의 instant 보정이 "틱"으로 보이는 문제 방지.
-				// 애니메이션 시작 시 lenis를 멈추고 완료 후 위치 동기화 + 재개.
+				// lenis 모멘텀 차단 후 애니메이션 시작
 				lenis?.stop();
 				gsap.to(slider, {
 					y: isOverlay ? '0%' : '100%',
 					duration: HERO_STAGE_DURATION,
 					ease: 'expo.inOut',
 					onComplete: () => {
+						// duration: 0 대신 짧은 duration 사용 — 순간 점프에 의한 틱 방지
 						lenis?.scrollTo(isOverlay ? getOverlayAnchor() : getIntroAnchor(), {
-							duration: 0,
+							duration: 0.15,
 							force: true,
 						});
 						lenis?.start();
 					},
 				});
 
-				// overlay 텍스트 fade in (슬라이드 진행 중 등장)
 				if (isOverlay) {
 					gsap.to(overlayText, {
 						opacity: 1,
@@ -137,17 +127,17 @@ export default function HeroSection() {
 						ease: 'power3.out',
 					});
 				} else {
-					gsap.to(overlayText, { opacity: 0, y: 40, duration: 0.25, ease: 'power2.in' });
+					gsap.to(overlayText, { opacity: 0, y: 40, duration: 0.2, ease: 'power2.in' });
 				}
 			};
 
-			const shouldMoveToOverlay = () => isHeroActive.value && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor());
-			// intro 복귀는 isHeroActive 불필요 — onLeave 이후에도 overlay anchor 근처에서 위로 스크롤하면 전환해야 함
-			const shouldMoveToIntro = () => currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor());
+			const shouldMoveToOverlay = () =>
+				isHeroActive.value && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor());
+			const shouldMoveToIntro = () =>
+				currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor());
 
 			const onWheel = (event: WheelEvent) => {
 				if (prefersReducedMotion) return;
-				// 전환 중 스크롤 차단 (CodePen 패턴)
 				if (gsap.isTweening(slider)) {
 					event.preventDefault();
 					return;
@@ -155,8 +145,7 @@ export default function HeroSection() {
 				if (event.deltaY > HERO_WHEEL_MIN_DELTA && shouldMoveToOverlay()) {
 					event.preventDefault();
 					transitionToStage('overlay');
-				}
-				if (event.deltaY < -HERO_WHEEL_MIN_DELTA && shouldMoveToIntro()) {
+				} else if (event.deltaY < -HERO_WHEEL_MIN_DELTA && shouldMoveToIntro()) {
 					event.preventDefault();
 					transitionToStage('intro');
 				}
@@ -181,8 +170,7 @@ export default function HeroSection() {
 					event.preventDefault();
 					touchStartY.value = null;
 					transitionToStage('overlay');
-				}
-				if (deltaY < 0 && shouldMoveToIntro()) {
+				} else if (deltaY < 0 && shouldMoveToIntro()) {
 					event.preventDefault();
 					touchStartY.value = null;
 					transitionToStage('intro');
@@ -208,7 +196,6 @@ export default function HeroSection() {
 
 			cleanupInteractions = () => {
 				activeTrigger.kill();
-				// 애니메이션 도중 언마운트 시 lenis가 stop 상태로 남지 않도록 보장
 				lenis?.start();
 				window.removeEventListener('wheel', onWheel);
 				window.removeEventListener('touchstart', onTouchStart);
@@ -255,8 +242,8 @@ export default function HeroSection() {
 					</SectionContainer>
 				</div>
 
-				{/* 패널 1: Overlay — 아래에서 슬라이드 업으로 intro를 덮음 */}
-				<div ref={sliderRef} className="absolute inset-0 overflow-hidden bg-black/90 backdrop-blur-[10px] will-change-transform">
+				{/* 패널 1: Overlay — 아래에서 슬라이드 업, 반투명 유리 효과 */}
+				<div ref={sliderRef} className="absolute inset-0 overflow-hidden bg-black/50 backdrop-blur-3xl will-change-transform">
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
