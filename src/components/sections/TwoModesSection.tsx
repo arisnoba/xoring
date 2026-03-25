@@ -15,6 +15,8 @@ const FRAME_WIDTH = 584;
 const FRAME_HEIGHT = 650;
 const FRAME_POSTER = '/assets/video/change-ring-frames/frame-001.png';
 const FRAME_SOURCES = Array.from({ length: FRAME_COUNT }, (_, index) => `/assets/video/change-ring-frames/frame-${String(index + 1).padStart(3, '0')}.png`);
+const SCROLL_SECTION_HEIGHT = 'h-[200vh]';
+const FRAME_SCRUB = 0.1;
 
 export default function TwoModesSection() {
 	const sectionRef = useRef<HTMLElement>(null);
@@ -93,7 +95,7 @@ export default function TwoModesSection() {
 				trigger: section,
 				start: 'top top',
 				end: 'bottom bottom',
-				scrub: 0.5,
+				scrub: FRAME_SCRUB,
 				onUpdate: self => {
 					const frameIndex = Math.round(self.progress * (FRAME_COUNT - 1));
 					drawFrame(frameIndex);
@@ -113,7 +115,7 @@ export default function TwoModesSection() {
 	}, []);
 
 	return (
-		<section id="modes" ref={sectionRef} data-header-theme="dark" className="two-modes-section relative bg-[#141414] text-white h-[300vh]">
+		<section id="modes" ref={sectionRef} data-header-theme="dark" className={`two-modes-section relative bg-[#141414] text-white ${SCROLL_SECTION_HEIGHT}`}>
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
 				<SectionContainer className="flex flex-col items-center justify-center">
 					<RevealOnScroll variants={fadeUp}>
