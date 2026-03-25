@@ -16,7 +16,7 @@ export default function PioneerSection() {
 					</RevealOnScroll>
 					<RevealOnScroll variants={fadeIn} delay={0.15}>
 						{/* eslint-disable-next-line @next/next/no-img-element */}
-						<img src="/assets/images/logo.svg" alt="XO RING" width={320} height={71} className="h-auto w-[min(52vw,320px)]" />
+						<img src="/assets/images/common/logo.svg" alt="XO RING" width={320} height={71} className="h-auto w-[min(52vw,320px)]" />
 					</RevealOnScroll>
 				</div>
 

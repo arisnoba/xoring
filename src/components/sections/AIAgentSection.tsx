@@ -8,22 +8,22 @@ import { fadeUp, scaleUp } from '@/lib/motion';
 const agents = [
 	{
 		title: 'AI Health Agent',
-		image: '/assets/images/agent-health.png',
+		image: '/assets/images/aiagent/agent-health.png',
 		description: 'Analyzes heart rate, blood oxygen, and sleep to provide real-time fatigue prediction and personalized workout management.',
 	},
 	{
 		title: 'AI Emotional Agent',
-		image: '/assets/images/agent-emotion.png',
+		image: '/assets/images/aiagent/agent-emotion.png',
 		description: 'Detects stress levels through heart rate variability and activity, automatically recommending meditation or the perfect playlist.',
 	},
 	{
 		title: 'AI Social Agent',
-		image: '/assets/images/agent-social.png',
+		image: '/assets/images/aiagent/agent-social.png',
 		description: 'Reads your network status via the ring’s direction (O/X) and finds nearby users who share your interests and lifestyle.',
 	},
 	{
 		title: 'AI Behavior Agent',
-		image: '/assets/images/agent-behavior.png',
+		image: '/assets/images/aiagent/agent-behavior.png',
 		description: '“Burn 400kcal more for a bonus.” Sets activity goals and rewards you with PoC tokens when you achieve them.',
 	},
 ];

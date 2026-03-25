@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/assets/images/ogimage.png',
+        url: '/assets/images/common/ogimage.png',
         width: 1200,
         height: 630,
         alt: 'XORing social smart ring hero image',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "XORing — Wear Contribution. Create Connection.",
     description:
       "A wearable POC device where behavior becomes value and AI comes alive.",
-    images: ['/assets/images/ogimage.png'],
+    images: ['/assets/images/common/ogimage.png'],
   },
   robots: {
     index: true,

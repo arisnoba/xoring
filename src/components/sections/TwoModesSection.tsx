@@ -146,7 +146,7 @@ export default function TwoModesSection() {
 					<RevealOnScroll variants={fadeUp} delay={0.3} className="mt-12 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-2 px-2 sm:max-w-[420px] sm:gap-4 md:mt-16 md:max-w-[580px] md:gap-5 md:px-0">
 						<div ref={oIndicatorRef} className="flex w-full flex-col items-center gap-3 text-center md:gap-5">
 							<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
-								<Image src="/assets/images/icon-o.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'brightness(0) invert(1)' }} />
+								<Image src="/assets/images/common/icon-o.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'brightness(0) invert(1)' }} />
 							</span>
 							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] text-white">
 								<span className="block">Connect with</span>
@@ -162,7 +162,7 @@ export default function TwoModesSection() {
 
 						<div ref={xIndicatorRef} className="flex w-full flex-col items-center gap-3 text-center md:gap-5">
 							<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
-								<Image src="/assets/images/icon-x.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'none' }} />
+								<Image src="/assets/images/common/icon-x.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'none' }} />
 							</span>
 							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)]" style={{ opacity: 0.45 }}>
 								<span className="block">Focus on</span>

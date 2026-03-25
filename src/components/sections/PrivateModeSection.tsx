@@ -22,7 +22,7 @@ export default function PrivateModeSection() {
 						</RevealOnScroll>
 						<RevealOnScroll variants={fadeIn} delay={0.1}>
 							<div className="mt-8 mode-ring">
-								<Image src="/assets/images/ring-x.png" alt="XORing Private Mode" width={500} height={500} className="h-auto w-full object-contain" unoptimized />
+								<Image src="/assets/images/common/ring-x.png" alt="XORing Private Mode" width={500} height={500} className="h-auto w-full object-contain" unoptimized />
 							</div>
 						</RevealOnScroll>
 					</div>

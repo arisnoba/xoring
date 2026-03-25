@@ -9,8 +9,8 @@ interface RingArtworkProps {
 }
 
 const RING_SRC: Record<NonNullable<RingArtworkProps["mark"]>, string> = {
-  none: "/assets/images/ring-xo.webp",
-  x: "/assets/images/ring-x.png",
+  none: "/assets/images/common/ring-xo.webp",
+  x: "/assets/images/common/ring-x.png",
 };
 
 export default function RingArtwork({

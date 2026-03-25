@@ -199,7 +199,7 @@ export default function HeroSection() {
 								<div>
 									<h1 className="sr-only">XO RING</h1>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src="/assets/images/logo-v.svg" alt="XO" width={427} height={310} className="hero-logo hero-section__logo h-auto" />
+									<img src="/assets/images/common/logo-v.svg" alt="XO" width={427} height={310} className="hero-logo hero-section__logo h-auto" />
 								</div>
 								<div className="hero-store-buttons flex w-full items-center justify-center">
 									<StoreButtons

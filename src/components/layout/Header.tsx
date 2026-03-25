@@ -94,7 +94,7 @@ export default function Header() {
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					}}>
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img src="/assets/images/logo.svg" alt="XO RING" width={120} height={27} className={cn(themeTransitionClassName, logoClassName)} />
+					<img src="/assets/images/common/logo.svg" alt="XO RING" width={120} height={27} className={cn(themeTransitionClassName, logoClassName)} />
 				</a>
 
 				{/* Desktop Nav */}

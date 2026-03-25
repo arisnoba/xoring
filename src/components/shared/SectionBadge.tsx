@@ -16,12 +16,12 @@ export default function SectionBadge({ label, icon = 'none', variant = 'dark', c
 		<div className={cn('flex items-center gap-2 lg:gap-4 font-bold uppercase section-badge', textColor, className)}>
 			{icon === 'o' && (
 				<span className={cn('flex items-center justify-center section-badge__label', borderColor)}>
-					<Image src="/assets/images/icon-o.svg" alt="O" width={48} height={48} unoptimized />
+					<Image src="/assets/images/common/icon-o.svg" alt="O" width={48} height={48} unoptimized />
 				</span>
 			)}
 			{icon === 'x' && (
 				<span className={cn('flex items-center justify-center section-badge__label', borderColor)}>
-					<Image src="/assets/images/icon-x.svg" alt="X" width={48} height={48} unoptimized className="invert" />
+					<Image src="/assets/images/common/icon-x.svg" alt="X" width={48} height={48} unoptimized className="invert" />
 				</span>
 			)}
 			{icon === 'none' && (

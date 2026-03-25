@@ -22,7 +22,7 @@ export default function Footer() {
 
 				<div className="flex min-w-[260px] flex-col items-end">
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img src="/assets/images/logo.svg" alt="XO RING" width={236} height={52} className="h-auto w-[180px] opacity-20 invert" />
+					<img src="/assets/images/common/logo.svg" alt="XO RING" width={236} height={52} className="h-auto w-[180px] opacity-20 invert" />
 				</div>
 			</div>
 		</footer>

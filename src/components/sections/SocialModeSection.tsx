@@ -21,7 +21,7 @@ export default function SocialModeSection() {
 						</RevealOnScroll>
 						<RevealOnScroll variants={fadeIn} delay={0.1}>
 							<div className="mt-8 mode-ring">
-								<Image src="/assets/images/ring-0.png" alt="XORing Social Mode" width={300} height={343} className="h-auto w-full object-contain" unoptimized />
+								<Image src="/assets/images/common/ring-0.png" alt="XORing Social Mode" width={300} height={343} className="h-auto w-full object-contain" unoptimized />
 							</div>
 						</RevealOnScroll>
 					</div>
