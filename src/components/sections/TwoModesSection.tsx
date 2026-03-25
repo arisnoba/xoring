@@ -35,7 +35,7 @@ export default function TwoModesSection() {
 		if (!context) return;
 
 		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const frameImages = FRAME_SOURCES.map((src) => {
+		const frameImages = FRAME_SOURCES.map(src => {
 			const image = new window.Image();
 			image.decoding = 'async';
 			image.src = src;
@@ -94,7 +94,7 @@ export default function TwoModesSection() {
 				start: 'top top',
 				end: 'bottom bottom',
 				scrub: 0.5,
-				onUpdate: (self) => {
+				onUpdate: self => {
 					const frameIndex = Math.round(self.progress * (FRAME_COUNT - 1));
 					drawFrame(frameIndex);
 
@@ -125,7 +125,7 @@ export default function TwoModesSection() {
 						</div>
 					</RevealOnScroll>
 
-					<div className="relative mt-14 flex w-full items-center justify-center md:mt-16">
+					<div className="relative mt-4 flex w-full items-center justify-center md:mt-8">
 						<div className="relative z-10 w-[58vw] max-w-[410px] -top-[21px]">
 							<canvas
 								ref={canvasRef}
