@@ -30,7 +30,7 @@ const agents = [
 
 export default function AIAgentSection() {
 	return (
-		<section data-header-theme="light" className="relative isolate overflow-hidden bg-[#efefec] text-[#111]">
+		<section data-header-theme="light" className="relative isolate overflow-hidden bg-white text-[#111]">
 			<SectionBackground desktopSrc="/assets/images/aiagent/bg-desk.jpg" mobileSrc="/assets/images/aiagent/bg-mo.jpg" opacity={0.3} />
 
 			<SectionContainer className="relative section-content-space">
