@@ -9,18 +9,18 @@ import "../styles/components/_section-overrides.scss";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "XORing — World's First Social Smart Ring",
+  title: "XORing — Wear Contribution. Create Connection.",
   description:
-    "Beyond myself, Connecting us. XORing is the world's first social smart ring — track your health, connect with others, and prove your value.",
+    "A wearable POC device where behavior becomes value and AI comes alive.",
   applicationName: 'XORing',
   keywords: ['XORing', 'smart ring', 'wearable', 'social fitness', 'AI agent', 'web3'],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "XORing — World's First Social Smart Ring",
+    title: "XORing — Wear Contribution. Create Connection.",
     description:
-      "Beyond myself, Connecting us. XORing is the world's first social smart ring — track your health, connect with others, and prove your value.",
+      "A wearable POC device where behavior becomes value and AI comes alive.",
     url: SITE_URL,
     siteName: 'XORing',
     locale: 'en_US',
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "XORing — World's First Social Smart Ring",
+    title: "XORing — Wear Contribution. Create Connection.",
     description:
-      "Beyond myself, Connecting us. XORing is the world's first social smart ring — track your health, connect with others, and prove your value.",
+      "A wearable POC device where behavior becomes value and AI comes alive.",
     images: ['/assets/images/ogimage.png'],
   },
   robots: {
