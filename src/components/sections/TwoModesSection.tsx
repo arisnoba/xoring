@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionContainer from '@/components/shared/SectionContainer';
 import RevealOnScroll from '@/components/shared/RevealOnScroll';
-import { fadeUp } from '@/lib/motion';
+import { fadeUp, scaleUp } from '@/lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,7 +125,7 @@ export default function TwoModesSection() {
 						</div>
 					</RevealOnScroll>
 
-					<div className="relative mt-4 flex w-full items-center justify-center md:mt-8">
+					<RevealOnScroll variants={scaleUp} delay={0.15} className="relative mt-4 flex w-full items-center justify-center md:mt-8">
 						<div className="relative z-10 w-[58vw] max-w-[410px] -top-[21px]">
 							<canvas
 								ref={canvasRef}
@@ -139,9 +139,9 @@ export default function TwoModesSection() {
 								}}
 							/>
 						</div>
-					</div>
+					</RevealOnScroll>
 
-					<div className="mt-12 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-2 px-2 sm:max-w-[420px] sm:gap-4 md:mt-16 md:max-w-[580px] md:gap-5 md:px-0">
+					<RevealOnScroll variants={fadeUp} delay={0.3} className="mt-12 grid w-full max-w-[320px] grid-cols-[1fr_auto_1fr] items-start gap-2 px-2 sm:max-w-[420px] sm:gap-4 md:mt-16 md:max-w-[580px] md:gap-5 md:px-0">
 						<div ref={oIndicatorRef} className="flex w-full flex-col items-center gap-3 text-center md:gap-5">
 							<span className="flex h-[64px] w-[64px] items-center justify-center sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]">
 								<Image src="/assets/images/icon-o.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'brightness(0) invert(1)' }} />
@@ -167,7 +167,7 @@ export default function TwoModesSection() {
 								<span className="block">yourself</span>
 							</span>
 						</div>
-					</div>
+					</RevealOnScroll>
 				</SectionContainer>
 			</div>
 		</section>
