@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLenis } from 'lenis/react';
+
 import { FlickeringGrid } from '@/components/ui/flickering-grid-hero';
 import HeroRingVideo from '@/components/shared/HeroRingVideo';
 import SectionContainer from '@/components/shared/SectionContainer';
@@ -22,14 +22,7 @@ const overlayCopy = [
 	"the world's first social smart ring.",
 ];
 
-// 앵커 근처 판정 허용 범위
-const HERO_SCROLL_TOLERANCE = 80;
-// 모바일 스와이프 트리거 최소 거리
-const HERO_TOUCH_THRESHOLD = 30;
-// 휠 실수 트리거 방지 최소 delta
-const HERO_WHEEL_MIN_DELTA = 5;
 
-type HeroStage = 'intro' | 'overlay';
 
 // 마스크 이미지 경로
 const LOGO_MASK_URL = '/assets/images/common/symbol-xo.svg';
@@ -65,7 +58,6 @@ const GRID_CONFIG = {
 } as const;
 
 export default function HeroSection() {
-	const lenis = useLenis();
 	const sectionRef = useRef<HTMLElement>(null);
 	const sliderRef = useRef<HTMLDivElement>(null);
 	const overlayTextRef = useRef<HTMLDivElement>(null);
@@ -95,19 +87,6 @@ export default function HeroSection() {
 
 		document.documentElement.dataset.heroHeaderTheme = 'light';
 		window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
-
-		const getIntroAnchor = () => section.offsetTop;
-		const getOverlayAnchor = () => section.offsetTop + window.innerHeight;
-		const isNearAnchor = (anchor: number) => Math.abs(window.scrollY - anchor) <= HERO_SCROLL_TOLERANCE;
-
-		const currentStage = { value: 'intro' as HeroStage };
-		const isHeroActive = { value: window.scrollY < section.offsetTop + section.offsetHeight };
-		const touchStartY = { value: null as number | null };
-
-		// Lenis easing — expo out 느낌
-		const lenisEasing = (t: number) => 1 - Math.pow(1 - t, 4);
-
-		let cleanupInteractions = () => {};
 
 		const ctx = gsap.context(() => {
 			gsap.set(slider, { y: '100%' });
@@ -140,8 +119,6 @@ export default function HeroSection() {
 				return;
 			}
 
-			// scrub: true — Lenis가 스크롤을 당길 때 애니메이션이 자연스럽게 따라옴
-			// snap 없음 — lenis.scrollTo가 정확한 앵커까지 이동 담당
 			const animTl = gsap.timeline();
 			animTl.to(slider, { y: '0%', ease: 'none', duration: 1 }, 0).to(overlayText, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 0.5);
 
@@ -154,82 +131,17 @@ export default function HeroSection() {
 				onUpdate: self => {
 					syncHeroHeaderTheme(self.progress > 0.5 ? 'dark' : 'light');
 				},
-				onLeave: () => {
-					isHeroActive.value = false;
-					syncHeroHeaderTheme('dark');
-				},
-				onLeaveBack: () => {
-					isHeroActive.value = false;
-					syncHeroHeaderTheme('light');
-				},
-				onEnter: () => {
-					isHeroActive.value = true;
-				},
-				onEnterBack: () => {
-					isHeroActive.value = true;
-				},
+				onLeave: () => syncHeroHeaderTheme('dark'),
+				onLeaveBack: () => syncHeroHeaderTheme('light'),
 			});
-
-			// lenis.scrollTo로 앵커까지 부드럽게 이동 — 이동 중 scrub이 자연스럽게 따라옴
-			const navigateTo = (stage: HeroStage) => {
-				if (currentStage.value === stage) return;
-				currentStage.value = stage;
-				lenis?.scrollTo(stage === 'overlay' ? getOverlayAnchor() : getIntroAnchor(), {
-					duration: 0.9,
-					easing: lenisEasing,
-				});
-			};
-
-			// PC: 휠 이벤트로 방향 감지 → lenis가 앵커까지 당김
-			const onWheel = (event: WheelEvent) => {
-				if (prefersReducedMotion || !isHeroActive.value) return;
-				if (event.deltaY > HERO_WHEEL_MIN_DELTA && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor())) {
-					event.preventDefault();
-					navigateTo('overlay');
-				} else if (event.deltaY < -HERO_WHEEL_MIN_DELTA && currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor())) {
-					event.preventDefault();
-					navigateTo('intro');
-				}
-			};
-
-			// 모바일: touchend에서 방향 판정 → lenis가 앵커까지 당김
-			// touchmove에는 개입 안 함 — Lenis가 자연스럽게 처리
-			const onTouchStart = (event: TouchEvent) => {
-				if (prefersReducedMotion) return;
-				touchStartY.value = event.touches[0]?.clientY ?? null;
-			};
-
-			const onTouchEnd = (event: TouchEvent) => {
-				if (prefersReducedMotion || touchStartY.value === null || !isHeroActive.value) return;
-				const endY = event.changedTouches[0]?.clientY ?? touchStartY.value;
-				const deltaY = touchStartY.value - endY;
-				touchStartY.value = null;
-
-				if (deltaY > HERO_TOUCH_THRESHOLD && currentStage.value === 'intro' && isNearAnchor(getIntroAnchor())) {
-					navigateTo('overlay');
-				} else if (deltaY < -HERO_TOUCH_THRESHOLD && currentStage.value === 'overlay' && isNearAnchor(getOverlayAnchor())) {
-					navigateTo('intro');
-				}
-			};
-
-			window.addEventListener('wheel', onWheel, { passive: false });
-			window.addEventListener('touchstart', onTouchStart, { passive: true });
-			window.addEventListener('touchend', onTouchEnd, { passive: true });
-
-			cleanupInteractions = () => {
-				window.removeEventListener('wheel', onWheel);
-				window.removeEventListener('touchstart', onTouchStart);
-				window.removeEventListener('touchend', onTouchEnd);
-			};
 		}, section);
 
 		return () => {
-			cleanupInteractions();
 			ctx.revert();
 			delete document.documentElement.dataset.heroHeaderTheme;
 			window.dispatchEvent(new Event('xoring:hero-header-theme-change'));
 		};
-	}, [lenis]);
+	}, []);
 
 	return (
 		<section id="hero" ref={sectionRef} data-header-theme="light" className="relative h-[200vh] bg-white">
