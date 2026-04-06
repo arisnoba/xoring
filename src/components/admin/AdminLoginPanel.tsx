@@ -7,13 +7,13 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ADMIN_DASHBOARD_PATH, MISSING_SUPABASE_CONFIG_MESSAGE } from '@/lib/admin/config';
-import { getAdminAccess, requestAdminMagicLink } from '@/lib/admin/auth';
+import { getAdminAccess, signInAdminWithPassword, signOutAdmin } from '@/lib/admin/auth';
 import { hasSupabaseBrowserConfig } from '@/lib/supabase/client';
 
 export default function AdminLoginPanel() {
 	const router = useRouter();
 	const [email, setEmail] = useState('');
-	const [sentTo, setSentTo] = useState<string | null>(null);
+	const [password, setPassword] = useState('');
 	const [isPending, startTransition] = useTransition();
 
 	useEffect(() => {
@@ -48,11 +48,20 @@ export default function AdminLoginPanel() {
 			}
 
 			try {
-				await requestAdminMagicLink(email.trim());
-				setSentTo(email.trim());
-				toast.success('Login link sent. Check your inbox.');
+				const client = await signInAdminWithPassword(email.trim(), password);
+				const { adminUser } = await getAdminAccess(client);
+
+				if (!adminUser) {
+					await signOutAdmin(client);
+					toast.error('This email is authenticated, but it is not on the admin allowlist.');
+					return;
+				}
+
+				setPassword('');
+				toast.success('Signed in successfully.');
+				router.replace(ADMIN_DASHBOARD_PATH);
 			} catch (error) {
-				const message = error instanceof Error ? error.message : 'Failed to send login link.';
+				const message = error instanceof Error ? error.message : 'Failed to sign in.';
 				toast.error(message);
 			}
 		});
@@ -62,8 +71,8 @@ export default function AdminLoginPanel() {
 		<div className="mx-auto flex w-full max-w-[520px] flex-col gap-6 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
 			<div className="flex flex-col gap-3">
 				<p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">Admin Access</p>
-				<h1 className="text-balance text-[2.2rem] font-black leading-[0.92] tracking-[-0.05em] text-white">Sign in with your admin email</h1>
-				<p className="text-sm leading-6 text-white/68">This route stays in the static site. Supabase Auth handles the email login, and database access stays behind RLS.</p>
+				<h1 className="text-balance text-[2.2rem] font-black leading-[0.92] tracking-[-0.05em] text-white">Sign in with your admin account</h1>
+				<p className="text-sm leading-6 text-white/68">This route stays in the static site. Supabase Auth handles email and password authentication, and database access stays behind RLS.</p>
 			</div>
 
 			<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -81,18 +90,30 @@ export default function AdminLoginPanel() {
 						className="h-11 rounded-[14px] border border-white/10 bg-white/5 px-3.5 text-white placeholder:text-white/28"
 					/>
 				</div>
+				<div className="flex flex-col gap-2">
+					<label className="text-sm font-medium text-white/84" htmlFor="admin-password">
+						Password
+					</label>
+					<Input
+						id="admin-password"
+						type="password"
+						value={password}
+						onChange={event => setPassword(event.target.value)}
+						placeholder="Enter your password"
+						required
+						className="h-11 rounded-[14px] border border-white/10 bg-white/5 px-3.5 text-white placeholder:text-white/28"
+					/>
+				</div>
 
-				<Button type="submit" disabled={isPending || !email.trim()} className="h-11 rounded-full bg-white text-sm font-semibold text-black hover:bg-white/92">
-					{isPending ? 'Sending link...' : 'Send login link'}
+				<Button type="submit" disabled={isPending || !email.trim() || !password} className="h-11 rounded-full bg-white text-sm font-semibold text-black hover:bg-white/92">
+					{isPending ? 'Signing in...' : 'Sign in'}
 				</Button>
 			</form>
-
-			{sentTo ? <p className="rounded-[16px] border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm leading-6 text-emerald-100">A magic link was sent to <strong>{sentTo}</strong>. Open it on this device to continue.</p> : null}
 
 			{!hasSupabaseBrowserConfig() ? (
 				<div className="rounded-[16px] border border-amber-300/20 bg-amber-200/10 px-4 py-3 text-sm leading-6 text-amber-50">
 					<p className="font-semibold">Supabase config is missing.</p>
-					<p>Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` before using the admin route.</p>
+					<p>Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` before using the admin route.</p>
 				</div>
 			) : null}
 
@@ -105,4 +126,3 @@ export default function AdminLoginPanel() {
 		</div>
 	);
 }
-

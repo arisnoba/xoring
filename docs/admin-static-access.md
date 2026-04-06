@@ -6,7 +6,7 @@
 
 - 별도 Node runtime 없음
 - 별도 `/api/admin` 서버 경계 없음
-- 로그인은 Supabase Auth 이메일 magic link
+- 로그인은 Supabase Auth 이메일/비밀번호
 - 관리자 권한은 `admin_users` 테이블과 RLS로 판정
 - 신청 데이터 읽기는 브라우저에서 직접 하되, `authenticated` + 관리자 allowlist 조건을 통과한 세션만 허용
 
@@ -31,6 +31,7 @@
 ## Admin Allowlist Operation
 
 관리자 권한은 환경 변수나 프런트 코드가 아니라 `public.admin_users` 테이블에서 관리한다.
+로그인 자체는 Supabase Auth `auth.users` 계정이 있어야 하므로, 관리자 이메일은 allowlist 등록과 함께 Auth 사용자 계정도 준비되어 있어야 한다.
 
 예시:
 
@@ -50,10 +51,22 @@ where email = 'admin@example.com';
 ## Route Flow
 
 1. 운영자가 `/admin/login` 접속
-2. 이메일 입력 후 magic link 요청
-3. 이메일 링크가 `/admin/auth/callback`으로 복귀
-4. 브라우저가 세션을 확정
-5. `/admin`에서 `admin_users`와 `frontier_applications`를 직접 조회
+2. 이메일과 비밀번호로 로그인
+3. 브라우저가 세션을 저장
+4. `/admin`에서 `admin_users`와 `frontier_applications`를 직접 조회
+
+## Auth Dashboard Settings
+
+로컬과 운영 둘 다 Supabase Auth 이메일/비밀번호 로그인이 켜져 있어야 한다.
+
+- Auth > Providers > Email
+- 관리자 계정 생성 또는 비밀번호 재설정
+
+최소 권장값:
+
+- Email provider 활성화
+- Confirm email 정책은 운영 정책에 맞게 유지
+- 관리자용 Auth 계정은 반드시 비밀번호가 설정된 상태
 
 ## What This Solves
 
@@ -74,4 +87,4 @@ where email = 'admin@example.com';
 - `npm run build`
 - allowlist에 없는 이메일 로그인 후 `/admin`에서 데이터가 보이지 않는지 확인
 - allowlist에 있는 이메일 로그인 후 최신 신청 목록이 보이는지 확인
-- 정적 배포 산출물 `out/`에 `/admin`, `/admin/login`, `/admin/auth/callback` 페이지가 포함되는지 확인
+- 정적 배포 산출물 `out/`에 `/admin`, `/admin/login` 페이지가 포함되는지 확인

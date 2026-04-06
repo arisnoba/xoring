@@ -1,5 +1,5 @@
-import type { EmailOtpType, Session, SupabaseClient } from '@supabase/supabase-js';
-import { ADMIN_AUTH_CALLBACK_PATH, MISSING_SUPABASE_CONFIG_MESSAGE } from '@/lib/admin/config';
+import type { Session, SupabaseClient } from '@supabase/supabase-js';
+import { MISSING_SUPABASE_CONFIG_MESSAGE } from '@/lib/admin/config';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 export interface AdminUserRecord {
@@ -7,8 +7,6 @@ export interface AdminUserRecord {
 	full_name: string | null;
 	is_active: boolean;
 }
-
-const EMAIL_OTP_TYPES: EmailOtpType[] = ['signup', 'magiclink', 'recovery', 'invite', 'email', 'email_change'];
 
 function requireSupabaseClient() {
 	const client = getSupabaseBrowserClient();
@@ -20,41 +18,12 @@ function requireSupabaseClient() {
 	return client;
 }
 
-export function getAdminMagicLinkRedirectUrl() {
-	if (typeof window === 'undefined') {
-		return ADMIN_AUTH_CALLBACK_PATH;
-	}
-
-	return new URL(ADMIN_AUTH_CALLBACK_PATH, window.location.origin).toString();
-}
-
-export async function requestAdminMagicLink(email: string) {
+export async function signInAdminWithPassword(email: string, password: string) {
 	const client = requireSupabaseClient();
 
-	const { error } = await client.auth.signInWithOtp({
+	const { error } = await client.auth.signInWithPassword({
 		email,
-		options: {
-			emailRedirectTo: getAdminMagicLinkRedirectUrl(),
-		},
-	});
-
-	if (error) {
-		throw error;
-	}
-}
-
-export async function completeAdminSignIn(searchParams: URLSearchParams) {
-	const client = requireSupabaseClient();
-	const tokenHash = searchParams.get('token_hash');
-	const type = searchParams.get('type');
-
-	if (!tokenHash || !type || !EMAIL_OTP_TYPES.includes(type as EmailOtpType)) {
-		throw new Error('The login link is invalid or expired.');
-	}
-
-	const { error } = await client.auth.verifyOtp({
-		token_hash: tokenHash,
-		type: type as EmailOtpType,
+		password,
 	});
 
 	if (error) {
