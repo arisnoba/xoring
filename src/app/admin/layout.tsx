@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export const metadata: Metadata = {
-	title: 'XORing Admin',
-	description: 'Static-hosted admin access for XORing Frontier applications.',
+	title: 'XORing 관리자',
+	description: 'XORing Frontier 신청 내역을 확인하는 정적 호스팅 관리자 화면',
 	robots: {
 		index: false,
 		follow: false,
@@ -12,11 +13,12 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
 	return (
-		<main className="min-h-screen bg-[#090909] px-4 py-10 sm:px-6">
-			<div className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-[1280px] items-start justify-center">
-				{children}
-			</div>
-		</main>
+		<div className="dark min-h-screen bg-background text-foreground">
+			<TooltipProvider>
+				<main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_34%),linear-gradient(180deg,_rgba(24,24,27,0.98)_0%,_rgba(10,10,11,1)_100%)]">
+					{children}
+				</main>
+			</TooltipProvider>
+		</div>
 	);
 }
-

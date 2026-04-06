@@ -3,8 +3,33 @@
 import { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { BadgeCheckIcon, CreditCardIcon, InboxIcon, LogOutIcon, MailIcon, SearchIcon, ShieldCheckIcon, XCircleIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupContent,
+	SidebarGroupLabel,
+	SidebarHeader,
+	SidebarInset,
+	SidebarMenu,
+	SidebarMenuBadge,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	SidebarProvider,
+	SidebarRail,
+	SidebarSeparator,
+	SidebarTrigger,
+} from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ADMIN_LOGIN_PATH, FRONTIER_APPLICATION_STATUS_VALUES, MISSING_SUPABASE_CONFIG_MESSAGE, type FrontierApplicationStatus } from '@/lib/admin/config';
 import { getAdminAccess, signOutAdmin } from '@/lib/admin/auth';
 import { listFrontierApplications, type FrontierApplicationListItem } from '@/lib/admin/frontier-applications';
@@ -22,35 +47,126 @@ type DashboardState =
 	  }
 	| { kind: 'error'; message: string };
 
+type StatusFilter = 'all' | FrontierApplicationStatus;
+
+const STATUS_LABELS: Record<FrontierApplicationStatus, string> = {
+	submitted: '접수됨',
+	awaiting_payment: '결제 대기',
+	payment_confirmed: '결제 확인',
+	approved: '승인 완료',
+	rejected: '반려됨',
+};
+
 function formatDate(value: string | null) {
 	if (!value) {
 		return '—';
 	}
 
 	return new Intl.DateTimeFormat('ko-KR', {
-		dateStyle: 'medium',
-		timeStyle: 'short',
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false,
 	}).format(new Date(value));
 }
 
-function getStatusTone(status: FrontierApplicationStatus) {
+function formatStatusLabel(status: FrontierApplicationStatus) {
+	return STATUS_LABELS[status];
+}
+
+function getStatusBadgeVariant(status: FrontierApplicationStatus) {
 	switch (status) {
 		case 'approved':
-			return 'bg-emerald-400/14 text-emerald-100';
-		case 'rejected':
-			return 'bg-rose-400/14 text-rose-100';
+			return 'default';
 		case 'payment_confirmed':
-			return 'bg-sky-400/14 text-sky-100';
-		case 'awaiting_payment':
-			return 'bg-amber-300/14 text-amber-100';
+			return 'secondary';
+		case 'rejected':
+			return 'destructive';
 		default:
-			return 'bg-white/10 text-white/78';
+			return 'outline';
 	}
+}
+
+function getStatusIcon(status: StatusFilter) {
+	switch (status) {
+		case 'approved':
+			return BadgeCheckIcon;
+		case 'awaiting_payment':
+		case 'payment_confirmed':
+			return CreditCardIcon;
+		case 'rejected':
+			return XCircleIcon;
+		case 'submitted':
+			return MailIcon;
+		default:
+			return InboxIcon;
+	}
+}
+
+function StatusBadge({ status }: { status: FrontierApplicationStatus }) {
+	return (
+		<Badge variant={getStatusBadgeVariant(status)} className="uppercase">
+			{formatStatusLabel(status)}
+		</Badge>
+	);
+}
+
+function DashboardLoadingState() {
+	return (
+		<div className="mx-auto flex min-h-screen w-full max-w-[1520px] items-center px-4 py-6 sm:px-6">
+			<Card className="w-full border-border/60 bg-card/85 backdrop-blur">
+				<CardHeader className="gap-3">
+					<Skeleton className="h-4 w-24" />
+					<Skeleton className="h-10 w-64" />
+					<Skeleton className="h-4 w-full max-w-xl" />
+				</CardHeader>
+				<CardContent className="flex flex-col gap-4">
+					<div className="grid gap-3 lg:grid-cols-3">
+						<Skeleton className="h-28 w-full rounded-xl" />
+						<Skeleton className="h-28 w-full rounded-xl" />
+						<Skeleton className="h-28 w-full rounded-xl" />
+					</div>
+					<Skeleton className="h-16 w-full rounded-xl" />
+					<Skeleton className="h-[420px] w-full rounded-xl" />
+				</CardContent>
+			</Card>
+		</div>
+	);
+}
+
+function DashboardMessageState({ title, message, ctaLabel }: { title: string; message: string; ctaLabel: string }) {
+	return (
+		<div className="mx-auto flex min-h-screen w-full max-w-[760px] items-center px-4 py-6 sm:px-6">
+			<Card className="w-full border-border/60 bg-card/90 backdrop-blur">
+				<CardHeader className="gap-3">
+					<Badge variant="outline" className="w-fit uppercase">
+						관리자 대시보드
+					</Badge>
+					<CardTitle className="text-3xl font-semibold tracking-tight">{title}</CardTitle>
+					<CardDescription className="max-w-2xl text-sm leading-6">{message}</CardDescription>
+				</CardHeader>
+				<CardContent className="flex flex-wrap items-center gap-3">
+					<Link
+						href={ADMIN_LOGIN_PATH}
+						className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+						{ctaLabel}
+					</Link>
+					<Badge variant="outline" className="uppercase">
+						정적 경로, RLS 보호
+					</Badge>
+				</CardContent>
+			</Card>
+		</div>
+	);
 }
 
 export default function AdminDashboardPanel() {
 	const router = useRouter();
 	const [state, setState] = useState<DashboardState>({ kind: 'loading' });
+	const [query, setQuery] = useState('');
+	const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
 	const [isPending, startTransition] = useTransition();
 
 	useEffect(() => {
@@ -111,145 +227,316 @@ export default function AdminDashboardPanel() {
 		startTransition(async () => {
 			try {
 				await signOutAdmin();
-				toast.success('Signed out.');
+				toast.success('로그아웃되었습니다.');
 				router.replace(ADMIN_LOGIN_PATH);
 			} catch (error) {
-				const message = error instanceof Error ? error.message : 'Failed to sign out.';
+				const message = error instanceof Error ? error.message : '로그아웃에 실패했습니다.';
 				toast.error(message);
 			}
 		});
 	};
 
 	if (state.kind === 'loading') {
-		return (
-			<div className="mx-auto flex w-full max-w-[1100px] flex-col gap-6 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
-				<p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">Admin Dashboard</p>
-				<h1 className="text-[2.2rem] font-black leading-[0.92] tracking-[-0.05em]">Loading applications</h1>
-				<div className="h-2 overflow-hidden rounded-full bg-white/8">
-					<div className="h-full w-1/2 animate-pulse rounded-full bg-white/70" />
-				</div>
-			</div>
-		);
+		return <DashboardLoadingState />;
 	}
 
 	if (state.kind === 'config-error' || state.kind === 'error') {
-		return (
-			<div className="mx-auto flex w-full max-w-[640px] flex-col gap-4 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
-				<p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">Admin Dashboard</p>
-				<h1 className="text-[2.1rem] font-black leading-[0.94] tracking-[-0.05em]">Dashboard unavailable</h1>
-				<p className="text-sm leading-6 text-white/68">{state.message}</p>
-				<Link href={ADMIN_LOGIN_PATH} className="text-sm font-medium text-white/72 underline underline-offset-4">
-					Go to admin login
-				</Link>
-			</div>
-		);
+		return <DashboardMessageState title="대시보드를 불러올 수 없습니다" message={state.message} ctaLabel="관리자 로그인으로 이동" />;
 	}
 
 	if (state.kind === 'unauthenticated' || state.kind === 'unauthorized') {
 		return (
-			<div className="mx-auto flex w-full max-w-[640px] flex-col gap-4 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
-				<p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">Admin Dashboard</p>
-				<h1 className="text-[2.1rem] font-black leading-[0.94] tracking-[-0.05em]">
-					{state.kind === 'unauthenticated' ? 'Sign in required' : 'Admin allowlist required'}
-				</h1>
-				<p className="text-sm leading-6 text-white/68">
-					{state.kind === 'unauthenticated'
-						? 'This route is statically hosted, but application data is still protected by Supabase Auth and RLS.'
-						: `${state.email ?? 'This account'} is signed in but does not have an active row in admin_users.`}
-				</p>
-				<Link
-					href={ADMIN_LOGIN_PATH}
-					className="inline-flex h-11 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-black transition-colors hover:bg-white/92">
-					Open admin login
-				</Link>
-			</div>
+			<DashboardMessageState
+				title={state.kind === 'unauthenticated' ? '로그인이 필요합니다' : '관리자 허용 목록이 필요합니다'}
+				message={
+					state.kind === 'unauthenticated'
+						? '이 경로는 정적으로 배포되지만, 신청 데이터는 여전히 Supabase Auth와 RLS 뒤에서 보호됩니다.'
+						: `${state.email ?? '이 계정'}은 로그인되었지만 admin_users에 활성 행이 없습니다.`
+				}
+				ctaLabel={state.kind === 'unauthenticated' ? '로그인 계속하기' : '관리자 로그인으로 이동'}
+			/>
 		);
 	}
 
 	const total = state.applications.length;
+	const normalizedQuery = query.trim().toLowerCase();
 	const statusCounts = FRONTIER_APPLICATION_STATUS_VALUES.map(status => ({
 		status,
 		count: state.applications.filter(application => application.status === status).length,
 	}));
+	const visibleApplications = state.applications.filter(application => {
+		const matchesStatus = selectedStatus === 'all' || application.status === selectedStatus;
+		const matchesQuery =
+			normalizedQuery.length === 0 ||
+			application.email.toLowerCase().includes(normalizedQuery) ||
+			application.wallet_address.toLowerCase().includes(normalizedQuery) ||
+			application.payment_token.toLowerCase().includes(normalizedQuery) ||
+			application.id.toLowerCase().includes(normalizedQuery);
+
+		return matchesStatus && matchesQuery;
+	});
+	const awaitingActionCount = state.applications.filter(application => ['submitted', 'awaiting_payment', 'payment_confirmed'].includes(application.status)).length;
+	const approvedCount = state.applications.filter(application => application.status === 'approved').length;
+	const latestSubmission = state.applications[0]?.submitted_at ?? null;
 
 	return (
-		<div className="mx-auto flex w-full max-w-[1100px] flex-col gap-6">
-			<section className="flex flex-col gap-5 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
-				<div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-					<div className="flex flex-col gap-3">
-						<p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">Admin Dashboard</p>
-						<h1 className="text-balance text-[2.4rem] font-black leading-[0.9] tracking-[-0.06em] text-white">Frontier applications, behind static-hosting-safe auth</h1>
-						<p className="max-w-2xl text-sm leading-6 text-white/68">This is the minimal static admin shell: Supabase Auth on the client, `admin_users` allowlist for access, and RLS-protected direct reads from `frontier_applications`.</p>
-					</div>
-					<div className="flex flex-wrap items-center gap-3">
-						<div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/72">{state.email}</div>
-						<Button type="button" variant="outline" onClick={handleSignOut} disabled={isPending} className="h-10 rounded-full border-white/15 bg-transparent px-4 text-white hover:bg-white/10 hover:text-white">
-							{isPending ? 'Signing out...' : 'Sign out'}
-						</Button>
-					</div>
-				</div>
+		<SidebarProvider defaultOpen>
+			<div className="flex min-h-screen w-full">
+				<Sidebar variant="sidebar" collapsible="icon">
+					<SidebarHeader className="border-b border-sidebar-border/70">
+						<div className="flex items-start gap-3 rounded-xl border border-sidebar-border/70 bg-sidebar-accent/50 p-3">
+							<div className="flex size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+								<ShieldCheckIcon />
+							</div>
+							<div className="grid min-w-0 gap-1 group-data-[collapsible=icon]:hidden">
+								<p className="text-sm font-semibold text-sidebar-foreground">XORing 운영</p>
+							</div>
+						</div>
+					</SidebarHeader>
 
-				<div className="grid gap-3 md:grid-cols-3">
-					<div className="rounded-[20px] border border-white/10 bg-black/20 p-4">
-						<p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Recent rows</p>
-						<p className="mt-3 text-3xl font-black tracking-[-0.05em] text-white">{total}</p>
-						<p className="mt-2 text-sm text-white/56">Latest 20 rows by `submitted_at desc`.</p>
-					</div>
-					<div className="rounded-[20px] border border-white/10 bg-black/20 p-4 md:col-span-2">
-						<p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Status snapshot</p>
-						<div className="mt-3 flex flex-wrap gap-2">
-							{statusCounts.map(item => (
-								<div key={item.status} className={`rounded-full px-3 py-2 text-sm font-medium ${getStatusTone(item.status)}`}>
-									{item.status}: {item.count}
+					<SidebarContent>
+						<SidebarGroup>
+							<SidebarGroupLabel>목록</SidebarGroupLabel>
+							<SidebarGroupContent>
+								<SidebarMenu>
+									<SidebarMenuItem>
+										<SidebarMenuButton type="button" isActive tooltip="신청 목록">
+											<InboxIcon />
+											<span>신청 목록</span>
+										</SidebarMenuButton>
+										<SidebarMenuBadge>{total}</SidebarMenuBadge>
+									</SidebarMenuItem>
+								</SidebarMenu>
+							</SidebarGroupContent>
+						</SidebarGroup>
+
+						<SidebarSeparator />
+
+						<SidebarGroup>
+							<SidebarGroupLabel>상태 보기</SidebarGroupLabel>
+							<SidebarGroupContent>
+								<SidebarMenu>
+									<SidebarMenuItem>
+										<SidebarMenuButton type="button" isActive={selectedStatus === 'all'} onClick={() => setSelectedStatus('all')} tooltip="전체 신청">
+											<InboxIcon />
+											<span>전체 신청</span>
+										</SidebarMenuButton>
+										<SidebarMenuBadge>{total}</SidebarMenuBadge>
+									</SidebarMenuItem>
+									{statusCounts.map(item => {
+										const Icon = getStatusIcon(item.status);
+
+										return (
+											<SidebarMenuItem key={item.status}>
+												<SidebarMenuButton type="button" isActive={selectedStatus === item.status} onClick={() => setSelectedStatus(item.status)} tooltip={formatStatusLabel(item.status)}>
+													<Icon />
+													<span>{formatStatusLabel(item.status)}</span>
+												</SidebarMenuButton>
+												<SidebarMenuBadge>{item.count}</SidebarMenuBadge>
+											</SidebarMenuItem>
+										);
+									})}
+								</SidebarMenu>
+							</SidebarGroupContent>
+						</SidebarGroup>
+					</SidebarContent>
+
+					<SidebarFooter className="border-t border-sidebar-border/70">
+						<div className="rounded-xl border border-sidebar-border/70 bg-sidebar-accent/50 p-3 group-data-[collapsible=icon]:hidden">
+							<p className="truncate text-sm font-medium text-sidebar-foreground">{state.email}</p>
+							<p className="mt-1 text-xs text-sidebar-foreground/70">읽기 전용 경로, RLS 보호</p>
+						</div>
+						<SidebarMenu>
+							<SidebarMenuItem>
+								<SidebarMenuButton type="button" onClick={handleSignOut} tooltip="로그아웃">
+									<LogOutIcon />
+									<span>{isPending ? '로그아웃 중...' : '로그아웃'}</span>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						</SidebarMenu>
+					</SidebarFooter>
+					<SidebarRail />
+				</Sidebar>
+
+				<SidebarInset className="min-w-0 bg-transparent">
+					<div className="mx-auto flex min-h-screen w-full max-w-[1520px] flex-col">
+						<header className="sticky top-0 z-20 border-b border-border/60 bg-background/82 backdrop-blur">
+							<div className="flex items-center gap-3 px-4 py-3 sm:px-5">
+								<SidebarTrigger />
+								<Separator orientation="vertical" className="hidden h-5 sm:block" />
+								<div className="grid min-w-0 gap-1">
+									<p className="text-[11px] font-medium tracking-[0.24em] text-muted-foreground">관리자 신청 목록</p>
+									<h1 className="text-lg font-semibold tracking-tight">읽기 워크벤치</h1>
 								</div>
-							))}
+								<div className="ml-auto flex items-center gap-2">
+									<Badge variant="outline" className="hidden sm:inline-flex">
+										{visibleApplications.length}개 표시 중
+									</Badge>
+									<Badge variant="outline">읽기 전용</Badge>
+								</div>
+							</div>
+						</header>
+
+						<div className="flex flex-1 flex-col gap-4 px-4 py-4 sm:px-5 lg:gap-6 lg:py-5">
+							<section className="grid gap-3 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)]">
+								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
+									<CardHeader className="gap-2">
+										<CardDescription>현재 표시 중인 신청</CardDescription>
+										<CardTitle className="text-3xl font-semibold tracking-tight">{visibleApplications.length}</CardTitle>
+									</CardHeader>
+									<CardContent className="pt-0 text-sm text-muted-foreground">
+										필터 적용 후 전체 {total}건 중 {visibleApplications.length}건을 보여줍니다.
+									</CardContent>
+								</Card>
+								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
+									<CardHeader className="gap-2">
+										<CardDescription>다음 확인 필요</CardDescription>
+										<CardTitle className="text-3xl font-semibold tracking-tight">{awaitingActionCount}</CardTitle>
+									</CardHeader>
+									<CardContent className="pt-0 text-sm text-muted-foreground">접수됨, 결제 대기, 결제 확인 상태를 합산합니다.</CardContent>
+								</Card>
+								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
+									<CardHeader className="gap-2">
+										<CardDescription>가장 최근 신청</CardDescription>
+										<CardTitle className="text-lg font-semibold tracking-tight">{formatDate(latestSubmission)}</CardTitle>
+									</CardHeader>
+									<CardContent className="pt-0 text-sm text-muted-foreground">승인 완료 {approvedCount}건</CardContent>
+								</Card>
+							</section>
+
+							<Card className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
+								<CardHeader className="gap-2">
+									<CardTitle>필터</CardTitle>
+									<CardDescription>이메일, 지갑 주소, 토큰, 신청 id로 검색할 수 있습니다. 상태 바로가기는 사이드바와 동기화됩니다.</CardDescription>
+								</CardHeader>
+								<CardContent className="flex flex-col gap-4">
+									<div className="relative">
+										<SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+										<Input value={query} onChange={event => setQuery(event.target.value)} placeholder="이메일, 지갑 주소, 토큰, 신청 id 검색" className="h-10 bg-background pl-9" />
+									</div>
+									<div className="flex flex-wrap gap-2">
+										<Button type="button" variant={selectedStatus === 'all' ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedStatus('all')}>
+											<InboxIcon data-icon="inline-start" />
+											전체
+										</Button>
+										{statusCounts.map(item => (
+											<Button key={item.status} type="button" variant={selectedStatus === item.status ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedStatus(item.status)}>
+												{formatStatusLabel(item.status)}
+												<span className="text-muted-foreground">{item.count}</span>
+											</Button>
+										))}
+									</div>
+								</CardContent>
+							</Card>
+
+							<Card className="border-border/60 bg-card/92 shadow-sm backdrop-blur">
+								<CardHeader className="gap-2">
+									<CardTitle>최근 신청 목록</CardTitle>
+									<CardDescription>신청 시각, 이메일, 상태를 먼저 읽도록 구성했습니다. 보조 필드는 보이되 목록 밀도를 해치지 않는 선에서 유지합니다.</CardDescription>
+								</CardHeader>
+								<CardContent className="px-0 sm:px-4">
+									{visibleApplications.length === 0 ? (
+										<div className="px-4 pb-4 sm:px-0 sm:pb-0">
+											<Card size="sm" className="border-dashed border-border/70 bg-muted/30">
+												<CardHeader className="gap-2">
+													<CardTitle>일치하는 항목이 없습니다</CardTitle>
+													<CardDescription>검색어를 지우거나 현재 상태 필터를 바꿔 보세요.</CardDescription>
+												</CardHeader>
+											</Card>
+										</div>
+									) : (
+										<>
+											<div className="hidden md:block">
+												<Table>
+													<TableHeader>
+														<TableRow>
+															<TableHead className="pl-4 sm:pl-2">신청 시각</TableHead>
+															<TableHead>신청자</TableHead>
+															<TableHead>상태</TableHead>
+															<TableHead className="hidden lg:table-cell">토큰</TableHead>
+															<TableHead className="hidden xl:table-cell">지갑</TableHead>
+															<TableHead className="hidden 2xl:table-cell">검토 시각</TableHead>
+														</TableRow>
+													</TableHeader>
+													<TableBody>
+														{visibleApplications.map(application => (
+															<TableRow key={application.id}>
+																<TableCell className="pl-4 align-top sm:pl-2">
+																	<div className="grid gap-1">
+																		<p className="font-medium leading-5">{formatDate(application.submitted_at)}</p>
+																		<p className="text-xs text-muted-foreground">상태 변경 {formatDate(application.status_changed_at)}</p>
+																	</div>
+																</TableCell>
+																<TableCell className="align-top">
+																	<div className="grid gap-1">
+																		<p className="font-medium leading-5 text-foreground">{application.email}</p>
+																		<p className="truncate text-xs text-muted-foreground">{application.id}</p>
+																	</div>
+																</TableCell>
+																<TableCell className="align-top">
+																	<StatusBadge status={application.status} />
+																</TableCell>
+																<TableCell className="hidden align-top lg:table-cell">
+																	<Badge variant="outline" className="uppercase">
+																		{application.payment_token}
+																	</Badge>
+																</TableCell>
+																<TableCell className="hidden align-top xl:table-cell">
+																	<p className="max-w-[220px] truncate font-mono text-xs text-muted-foreground">{application.wallet_address}</p>
+																</TableCell>
+																<TableCell className="hidden align-top 2xl:table-cell">
+																	<p className="text-muted-foreground">{formatDate(application.reviewed_at)}</p>
+																</TableCell>
+															</TableRow>
+														))}
+													</TableBody>
+												</Table>
+											</div>
+
+											<div className="grid gap-3 px-4 pb-4 md:hidden">
+												{visibleApplications.map(application => (
+													<Card key={application.id} size="sm" className="border-border/70 bg-background/60 shadow-none">
+														<CardHeader className="gap-2">
+															<div className="flex items-start justify-between gap-3">
+																<div className="grid gap-1">
+																	<CardDescription>신청 시각</CardDescription>
+																	<CardTitle className="text-base font-semibold">{formatDate(application.submitted_at)}</CardTitle>
+																</div>
+																<StatusBadge status={application.status} />
+															</div>
+														</CardHeader>
+														<CardContent className="flex flex-col gap-3">
+															<div className="grid gap-1">
+																<p className="text-xs tracking-[0.18em] text-muted-foreground">신청자</p>
+																<p className="text-sm font-medium text-foreground">{application.email}</p>
+																<p className="truncate text-xs text-muted-foreground">{application.id}</p>
+															</div>
+															<div className="grid gap-3 sm:grid-cols-2">
+																<div className="grid gap-1">
+																	<p className="text-xs tracking-[0.18em] text-muted-foreground">토큰</p>
+																	<p className="text-sm uppercase text-foreground">{application.payment_token}</p>
+																</div>
+																<div className="grid gap-1">
+																	<p className="text-xs tracking-[0.18em] text-muted-foreground">검토 시각</p>
+																	<p className="text-sm text-foreground">{formatDate(application.reviewed_at)}</p>
+																</div>
+															</div>
+															<div className="grid gap-1">
+																<p className="text-xs tracking-[0.18em] text-muted-foreground">지갑</p>
+																<p className="truncate font-mono text-xs text-muted-foreground">{application.wallet_address}</p>
+															</div>
+														</CardContent>
+													</Card>
+												))}
+											</div>
+										</>
+									)}
+								</CardContent>
+							</Card>
 						</div>
 					</div>
-				</div>
-			</section>
-
-			<section className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur">
-				<div className="border-b border-white/10 px-6 py-4">
-					<h2 className="text-lg font-semibold text-white">Latest applications</h2>
-					<p className="mt-1 text-sm text-white/56">Phase 5 keeps this read-only. Search, detail, and mutation UI can layer on later without changing the hosting model.</p>
-				</div>
-
-				{state.applications.length === 0 ? (
-					<div className="px-6 py-10 text-sm text-white/60">No application rows are visible yet. Confirm that your admin account is allowlisted and that the table contains records.</div>
-				) : (
-					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-white/10 text-left text-sm">
-							<thead className="bg-black/10 text-white/45">
-								<tr>
-									<th className="px-6 py-3 font-medium">Email</th>
-									<th className="px-6 py-3 font-medium">Wallet</th>
-									<th className="px-6 py-3 font-medium">Token</th>
-									<th className="px-6 py-3 font-medium">Status</th>
-									<th className="px-6 py-3 font-medium">Submitted</th>
-									<th className="px-6 py-3 font-medium">Reviewed</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-white/10">
-								{state.applications.map(application => (
-									<tr key={application.id} className="align-top text-white/78">
-										<td className="px-6 py-4">
-											<div className="font-medium text-white">{application.email}</div>
-											<div className="mt-1 text-xs text-white/40">{application.id}</div>
-										</td>
-										<td className="px-6 py-4 font-mono text-xs text-white/62">{application.wallet_address}</td>
-										<td className="px-6 py-4 uppercase text-white/72">{application.payment_token}</td>
-										<td className="px-6 py-4">
-											<span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getStatusTone(application.status)}`}>{application.status}</span>
-										</td>
-										<td className="px-6 py-4 text-white/62">{formatDate(application.submitted_at)}</td>
-										<td className="px-6 py-4 text-white/62">{formatDate(application.reviewed_at)}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-			</section>
-		</div>
+				</SidebarInset>
+			</div>
+		</SidebarProvider>
 	);
 }
