@@ -242,15 +242,12 @@ function FrontierApplicationModal({
 		};
 	}, [open, lenis]);
 
-		return (
+	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent showCloseButton={false} scrollable className="max-w-2xl gap-0 overflow-hidden rounded-[30px] border-none bg-white p-0 text-left shadow-[0_28px_100px_rgba(0,0,0,0.34)]">
 				<div className="relative bg-white">
-					<div className="relative overflow-hidden bg-[#0c1116] px-2 pt-[20px] sm:px-3 sm:pt-[24px]">
-						<div className="absolute inset-0 opacity-90">
-							<Image src={FRONTIER_MODAL_BACKGROUND_SRC} alt="" fill className="object-cover object-center" unoptimized />
-						</div>
-						<div className="relative z-10 mx-auto w-full max-w-[38.5rem]">
+					<div className="relative overflow-hidden bg-[#0c1116] bg-cover bg-center p-4" style={{ backgroundImage: `url(${FRONTIER_MODAL_BACKGROUND_SRC})` }}>
+						<div className="relative z-10 mx-auto w-full">
 							<Image src={FRONTIER_MODAL_VISUAL_SRC} alt={FRONTIER_MODAL_VISUAL_ALT} width={2710} height={1280} className="h-auto w-full" unoptimized priority />
 						</div>
 					</div>
