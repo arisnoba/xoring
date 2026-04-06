@@ -396,14 +396,14 @@ function FrontierCompletionModal({ open, selectedToken, onOpenChange }: { open: 
 							<DialogTitle className="mx-auto text-balance text-[2rem] font-black leading-[0.95] tracking-[-0.04em] text-[#2f2f31] sm:text-[2.35rem] pt-5 pb-3">
 								Your Frontier Edition application is complete.
 							</DialogTitle>
-							<DialogDescription className="mx-auto text-balance text-base leading-[1.65] text-[#555] space-y-8">
-								<p>Please send the token to the designated wallet below within 3 days.</p>
-								<p>
+							<DialogDescription className="mx-auto text-balance text-base leading-[1.65] text-[#555]">
+								<span className="block">Please send the token to the designated wallet below within 3 days.</span>
+								<span className="mt-8 block">
 									<span className="font-bold">Allocation is confirmed on a first-come</span>
 									<br />
 									first-served basis upon successful transfer to the specified address.
-								</p>
-								<p>After verification of your application and transfer, an email will be sent to request your shipping address for XO Ring.</p>
+								</span>
+								<span className="mt-8 block">After verification of your application and transfer, an email will be sent to request your shipping address for XO Ring.</span>
 							</DialogDescription>
 						</div>
 

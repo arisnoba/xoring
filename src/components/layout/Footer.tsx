@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
 	return (
-		<footer data-header-theme="dark" className="bg-black text-white/65">
+		<footer data-header-theme="dark" className="bg-black text-white/65 border-t border-white/10">
 			<div className="footer-section">
 				<div className="mx-auto flex max-w-[1680px] flex-col gap-10">
 					<div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -10,8 +10,12 @@ export default function Footer() {
 						<img src="/assets/images/common/logo.svg" alt="XO RING" width={236} height={52} className="h-auto w-[180px] opacity-20 invert" />
 
 						<div className="flex items-center gap-6 text-sm font-medium text-white/50">
-							<Link href="/terms" className="hover:text-white transition-colors duration-300">Terms of Service</Link>
-							<Link href="/privacy" className="hover:text-white transition-colors duration-300">Privacy Policy</Link>
+							<Link href="/terms" className="hover:text-white transition-colors duration-300">
+								Terms of Service
+							</Link>
+							<Link href="/privacy" className="hover:text-white transition-colors duration-300">
+								Privacy Policy
+							</Link>
 						</div>
 					</div>
 
@@ -28,9 +32,7 @@ export default function Footer() {
 						</p>
 					</address>
 
-					<p className="text-xs font-medium tracking-[0.08em] text-white/35">
-						© DEEPCON Inc. All Rights Reserved.
-					</p>
+					<p className="text-xs font-medium tracking-[0.08em] text-white/35">© DEEPCON Inc. All Rights Reserved.</p>
 				</div>
 			</div>
 		</footer>

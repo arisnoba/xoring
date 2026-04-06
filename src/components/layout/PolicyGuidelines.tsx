@@ -5,7 +5,7 @@ const policyLines = [
 
 export default function PolicyGuidelines() {
 	return (
-		<section data-header-theme="dark" className="bg-black text-white/65 footer-section border-b border-white/10">
+		<section data-header-theme="dark" className="bg-black text-white/65 footer-section">
 			<div className="mx-auto max-w-[1680px]">
 				<h3 className="footer-section__title section-title section-title--footer">Policy &amp; Community Guidelines</h3>
 

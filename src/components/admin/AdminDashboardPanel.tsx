@@ -527,7 +527,7 @@ export default function AdminDashboardPanel() {
 																	</Badge>
 																</TableCell>
 																<TableCell className="hidden align-top xl:table-cell">
-																	<p className="max-w-[220px] truncate font-mono text-xs text-muted-foreground">{application.wallet_address}</p>
+																	<p className="truncate font-mono text-xs text-muted-foreground">{application.wallet_address}</p>
 																</TableCell>
 																<TableCell className="hidden align-top 2xl:table-cell">
 																	<p className="text-muted-foreground">{formatDate(application.reviewed_at)}</p>
