@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v1.1
+milestone_name: frontier-admin
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-24T06:26:40.135Z"
-last_activity: 2026-03-24 — brownfield 모션 개선 로드맵 생성 및 requirement traceability 매핑 완료
+stopped_at: Phase 5 ready to discuss
+last_updated: "2026-04-06T06:18:43Z"
+last_activity: 2026-04-06 — milestone v1.1 Frontier 신청 관리자 페이지 요구사항과 로드맵 정의 완료
 progress:
-  total_phases: 4
+  total_phases: 3
   completed_phases: 0
-  total_plans: 0
+  total_plans: 6
   completed_plans: 0
   percent: 0
 ---
@@ -18,17 +18,17 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-24)
+See: .planning/PROJECT.md (updated 2026-04-06)
 
-**Core value:** 기존 랜딩 페이지를 깨뜨리지 않고, 일관되고 세련된 등장 모션을 안전하게 추가한다.
-**Current focus:** Phase 1: Motion Foundation
+**Core value:** 운영자가 신청 정보를 안전하게 처리하고 공개 랜딩 경험을 해치지 않는다.
+**Current focus:** Phase 5: Admin Access & Server Boundary
 
 ## Current Position
 
-Phase: 1 of 4 (Motion Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-24 — brownfield 모션 개선 로드맵 생성 및 requirement traceability 매핑 완료
+Phase: 5 of 7 (Admin Access & Server Boundary)
+Plan: 0 of 2 in current phase
+Status: Ready to discuss
+Last activity: 2026-04-06 — milestone v1.1 Frontier 신청 관리자 페이지 요구사항과 로드맵 정의 완료
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -44,10 +44,9 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Motion Foundation | 0 | 0 min | 0 min |
-| 2. Static Section Reveal | 0 | 0 min | 0 min |
-| 3. Interactive Section Safeguards | 0 | 0 min | 0 min |
-| 4. Hero Intro & Release Readiness | 0 | 0 min | 0 min |
+| 5. Admin Access & Server Boundary | 0 | 0 min | 0 min |
+| 6. Application Review Workspace | 0 | 0 min | 0 min |
+| 7. Status Mutation & Release Verification | 0 | 0 min | 0 min |
 
 **Recent Trend:**
 
@@ -61,10 +60,10 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Phase 1: `RevealOnScroll`만 클라이언트 경계로 두고 섹션 자체는 가능한 한 서버 컴포넌트로 유지한다.
-- Phase 2: 저위험 섹션과 블록형 섹션은 공통 preset 기반 reveal로 일관성을 맞춘다.
-- Phase 3: sticky, carousel, O/X 모드 전환 구간은 블록 단위 reveal 우선으로 구조 충돌을 피한다.
-- Phase 4: Hero 초기 진입 모션은 GSAP one-shot 타임라인으로 추가하고 기존 scrub과 분리한다.
+- 공개 신청 데이터는 브라우저 직접 접근이 아니라 Edge Function 또는 동등한 서버 경계를 통해서만 다룬다.
+- 중복 신청은 이메일 1건, 지갑 주소 1건으로 차단한다.
+- 관리자 기능은 신청 목록/상태 관리에 집중하고 자동 이메일, 배송 정보, 결제 자동화는 후속 단계로 미룬다.
+- 관리자 페이지는 기존 정적 랜딩 경험과 분리된 전용 접근 경계를 사용한다.
 
 ### Pending Todos
 
@@ -72,11 +71,12 @@ None yet.
 
 ### Blockers/Concerns
 
-- 자동 테스트 프레임워크가 없으므로 릴리스 판단은 `lint`, `build`, 데스크톱/모바일 수동 검증에 의존한다.
-- `HeroSection`, 헤더 테마 연동, `ModeCardCarousel`, `TwoModes` 토글은 brownfield 핵심 호환성 리스크다.
+- 현재 사이트는 `output: "export"` 정적 배포 제약이 있으므로 관리자 인증/데이터 경계를 어떤 방식으로 붙일지 먼저 확정해야 한다.
+- `frontier_applications`는 RLS 기본 차단 상태이므로, 관리자 기능은 service role 노출 없이 안전한 서버 경계를 사용해야 한다.
+- 자동 테스트 프레임워크가 없으므로 운영 검증은 `lint`, `build`, 수동 시나리오 확인에 의존한다.
 
 ## Session Continuity
 
-Last session: 2026-03-24T06:26:40.132Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-motion-foundation/01-CONTEXT.md
+Last session: 2026-04-06T06:18:43Z
+Stopped at: Phase 5 ready to discuss
+Resume file: .planning/ROADMAP.md
