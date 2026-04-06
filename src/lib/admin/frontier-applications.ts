@@ -32,3 +32,28 @@ export async function listFrontierApplications(limit = 20) {
 	return (data ?? []) as FrontierApplicationListItem[];
 }
 
+export async function updateFrontierApplicationStatus(
+	id: string,
+	status: FrontierApplicationStatus
+) {
+	const client = getSupabaseBrowserClient();
+
+	if (!client) {
+		throw new Error('Supabase browser client is not configured.');
+	}
+
+	const { data, error } = await client
+		.from('frontier_applications')
+		.update({ status })
+		.eq('id', id)
+		.select(
+			'id, email, wallet_address, payment_token, status, submitted_at, status_changed_at, reviewed_at'
+		)
+		.single();
+
+	if (error) {
+		throw error;
+	}
+
+	return data as FrontierApplicationListItem;
+}
