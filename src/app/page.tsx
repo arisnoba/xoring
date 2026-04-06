@@ -1,5 +1,6 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import PolicyGuidelines from '@/components/layout/PolicyGuidelines';
 import AIAgentSection from '@/components/sections/AIAgentSection';
 import ApplicationSection from '@/components/sections/ApplicationSection';
 import BeyondScreenSection from '@/components/sections/BeyondScreenSection';
@@ -25,6 +26,7 @@ export default function Home() {
 			<PocSection />
 			<Web3Section />
 			<PioneerSection />
+			<PolicyGuidelines />
 			<Footer />
 		</main>
 	);
