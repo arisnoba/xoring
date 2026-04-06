@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const policyLines = [
 	'To maintain a healthy ecosystem, discussing price fluctuations, sharing trading screenshots, predicting returns, and inducing investments are strictly prohibited within the community.',
 	'This platform is an independent sports tech and behavioral data service provider. We do not issue, sell, or broker digital assets, nor do we provide investment advice.',
@@ -20,7 +22,11 @@ export default function Footer() {
 					</div>
 				</div>
 
-				<div className="flex min-w-[260px] flex-col items-end">
+				<div className="flex min-w-[260px] flex-col items-end gap-6">
+					<div className="flex items-center gap-6 text-sm font-medium text-white/50">
+						<Link href="/terms" className="hover:text-white transition-colors duration-300">Terms of Service</Link>
+						<Link href="/privacy" className="hover:text-white transition-colors duration-300">Privacy Policy</Link>
+					</div>
 					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img src="/assets/images/common/logo.svg" alt="XO RING" width={236} height={52} className="h-auto w-[180px] opacity-20 invert" />
 				</div>
