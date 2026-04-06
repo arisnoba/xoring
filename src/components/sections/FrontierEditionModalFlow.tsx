@@ -296,7 +296,7 @@ function FrontierApplicationModal({
 									</p>
 									<CopyField value={selectedTokenOption.wallet} />
 								</div>
-								<p className="text-left text-sm font-medium leading-normal text-[#ff5f5f]">{WARNING_TEXT}</p>
+								<p className="text-left text-sm font-medium leading-normal text-amber-500">{WARNING_TEXT}</p>
 							</div>
 						</div>
 
@@ -316,7 +316,7 @@ function FrontierApplicationModal({
 									errors.email ? 'ring-1 ring-[#ff5f5f]' : ''
 								)}
 							/>
-							<p className={cn('text-left text-sm font-medium leading-normal', errors.email ? 'text-[#ff5f5f]' : 'text-[#777]')}>{errors.email ?? EMAIL_HELPER}</p>
+							<p className={cn('text-left text-sm font-medium leading-normal', errors.email ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.email ?? EMAIL_HELPER}</p>
 						</div>
 
 						<div className="flex flex-col gap-3">
@@ -335,7 +335,7 @@ function FrontierApplicationModal({
 									errors.walletAddress ? 'ring-1 ring-[#ff5f5f]' : ''
 								)}
 							/>
-							<p className={cn('text-left text-sm font-medium leading-normal', errors.walletAddress ? 'text-[#ff5f5f]' : 'text-[#777]')}>{errors.walletAddress ?? WALLET_HELPER}</p>
+							<p className={cn('text-left text-sm font-medium leading-normal', errors.walletAddress ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.walletAddress ?? WALLET_HELPER}</p>
 						</div>
 
 						<label className="flex items-start gap-3 rounded-[16px] bg-[#f7f7f7] px-4 py-4 text-left" htmlFor="frontier-agreement">

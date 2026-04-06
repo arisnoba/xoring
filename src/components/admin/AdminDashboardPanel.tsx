@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BadgeCheckIcon, CreditCardIcon, InboxIcon, LogOutIcon, MailIcon, PenLineIcon, SearchIcon, ShieldCheckIcon, XCircleIcon } from 'lucide-react';
+import { ArrowUpRightIcon, BadgeCheckIcon, CreditCardIcon, InboxIcon, LogOutIcon, MailIcon, PenLineIcon, SearchIcon, ShieldCheckIcon, XCircleIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,6 @@ import {
 	SidebarSeparator,
 	SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ADMIN_LOGIN_PATH, FRONTIER_APPLICATION_STATUS_VALUES, MISSING_SUPABASE_CONFIG_MESSAGE, type FrontierApplicationStatus } from '@/lib/admin/config';
 import { getAdminAccess, signOutAdmin } from '@/lib/admin/auth';
@@ -53,8 +52,8 @@ type TokenFilter = 'all' | FrontierApplicationListItem['payment_token'];
 
 const STATUS_LABELS: Record<FrontierApplicationStatus, string> = {
 	submitted: '접수됨',
-	awaiting_payment: '결제 대기',
-	payment_confirmed: '결제 확인',
+	awaiting_payment: '입금 대기',
+	payment_confirmed: '입금 확인',
 	approved: '승인 완료',
 	rejected: '반려됨',
 };
@@ -117,23 +116,14 @@ function StatusBadge({ status }: { status: FrontierApplicationStatus }) {
 
 function DashboardLoadingState() {
 	return (
-		<div className="mx-auto flex min-h-screen w-full max-w-[1520px] items-center px-4 py-6 sm:px-6">
-			<Card className="w-full border-border/60 bg-card/85 backdrop-blur">
-				<CardHeader className="gap-3">
-					<Skeleton className="h-4 w-24" />
-					<Skeleton className="h-10 w-64" />
-					<Skeleton className="h-4 w-full max-w-xl" />
-				</CardHeader>
-				<CardContent className="flex flex-col gap-4">
-					<div className="grid gap-3 lg:grid-cols-3">
-						<Skeleton className="h-28 w-full rounded-xl" />
-						<Skeleton className="h-28 w-full rounded-xl" />
-						<Skeleton className="h-28 w-full rounded-xl" />
-					</div>
-					<Skeleton className="h-16 w-full rounded-xl" />
-					<Skeleton className="h-[420px] w-full rounded-xl" />
-				</CardContent>
-			</Card>
+		<div className="mx-auto flex min-h-screen w-full max-w-[1520px] items-center justify-center px-4 py-6 sm:px-6">
+			<div className="flex flex-col items-center gap-4 text-center">
+				<div className="size-10 animate-spin rounded-full border-2 border-white/14 border-t-white/80" />
+				<div className="grid gap-1">
+					<p className="text-sm font-medium text-white/86">관리자 화면 불러오는 중</p>
+					<p className="text-xs text-white/48">신청 목록과 권한 상태를 확인하고 있습니다.</p>
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -228,6 +218,12 @@ export default function AdminDashboardPanel() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (state.kind === 'unauthenticated') {
+			router.replace(ADMIN_LOGIN_PATH);
+		}
+	}, [router, state.kind]);
+
 	const handleSignOut = () => {
 		startTransition(async () => {
 			try {
@@ -278,17 +274,13 @@ export default function AdminDashboardPanel() {
 		return <DashboardMessageState title="대시보드를 불러올 수 없습니다" message={state.message} ctaLabel="관리자 로그인으로 이동" />;
 	}
 
-	if (state.kind === 'unauthenticated' || state.kind === 'unauthorized') {
+	if (state.kind === 'unauthenticated') {
+		return <DashboardLoadingState />;
+	}
+
+	if (state.kind === 'unauthorized') {
 		return (
-			<DashboardMessageState
-				title={state.kind === 'unauthenticated' ? '로그인이 필요합니다' : '관리자 허용 목록이 필요합니다'}
-				message={
-					state.kind === 'unauthenticated'
-						? '이 경로는 정적으로 배포되지만, 신청 데이터는 여전히 Supabase Auth와 RLS 뒤에서 보호됩니다.'
-						: `${state.email ?? '이 계정'}은 로그인되었지만 admin_users에 활성 행이 없습니다.`
-				}
-				ctaLabel={state.kind === 'unauthenticated' ? '로그인 계속하기' : '관리자 로그인으로 이동'}
-			/>
+			<DashboardMessageState title="관리자 허용 목록이 필요합니다" message={`${state.email ?? '이 계정'}은 로그인되었지만 admin_users에 활성 행이 없습니다.`} ctaLabel="관리자 로그인으로 이동" />
 		);
 	}
 
@@ -298,7 +290,7 @@ export default function AdminDashboardPanel() {
 		status,
 		count: state.applications.filter(application => application.status === status).length,
 	}));
-	const tokenCounts = ['usdt', 'aios'].map(token => ({
+	const tokenCounts = (['usdt', 'aios'] as const).map(token => ({
 		token,
 		count: state.applications.filter(application => application.payment_token === token).length,
 	}));
@@ -383,9 +375,14 @@ export default function AdminDashboardPanel() {
 					<SidebarFooter className="border-t border-sidebar-border/70">
 						<div className="rounded-xl border border-sidebar-border/70 bg-sidebar-accent/50 p-3 group-data-[collapsible=icon]:hidden">
 							<p className="truncate text-sm font-medium text-sidebar-foreground">{state.email}</p>
-							<p className="mt-1 text-xs text-sidebar-foreground/70">읽기 전용 경로, RLS 보호</p>
 						</div>
 						<SidebarMenu>
+							<SidebarMenuItem>
+								<SidebarMenuButton render={<Link href="/" />} tooltip="랜딩 페이지로 이동">
+									<ArrowUpRightIcon />
+									<span>랜딩 페이지</span>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
 							<SidebarMenuItem>
 								<SidebarMenuButton type="button" onClick={handleSignOut} tooltip="로그아웃">
 									<LogOutIcon />
@@ -400,13 +397,10 @@ export default function AdminDashboardPanel() {
 				<SidebarInset className="min-w-0 bg-transparent">
 					<div className="mx-auto flex min-h-screen w-full flex-col">
 						<header className="sticky top-0 z-20 border-b border-border/60 bg-background/82 backdrop-blur">
-							<div className="flex items-center gap-3 px-4 py-3 sm:px-5">
+							<div className="flex items-center gap-5 px-4 py-3 sm:px-5">
 								<SidebarTrigger />
-								<Separator orientation="vertical" className="hidden h-5 sm:block" />
-								<div className="grid min-w-0 gap-1">
-									<p className="text-[11px] font-medium tracking-[0.24em] text-muted-foreground">관리자 신청 목록</p>
-									<h1 className="text-lg font-semibold tracking-tight">읽기 워크벤치</h1>
-								</div>
+								<Separator orientation="vertical" className="hidden h-8 sm:block" />
+								<h1 className="text-sm font-semibold tracking-tight text-foreground sm:text-base">Frontier 신청 현황</h1>
 								<div className="ml-auto flex items-center gap-2">
 									<Badge variant="outline" className="hidden sm:inline-flex">
 										{visibleApplications.length}개 표시 중
@@ -432,7 +426,7 @@ export default function AdminDashboardPanel() {
 										<CardDescription>다음 확인 필요</CardDescription>
 										<CardTitle className="text-3xl! font-semibold! tracking-tight">{awaitingActionCount}</CardTitle>
 									</CardHeader>
-									<CardContent className="pt-0 text-sm text-muted-foreground">접수됨, 결제 대기, 결제 확인 상태를 합산합니다.</CardContent>
+									<CardContent className="pt-0 text-sm text-muted-foreground">접수됨, 입금 대기, 입금 확인 상태를 합산합니다.</CardContent>
 								</Card>
 								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
 									<CardHeader className="gap-2">
@@ -606,18 +600,18 @@ export default function AdminDashboardPanel() {
 						setActiveApplication(null);
 					}
 				}}>
-				<DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
+				<DialogContent className="dark max-w-[calc(100%-2rem)] border-white/10 bg-[#1a1a1a] text-white sm:max-w-lg">
 					<DialogHeader>
-						<DialogTitle>상태 변경</DialogTitle>
-						<DialogDescription>{activeApplication ? `${activeApplication.email}의 현재 상태를 변경합니다.` : '선택한 신청의 상태를 변경합니다.'}</DialogDescription>
+						<DialogTitle className="text-white">상태 변경</DialogTitle>
+						<DialogDescription className="text-white/50">{activeApplication ? `${activeApplication.email}의 현재 상태를 변경합니다.` : '선택한 신청의 상태를 변경합니다.'}</DialogDescription>
 					</DialogHeader>
 
 					{activeApplication ? (
 						<div className="flex flex-col gap-4">
-							<div className="rounded-xl border border-border/70 bg-muted/30 p-4">
+							<div className="rounded-xl border border-white/10 bg-white/5 p-4">
 								<div className="grid gap-2">
-									<p className="text-sm font-medium text-foreground">{activeApplication.email}</p>
-									<div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+									<p className="text-sm font-medium text-white">{activeApplication.email}</p>
+									<div className="flex flex-wrap items-center gap-2 text-xs text-white/50">
 										<span>현재 상태</span>
 										<StatusBadge status={activeApplication.status} />
 										<span>최근 변경 {formatDate(activeApplication.status_changed_at)}</span>
@@ -631,7 +625,7 @@ export default function AdminDashboardPanel() {
 										key={status}
 										type="button"
 										variant={activeApplication.status === status ? 'secondary' : 'outline'}
-										className="justify-start"
+										className="justify-start border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white disabled:opacity-40"
 										disabled={isUpdatingStatus || activeApplication.status === status}
 										onClick={() => handleStatusUpdate(status)}>
 										{formatStatusLabel(status)}
@@ -642,8 +636,13 @@ export default function AdminDashboardPanel() {
 					) : null}
 
 					<DialogFooter className="items-center justify-between sm:flex-row sm:justify-between">
-						<p className="text-xs text-muted-foreground">승인 또는 반려로 바꾸면 승인 시간이 자동으로 기록됩니다.</p>
-						<Button type="button" variant="outline" onClick={() => setActiveApplication(null)} disabled={isUpdatingStatus}>
+						<p className="text-xs text-white/40">승인 또는 반려로 바꾸면 승인 시간이 자동으로 기록됩니다.</p>
+						<Button
+							type="button"
+							variant="outline"
+							onClick={() => setActiveApplication(null)}
+							disabled={isUpdatingStatus}
+							className="border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white">
 							닫기
 						</Button>
 					</DialogFooter>
