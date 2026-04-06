@@ -1,66 +1,76 @@
-# Requirements: XORing Motion Enhancement
+# Requirements: XORing Frontier Launch Surface
 
-**Defined:** 2026-03-24
-**Core Value:** 기존 랜딩 페이지를 깨뜨리지 않고, 일관되고 세련된 등장 모션을 안전하게 추가한다.
+**Defined:** 2026-04-06
+**Core Value:** 운영자가 신청 정보를 안전하게 처리하고 공개 랜딩 경험을 해치지 않는다.
 
 ## v1 Requirements
 
-### Motion Foundation
+### Admin Access
 
-- [ ] **MOTN-01**: 개발자는 `src/components/shared/RevealOnScroll.tsx`에서 재사용 가능한 reveal 래퍼를 사용할 수 있다
-- [ ] **MOTN-02**: 개발자는 `src/lib/motion.ts`에서 공통 프리셋(`fadeUp`, `fadeIn`, `scaleUp` 등)을 import해 일관된 모션을 적용할 수 있다
-- [ ] **MOTN-03**: reduced motion 환경에서는 reveal 대상 콘텐츠가 애니메이션 없이 즉시 표시된다
+- [ ] **ADMN-01**: 운영자는 관리자 전용 경로에 접근해 Frontier 신청 운영 화면을 열 수 있다
+- [ ] **ADMN-02**: 공개 사용자는 관리자 경로와 관리자 데이터 API에 접근할 수 없다
 
-### Section Reveal
+### Application List
 
-- [ ] **SECT-01**: 사용자는 `BeyondScreen`, `Web3`, `Pioneer` 섹션 진입 시 일관된 reveal 모션을 본다
-- [ ] **SECT-02**: 사용자는 `SocialMode`와 `PrivateMode` 섹션에서 sticky 레이아웃과 캐러셀 동작이 유지된 상태로 reveal 모션을 본다
-- [ ] **SECT-03**: 사용자는 `AIAgent`, `Application`, `Poc` 섹션에서 계획 문서에 맞는 블록 단위 reveal 모션을 본다
-- [ ] **SECT-04**: 사용자는 `TwoModes` 섹션에서 초기 reveal 이후에도 O/X 모드 전환 인터랙션을 정상적으로 사용할 수 있다
+- [ ] **APPL-01**: 운영자는 신청 목록을 `submitted_at` 최신순으로 볼 수 있다
+- [ ] **APPL-02**: 운영자는 신청 목록을 상태값 기준으로 필터링할 수 있다
+- [ ] **APPL-03**: 운영자는 이메일 또는 지갑 주소 기준으로 신청을 검색할 수 있다
 
-### Hero Motion
+### Application Review
 
-- [ ] **HERO-01**: 사용자는 페이지 첫 진입 시 Hero 로고, 링, 다운로드 버튼의 초기 등장 모션을 본다
-- [ ] **HERO-02**: Hero의 초기 등장 모션은 기존 GSAP scrub 타임라인과 충돌하지 않고, overlay 전환과 header theme sync를 그대로 유지한다
+- [ ] **APPL-04**: 운영자는 개별 신청의 이메일, 지갑 주소, 선택 토큰, 동의 버전, 상태 변경 시각을 확인할 수 있다
+- [ ] **APPL-05**: 운영자는 신청 상태를 `submitted`, `awaiting_payment`, `payment_confirmed`, `approved`, `rejected` 중 하나로 변경할 수 있다
+- [ ] **APPL-06**: 운영자는 신청 검토 시 내부 메모를 저장할 수 있다
+
+### Data & Integration
+
+- [ ] **DATA-01**: 관리자 페이지는 `frontier_applications`를 브라우저 직접 접근이 아닌 서버 경계를 통해 조회/수정한다
+- [ ] **DATA-02**: 관리자 데이터 경계는 검색값, 상태값, 수정 payload를 검증하고 안전한 에러 응답을 반환한다
 
 ### Delivery Quality
 
-- [ ] **QUAL-01**: reveal 추가만으로 기존 서버 컴포넌트 섹션을 불필요하게 클라이언트 컴포넌트로 바꾸지 않는다
-- [ ] **QUAL-02**: 변경 후 `npm run lint`와 `npm run build`가 모두 통과한다
-- [ ] **QUAL-03**: 개발자는 데스크톱과 모바일에서 모든 reveal 구간을 수동 검증할 수 있다
+- [ ] **QUAL-04**: 관리자 페이지 변경 후 `npm run lint`와 `npm run build`가 모두 통과한다
+- [ ] **QUAL-05**: 개발자는 목록 조회, 검색/필터, 상세 확인, 상태 변경 흐름을 수동으로 검증할 수 있다
 
 ## v2 Requirements
 
-### Motion Extensions
+### Operations
 
-- **MEXT-01**: 캐러셀 카드 단위의 세밀한 stagger 또는 hover 연출을 추가한다
-- **MEXT-02**: 전역 `MotionConfig` 또는 테마 레벨 모션 제어 계층을 도입한다
+- **OPER-01**: 운영자는 승인/반려/입금 확인 시 자동 이메일을 발송할 수 있다
+- **OPER-02**: 운영자는 배송 정보 수집 단계를 신청 레코드와 연결해 관리할 수 있다
+- **OPER-03**: 운영자는 다건 선택 후 일괄 상태 변경을 수행할 수 있다
+
+### Payment Automation
+
+- **PAYM-01**: 시스템은 토큰 입금 여부를 외부 데이터와 대조해 자동으로 판별할 수 있다
+- **PAYM-02**: 시스템은 입금 확인 이력을 별도 감사 로그로 남길 수 있다
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| 랜딩 페이지 카피/디자인 리디자인 | 이번 범위는 motion polish이며 콘텐츠 설계 변경이 아니다 |
-| GSAP 제거 및 전역 motion 통합 | 히어로 scrub은 GSAP이 더 적합하고 현재 구현도 안정적이다 |
-| 신규 섹션, 신규 CTA, 신규 데이터 연동 추가 | 모션 개선과 무관한 범위 확장이다 |
-| 테스트 프레임워크 도입 및 자동화 E2E 구축 | 현재 저장소 운영 방식 대비 범위가 과하다 |
+| 자동 이메일 발송 | 운영 상태 관리가 먼저이며 메일 템플릿/전송 정책은 후속 결정이 필요하다 |
+| 배송 정보 입력/관리 | 초기 신청 단계 범위를 넘어서는 추가 운영 플로우다 |
+| 온체인 입금 자동 검증 | 외부 연동과 검증 규칙 정의가 더 필요하다 |
+| 일괄 처리/대시보드 통계 | 초기 운영 규모에서는 단건 검토 UX가 우선이다 |
+| 공개 신청 폼 리디자인 | 이번 마일스톤은 관리자 페이지와 운영 경계에 집중한다 |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MOTN-01 | Phase 1 | Pending |
-| MOTN-02 | Phase 1 | Pending |
-| MOTN-03 | Phase 1 | Pending |
-| SECT-01 | Phase 2 | Pending |
-| SECT-02 | Phase 3 | Pending |
-| SECT-03 | Phase 2 | Pending |
-| SECT-04 | Phase 3 | Pending |
-| HERO-01 | Phase 4 | Pending |
-| HERO-02 | Phase 4 | Pending |
-| QUAL-01 | Phase 1 | Pending |
-| QUAL-02 | Phase 4 | Pending |
-| QUAL-03 | Phase 4 | Pending |
+| ADMN-01 | Phase 5 | Pending |
+| ADMN-02 | Phase 5 | Pending |
+| APPL-01 | Phase 6 | Pending |
+| APPL-02 | Phase 6 | Pending |
+| APPL-03 | Phase 6 | Pending |
+| APPL-04 | Phase 6 | Pending |
+| APPL-05 | Phase 7 | Pending |
+| APPL-06 | Phase 7 | Pending |
+| DATA-01 | Phase 5 | Pending |
+| DATA-02 | Phase 5 | Pending |
+| QUAL-04 | Phase 7 | Pending |
+| QUAL-05 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 12 total
@@ -68,5 +78,5 @@
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after roadmap creation*
+*Requirements defined: 2026-04-06*
+*Last updated: 2026-04-06 after milestone v1.1 requirements definition*
