@@ -5,14 +5,17 @@ let browserClient: SupabaseClient | null = null;
 export function getSupabaseBrowserConfig() {
 	return {
 		url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-		anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+		publishableKey:
+			process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ??
+			process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+			'',
 	};
 }
 
 export function hasSupabaseBrowserConfig() {
-	const { url, anonKey } = getSupabaseBrowserConfig();
+	const { url, publishableKey } = getSupabaseBrowserConfig();
 
-	return Boolean(url && anonKey);
+	return Boolean(url && publishableKey);
 }
 
 export function getSupabaseBrowserClient() {
@@ -21,9 +24,9 @@ export function getSupabaseBrowserClient() {
 	}
 
 	if (!browserClient) {
-		const { url, anonKey } = getSupabaseBrowserConfig();
+		const { url, publishableKey } = getSupabaseBrowserConfig();
 
-		browserClient = createClient(url, anonKey, {
+		browserClient = createClient(url, publishableKey, {
 			auth: {
 				persistSession: true,
 				autoRefreshToken: true,
@@ -34,4 +37,3 @@ export function getSupabaseBrowserClient() {
 
 	return browserClient;
 }
-

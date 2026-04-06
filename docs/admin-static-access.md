@@ -13,7 +13,7 @@
 ## Required Environment Variables
 
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
 
 이 두 값은 공개 클라이언트에서 사용되므로 `NEXT_PUBLIC_` prefix를 유지한다.
 
