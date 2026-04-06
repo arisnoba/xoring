@@ -1,9 +1,8 @@
 import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import RingArtwork from '@/components/shared/RingArtwork';
-import PlaceholderLink from '@/components/shared/PlaceholderLink';
+import FrontierEditionModalFlow from '@/components/sections/FrontierEditionModalFlow';
 import SectionContainer from '@/components/shared/SectionContainer';
 import { fadeIn, fadeUp, scaleUp } from '@/lib/motion';
-import { PLACEHOLDER_LINKS } from '@/lib/site';
 
 export default function PioneerSection() {
 	return (
@@ -22,39 +21,35 @@ export default function PioneerSection() {
 
 				<div className="mx-auto max-w-[760px] text-center">
 					<RevealOnScroll variants={fadeUp} delay={0.1}>
-						<h2 className="section-title text-balance text-[#35363a]">The 500 Pioneers</h2>
+						<h2 className="section-title text-balance text-[#35363a]">Frontier Edition</h2>
 					</RevealOnScroll>
 
 					<RevealOnScroll variants={fadeUp} delay={0.2}>
-						<div className="section-copy mt-10 space-y-10 text-[#3a3b3f]">
+						<div className="section-copy mt-10 space-y-8 text-[#202020] text-balance">
+							<p>We are inviting the first 000 pioneers to experience XO Ring before anyone else.</p>
+							<p>A wearable that turns your actions into real value.</p>
 							<p>
-								We don&apos;t do mass production.
-								<br />
-								Not just to be scarce.
-							</p>
-							<p>
-								Instead of wasting electricity,
-								<br />
-								we are looking for 500 &apos;pioneers&apos;
-								<br />
-								who will prove their real presence through action.
+								Not for everyone. <br />
+								No mass production.
 							</p>
 						</div>
 					</RevealOnScroll>
 
-					<div className="mt-12">
+					<div className="mt-12 space-y-4">
 						<RevealOnScroll variants={fadeUp} delay={0.25}>
-							<div>
-								<p className="text-[1.1rem] font-medium text-[#a0a0a5]">Global Limited 500 Pieces</p>
-								<p className="text-[clamp(4rem,7vw,6.4rem)] font-black tracking-tight text-[#6a6b70]">$499</p>
+							<div className="space-y-4">
+								<p className="text-sm font-normal text-[#9b9b9b] sm:text-base">Limited — 000 Spots</p>
+								<p className="flex flex-wrap items-end justify-center gap-x-3 gap-y-1 bg-gradient-to-r from-[#999999] to-[#333333] bg-clip-text text-transparent">
+									<span className="text-[clamp(3.2rem,6.2vw,4.75rem)] font-black leading-none tracking-tight">99.9</span>
+									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">USDT</span>
+									<span className="pb-1 text-[clamp(3rem,5.8vw,4.5rem)] font-thin leading-none text-[#666666]">/</span>
+									<span className="text-[clamp(3.2rem,6.2vw,4.75rem)] font-black leading-none tracking-tight">9,999</span>
+									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">AIOS</span>
+								</p>
 							</div>
 						</RevealOnScroll>
 						<RevealOnScroll variants={fadeUp} delay={0.3}>
-							<PlaceholderLink
-								href={PLACEHOLDER_LINKS.waitlist}
-								className="inline-flex min-w-[204px] items-center justify-center rounded-full bg-[#171717] px-8 py-3 text-lg font-semibold text-white shadow-[0_18px_50px_rgba(17,24,39,0.14)] transition-all duration-200 hover:bg-[#2c2c2e] hover:shadow-[0_22px_55px_rgba(17,24,39,0.2)] active:scale-[0.97] active:-translate-y-px">
-								Coming Soon
-							</PlaceholderLink>
+							<FrontierEditionModalFlow />
 						</RevealOnScroll>
 					</div>
 				</div>

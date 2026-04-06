@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
+import { usePathname, useRouter } from 'next/navigation';
 import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import { cn } from '@/lib/utils';
 import { PLACEHOLDER_LINKS } from '@/lib/site';
@@ -17,6 +18,8 @@ type HeaderTheme = 'light' | 'dark';
 
 export default function Header() {
 	const lenis = useLenis();
+	const pathname = usePathname();
+	const router = useRouter();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeTheme, setActiveTheme] = useState<HeaderTheme>('light');
@@ -26,9 +29,9 @@ export default function Header() {
 			const stack = document.elementsFromPoint(window.innerWidth / 2, 1);
 			const themedContainer = stack.find((element): element is HTMLElement => {
 				if (!(element instanceof HTMLElement)) return false;
-				return Boolean(element.closest('section[data-header-theme], footer[data-header-theme]'));
+				return Boolean(element.closest('[data-header-theme]'));
 			});
-			const themedSection = themedContainer?.closest<HTMLElement>('section[data-header-theme], footer[data-header-theme]');
+			const themedSection = themedContainer?.closest<HTMLElement>('[data-header-theme]');
 			const sectionTheme = themedSection?.dataset.headerTheme === 'dark' ? 'dark' : 'light';
 
 			if (themedSection?.id === 'hero') {
@@ -59,6 +62,11 @@ export default function Header() {
 	const scrollTo = (href: string) => {
 		setMenuOpen(false);
 
+		if (pathname !== '/') {
+			router.push('/' + href);
+			return;
+		}
+
 		if (lenis) {
 			lenis.scrollTo(href);
 			return;
@@ -85,6 +93,11 @@ export default function Header() {
 					className="flex items-center gap-2"
 					onClick={e => {
 						e.preventDefault();
+
+						if (pathname !== '/') {
+							router.push('/');
+							return;
+						}
 
 						if (lenis) {
 							lenis.scrollTo(0);

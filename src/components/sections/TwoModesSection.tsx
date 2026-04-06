@@ -117,7 +117,7 @@ export default function TwoModesSection() {
 	return (
 		<section id="modes" ref={sectionRef} data-header-theme="dark" className={`two-modes-section relative bg-[#141414] text-white ${SCROLL_SECTION_HEIGHT}`}>
 			<div className="sticky top-0 h-[100dvh] overflow-hidden">
-				<SectionContainer className="flex flex-col items-center justify-center">
+				<SectionContainer className="flex h-full min-h-full flex-col items-center justify-center !py-[5vh]">
 					<RevealOnScroll variants={fadeUp}>
 						<div className="max-w-[860px] text-center">
 							<p className="text-balance section-title font-black">

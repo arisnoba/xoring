@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import 'lenis/dist/lenis.css';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
+import { Toaster } from '@/components/ui/sonner';
 import { SITE_URL } from '@/lib/site';
 import "./globals.css";
 import "./globals.scss";
@@ -93,6 +94,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

@@ -7,11 +7,11 @@ export const metadata = {
 
 export default function PrivacyPage() {
 	return (
-		<main id="main-content" className="min-h-screen bg-black text-white relative">
+		<main id="main-content" className="min-h-screen bg-black text-white relative" data-header-theme="dark">
 			<Header />
 			
 			<div className="mx-auto max-w-4xl px-4 py-32 pt-48 pb-32 font-sans font-medium">
-				<h1 className="text-4xl lg:text-5xl font-bold text-white mb-8 mb-12">Privacy Policy</h1>
+				<h1 className="text-4xl lg:text-5xl font-bold text-white mb-12">Privacy Policy</h1>
 					<p className="text-white/50 text-sm mb-4">Last Updated: March 12, 2026</p>
 					<p className="mb-4 text-white/80 leading-relaxed">This Privacy Policy (“Policy”) applies to the XO RING service (the “Platform”), including the XO RING app, website, software, smart ring and other connected device features, and other related services linked to this Policy.</p>
 					<p className="mb-4 text-white/80 leading-relaxed">The Platform is provided and operated by DEEPCON Inc. (registered address: 1F, 15, Gangnam-daero 89-gil, Seocho-gu, Seoul, 06536, Republic of Korea) (“XO RING,” “we,” “us,” or the “Company”).</p>
