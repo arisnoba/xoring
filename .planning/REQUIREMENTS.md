@@ -8,7 +8,7 @@
 ### Admin Access
 
 - [ ] **ADMN-01**: 운영자는 관리자 전용 경로에 접근해 Frontier 신청 운영 화면을 열 수 있다
-- [ ] **ADMN-02**: 공개 사용자는 관리자 경로와 관리자 데이터 API에 접근할 수 없다
+- [ ] **ADMN-02**: 공개 사용자는 로그인과 allowlist 없이 관리자 경로에서 운영 데이터와 기능을 사용할 수 없다
 
 ### Application List
 
@@ -24,8 +24,8 @@
 
 ### Data & Integration
 
-- [ ] **DATA-01**: 관리자 페이지는 `frontier_applications`를 브라우저 직접 접근이 아닌 서버 경계를 통해 조회/수정한다
-- [ ] **DATA-02**: 관리자 데이터 경계는 검색값, 상태값, 수정 payload를 검증하고 안전한 에러 응답을 반환한다
+- [ ] **DATA-01**: 관리자 페이지는 `Supabase Auth` 세션과 `admin_users` allowlist 기반 RLS를 통해 `frontier_applications`를 조회/수정한다
+- [ ] **DATA-02**: 관리자 데이터 접근은 공개 사용자에게 닫혀 있어야 하고, 허용된 관리자에게만 필요한 범위의 읽기/수정 권한을 준다
 
 ### Delivery Quality
 

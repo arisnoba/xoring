@@ -35,7 +35,7 @@
 - [ ] 운영자는 이메일, 지갑 주소, 상태 기준으로 신청을 검색하거나 필터링할 수 있어야 한다
 - [ ] 운영자는 신청 상세 정보와 동의/상태 타임스탬프를 확인할 수 있어야 한다
 - [ ] 운영자는 신청 상태를 변경하고 내부 메모를 저장할 수 있어야 한다
-- [ ] 관리자 화면과 데이터 API는 공개 신청 폼과 분리된 인증/서버 경계를 사용해야 한다
+- [ ] 관리자 화면은 공개 신청 폼과 분리된 인증/RLS 경계를 사용해야 한다
 
 ### Out of Scope
 
@@ -51,14 +51,14 @@
 - 코드베이스 맵은 `.planning/codebase/`에 생성되어 있으며, 현재 사이트는 `output: "export"` 제약 때문에 일반적인 서버 렌더링 관리자 페이지 패턴을 그대로 쓰기 어렵다.
 - `supabase/migrations/20260406_frontier_application_intake.sql`와 `supabase/migrations/20260406_frontier_application_security_hardening.sql`가 적용되어 있어 관리자 기능은 이 스키마를 그대로 사용해야 한다.
 - `frontier_applications` 테이블은 `email`, `wallet_address`, `payment_token`, `status`, `status_note`, 동의 버전/시각, 상태 변경 시각을 저장한다.
-- 현재 보안 기본값은 `anon`, `authenticated` 역할의 직접 테이블 접근 차단이며, 관리자 기능은 별도 서버 경계를 설계해야 한다.
+- 현재 보안 기본값은 `anon`, `authenticated` 역할의 직접 테이블 접근 차단이며, 관리자 기능은 정적 호스팅 제약 안에서 `Supabase Auth + admin_users allowlist + RLS` 조합으로 풀어야 한다.
 - 자동 테스트 프레임워크는 없고, 검증 수단은 `npm run lint`, `npm run build`, 수동 운영 시나리오 확인이다.
 
 ## Constraints
 
 - **Tech stack**: Next.js 16 + React 19 + Tailwind 4 + Supabase를 유지한다 — 기존 코드와 이미 적용된 DB 구성을 존중해야 한다
-- **Deployment**: `output: "export"` 정적 배포를 유지한다 — 관리자 기능도 이 제약 안에서 동작 가능한 구조가 필요하다
-- **Security**: 공개 클라이언트가 `frontier_applications`에 직접 접근하면 안 된다 — 현재 RLS와 운영 합의가 이 전제를 가진다
+- **Deployment**: `output: "export"` 정적 배포를 유지한다 — 관리자 기능도 같은 정적 앱 안에서 동작해야 한다
+- **Security**: 공개 사용자는 `frontier_applications`를 읽거나 수정할 수 없어야 한다 — 현재 제약에서는 별도 서버 대신 `Supabase Auth + RLS`가 핵심 경계다
 - **Operations**: 관리자는 초기에는 Supabase 대시보드와 새 관리자 페이지를 병행 사용할 수 있어야 한다 — 운영 전환 리스크를 줄여야 한다
 - **Scope**: 이번 마일스톤은 신청 검토 화면과 상태 관리에 집중한다 — 자동 메일, 배송, 결제 자동화까지 확장하지 않는다
 

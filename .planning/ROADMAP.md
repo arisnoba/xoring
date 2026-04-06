@@ -2,7 +2,7 @@
 
 ## Overview
 
-이 로드맵은 기존 XORing 정적 랜딩 사이트 위에 `Frontier Edition` 신청 운영 관리자 페이지를 추가하는 경로를 정의한다. 이미 적용된 Supabase 신청 스키마와 RLS 기본 차단 정책을 존중하면서, 먼저 관리자 접근 경계와 서버 데이터 계층을 세우고, 그 위에 목록/상세 UI를 만들고, 마지막으로 상태 변경과 검증까지 마무리한다.
+이 로드맵은 기존 XORing 정적 랜딩 사이트 위에 `Frontier Edition` 신청 운영 관리자 페이지를 추가하는 경로를 정의한다. 이미 적용된 Supabase 신청 스키마와 RLS 기본 차단 정책을 존중하면서, 먼저 관리자 접근 경계와 RLS 기반 데이터 접근 구조를 세우고, 그 위에 목록/상세 UI를 만들고, 마지막으로 상태 변경과 검증까지 마무리한다.
 
 ## Phases
 
@@ -19,18 +19,19 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 5: Admin Access & Server Boundary
-**Goal**: 공개 랜딩과 분리된 관리자 접근 구조와 안전한 서버 데이터 경계를 마련한다
+**Goal**: 정적 호스팅 제약 안에서 관리자 로그인 경로와 RLS 기반 데이터 접근 구조를 마련한다
 **Depends on**: Nothing (first phase in this milestone)
 **Requirements**: ADMN-01, ADMN-02, DATA-01, DATA-02
 **Success Criteria** (what must be TRUE):
-  1. 운영자는 관리자 전용 경로로 진입할 수 있고 공개 사용자에게는 해당 경로가 열리지 않는다.
-  2. 관리자 페이지는 브라우저 직접 테이블 접근이 아니라 서버 경계를 통해 신청 데이터를 조회한다.
-  3. 검색/상태 파라미터와 수정 payload는 서버 경계에서 검증된다.
-  4. 현재 `frontier_applications` RLS 정책을 깨지 않고 관리자 기능을 연결할 수 있다.
-**Plans**: 2 plans
+  1. 운영자는 관리자 전용 경로로 진입할 수 있고 공개 사용자는 로그인/allowlist 없이 관리자 콘텐츠를 사용할 수 없다.
+  2. 관리자 페이지는 `Supabase Auth + admin_users + RLS` 조합으로 신청 데이터를 읽을 수 있다.
+  3. 공개 사용자는 로그인하더라도 allowlist 없이 관리자 데이터를 볼 수 없다.
+  4. 현재 `frontier_applications` RLS 정책을 유지하면서 정적 호스팅 환경에 관리자 기능을 연결할 수 있다.
+**Plans**: 3 plans
 Plans:
-- [ ] 05-01-PLAN.md — 관리자 접근 전략과 경로 구조를 확정한다
-- [ ] 05-02-PLAN.md — 신청 목록/상세 조회용 서버 데이터 경계를 구현한다
+- [ ] 05-01-PLAN.md — 정적 앱 안의 `/admin` 접근 구조와 auth 흐름을 정리한다
+- [ ] 05-02-PLAN.md — `admin_users` allowlist와 RLS 기반 관리자 권한 경계를 연결한다
+- [ ] 05-03-PLAN.md — 보호된 `/admin`에서 최신 신청을 읽는 최소 관리자 셸을 구현한다
 **UI hint**: yes
 
 ### Phase 6: Application Review Workspace
@@ -70,6 +71,6 @@ Phases execute in numeric order: 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 5. Admin Access & Server Boundary | 0/2 | Not started | - |
+| 5. Admin Access & Server Boundary | 0/3 | Not started | - |
 | 6. Application Review Workspace | 0/2 | Not started | - |
 | 7. Status Mutation & Release Verification | 0/2 | Not started | - |

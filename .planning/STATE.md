@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: frontier-admin
-status: planning
+status: executing
 stopped_at: Phase 5 context gathered
-last_updated: "2026-04-06T06:29:14Z"
-last_activity: 2026-04-06 — Phase 5 관리자 접근/서버 경계 컨텍스트 수집 완료
+last_updated: "2026-04-06T07:12:45.749Z"
+last_activity: 2026-04-06 -- Phase 05 execution started
 progress:
   total_phases: 3
   completed_phases: 0
-  total_plans: 6
+  total_plans: 7
   completed_plans: 0
   percent: 0
 ---
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 ## Current Position
 
 Phase: 5 of 7 (Admin Access & Server Boundary)
-Plan: 0 of 2 in current phase
-Status: Context gathered
-Last activity: 2026-04-06 — Phase 5 관리자 접근/서버 경계 컨텍스트 수집 완료
+Plan: 1 of 3
+Status: Executing Phase 05
+Last activity: 2026-04-06 -- Phase 05 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -72,7 +72,7 @@ None yet.
 ### Blockers/Concerns
 
 - 현재 사이트는 `output: "export"` 정적 배포 제약이 있으므로 관리자 인증/데이터 경계를 어떤 방식으로 붙일지 먼저 확정해야 한다.
-- `frontier_applications`는 RLS 기본 차단 상태이므로, 관리자 기능은 service role 노출 없이 안전한 서버 경계를 사용해야 한다.
+- `frontier_applications`는 RLS 기본 차단 상태이므로, 관리자 기능은 정적 호스팅 제약 안에서 `admin_users` allowlist와 Supabase Auth를 함께 써야 한다.
 - 자동 테스트 프레임워크가 없으므로 운영 검증은 `lint`, `build`, 수동 시나리오 확인에 의존한다.
 
 ## Session Continuity

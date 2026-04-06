@@ -7,7 +7,6 @@
     "dev:turbo": "WATCHPACK_POLLING=true next dev",
     "dev:webpack": "WATCHPACK_POLLING=true next dev --webpack",
     "build": "next build",
-    "build:admin": "next build apps/admin",
     "start": "next start",
     "lint": "eslint",
     "verify:motion-foundation": "node scripts/verify-motion-foundation.mjs",
@@ -16,6 +15,7 @@
   "dependencies": {
     "@base-ui/react": "^1.3.0",
     "@gsap/react": "^2.1.2",
+    "@supabase/supabase-js": "^2.101.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gsap": "^3.14.2",

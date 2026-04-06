@@ -6,7 +6,7 @@
 <domain>
 ## Phase Boundary
 
-공개 랜딩과 분리된 관리자 접근 구조와 안전한 서버 데이터 경계를 마련한다. 이 phase의 범위는 관리자 로그인 방식, `/admin` 경로 배치, 서버 경계를 통한 `frontier_applications` 조회/수정 구조 확정까지이며, 실제 목록/상세 UI 완성과 상태 변경 UX 자체는 다음 phase에서 다룬다.
+정적 호스팅 제약 안에서 관리자 접근 구조와 안전한 데이터 읽기 경계를 마련한다. 이 phase의 범위는 관리자 로그인 방식, `/admin` 경로 배치, `admin_users` allowlist와 RLS를 통한 `frontier_applications` 조회 구조 확정까지이며, 실제 목록/상세 UI 완성과 상태 변경 UX 자체는 다음 phase에서 다룬다.
 
 </domain>
 
@@ -24,13 +24,13 @@
 - **D-06:** Supabase 대시보드만으로 운영을 대체하지 않고, 이번 milestone 목표대로 별도 관리자 페이지를 만든다.
 
 ### 데이터 처리 경계
-- **D-07:** 브라우저는 `frontier_applications` 테이블에 직접 접근하지 않고 Next.js 서버 경계만 호출한다.
-- **D-08:** 관리자용 조회/수정은 Next.js 서버 경계(route handler 또는 server action)에서 `Supabase service role`을 사용해 처리한다.
-- **D-09:** RLS 기본 차단 정책은 유지하고, service role은 서버 전용 환경 변수로만 사용한다.
+- **D-07:** 공개 사용자는 계속 `frontier_applications`를 직접 읽거나 수정할 수 없다.
+- **D-08:** 관리자용 조회/수정은 `Supabase Auth` 세션과 `admin_users` allowlist 기반 RLS로 처리한다.
+- **D-09:** 정적 호스팅 제약 때문에 별도 서버 runtime이나 service role 노출 전제는 두지 않는다.
 
 ### the agent's Discretion
-- Next.js 서버 경계의 구체 형태는 `route handler`와 `server action` 중 현재 코드 구조와 배포 제약에 더 적합한 쪽으로 planner와 implementer가 결정한다.
-- 관리자 allowlist 저장 위치는 환경 변수, 별도 설정 테이블, 서버 상수 중 보안과 운영성을 만족하는 최소 구현으로 선택할 수 있다.
+- Supabase Auth callback 처리 방식은 magic link callback page 또는 동등한 브라우저 세션 확정 흐름 중 현재 정적 배포 제약에 맞는 최소 구현으로 선택할 수 있다.
+- 관리자 allowlist 저장 위치는 `admin_users` 같은 별도 설정 테이블을 우선하고, 공개 env 상수 방식은 피한다.
 - `/admin` 레이아웃의 세부 정보 구조, 로딩 상태, 오류 메시지 형태는 이후 phase UI 구현에서 표준 운영 도구 스타일로 정한다.
 
 </decisions>
@@ -66,13 +66,13 @@
 - `src/components/layout/Header.tsx`: 현재 공개 랜딩 헤더 패턴이 있으나 관리자 페이지는 이 헤더를 그대로 재사용하지 않는 편이 더 자연스럽다.
 
 ### Established Patterns
-- 현재 저장소에는 auth/session/middleware 패턴이 전혀 없다. 관리자 인증은 새 경계를 처음 도입하는 작업이다.
-- 현재 앱은 정적 export를 전제로 설계되어 있어, 관리자 기능은 공개 랜딩과 다른 실행 경로를 의식해야 한다.
+- 현재 저장소에는 auth/session 패턴이 전혀 없다. 관리자 인증은 새 경계를 처음 도입하는 작업이다.
+- 현재 앱은 정적 export를 전제로 설계되어 있어, 관리자 기능도 별도 서버 없이 동작해야 한다.
 - UI는 Tailwind와 기존 shadcn 기반 primitive 위에 조립하는 방식이 자연스럽다.
 
 ### Integration Points
 - `/admin` 경로는 `src/app/admin/` 아래에 새로 추가하는 구성이 가장 자연스럽다.
-- 관리자 데이터 경계는 Next.js 서버 경계에서 Supabase service role을 사용하도록 `src/app/api/admin/...` 또는 동등한 서버 전용 모듈로 연결할 수 있다.
+- 관리자 데이터 경계는 `admin_users` allowlist와 RLS를 통해 브라우저에서 직접 읽도록 연결할 수 있다.
 - Phase 6 목록/상세 UI는 Phase 5에서 확정한 인증/데이터 경계 위에 얹히므로, 이 phase에서 데이터 shape와 접근 흐름을 먼저 고정해야 한다.
 
 </code_context>
@@ -80,9 +80,9 @@
 <specifics>
 ## Specific Ideas
 
-- 로그인은 새 외부 서비스 없이 `Supabase Auth 이메일 로그인 + 관리자 이메일 allowlist`로 최소 구성한다.
+- 로그인은 새 외부 서비스 없이 `Supabase Auth 이메일 로그인 + admin_users allowlist`로 최소 구성한다.
 - 관리자 도구는 별도 앱으로 찢지 않고 현재 저장소 안 `/admin`에서 운영한다.
-- 클라이언트가 직접 Supabase를 치지 않고, Next.js 서버 경계가 관리자 데이터 접근의 단일 진입점이 된다.
+- 브라우저는 `authenticated` 세션으로만 관리자 데이터를 읽고, 공개 사용자는 RLS로 차단한다.
 
 </specifics>
 
