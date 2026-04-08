@@ -540,7 +540,7 @@ export default function FrontierEditionModalFlow() {
 			<Button
 				type="button"
 				onClick={() => setModalStep('application')}
-				className="h-[50px] min-w-[206px] rounded-full border border-[rgba(36,36,36,0.25)] bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] px-6 text-base font-semibold leading-none text-white shadow-[0_0_35.5px_rgba(0,0,0,0.06)] hover:bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] hover:brightness-110">
+				className="h-[50px] min-w-[206px] cursor-pointer rounded-full border border-[rgba(36,36,36,0.25)] bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] px-6 text-base font-semibold leading-none text-white shadow-[0_0_35.5px_rgba(0,0,0,0.06)] hover:bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] hover:brightness-110">
 				Join Now
 			</Button>
 

@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
 import { usePathname, useRouter } from 'next/navigation';
-import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import { cn } from '@/lib/utils';
-import { PLACEHOLDER_LINKS } from '@/lib/site';
 
 const navLinks = [
 	{ label: 'RING', href: '#ring' },
@@ -59,7 +57,7 @@ export default function Header() {
 		};
 	}, []);
 
-	const scrollTo = (href: string) => {
+	const scrollTo = (href: string, instant = false) => {
 		setMenuOpen(false);
 
 		if (pathname !== '/') {
@@ -68,12 +66,18 @@ export default function Header() {
 		}
 
 		if (lenis) {
-			lenis.scrollTo(href);
+			lenis.scrollTo(href, { immediate: instant });
 			return;
 		}
 
 		const el = document.querySelector(href);
-		if (el) el.scrollIntoView({ behavior: 'smooth' });
+		if (el) {
+			if (instant) {
+				el.scrollIntoView({ behavior: 'auto' });
+			} else {
+				el.scrollIntoView({ behavior: 'smooth' });
+			}
+		}
 	};
 
 	const isDarkTheme = activeTheme === 'dark';
@@ -118,12 +122,12 @@ export default function Header() {
 						</button>
 					))}
 
-					<PlaceholderLink
-						href={PLACEHOLDER_LINKS.buyNow}
+					<button
+						onClick={() => scrollTo('#pioneer', true)}
 						className={cn('px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] cursor-pointer', themeTransitionClassName, desktopButtonClassName)}
 					>
-						Buy Now
-					</PlaceholderLink>
+						Join Now
+					</button>
 				</nav>
 
 				{/* Mobile hamburger */}
@@ -147,12 +151,12 @@ export default function Header() {
 								{link.label}
 							</button>
 						))}
-						<PlaceholderLink
-							href={PLACEHOLDER_LINKS.buyNow}
+						<button
+							onClick={() => scrollTo('#pioneer', true)}
 							className="mt-2 w-full px-6 py-3 border-none rounded-full bg-[#1d1d1f] text-white text-sm font-bold text-center"
 						>
-							Buy Now
-						</PlaceholderLink>
+							Join Now
+						</button>
 					</nav>
 				</div>
 			)}
