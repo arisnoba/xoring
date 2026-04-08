@@ -51,11 +51,11 @@ type StatusFilter = 'all' | FrontierApplicationStatus;
 type TokenFilter = 'all' | FrontierApplicationListItem['payment_token'];
 
 const STATUS_LABELS: Record<FrontierApplicationStatus, string> = {
-	submitted: '접수됨',
-	awaiting_payment: '입금 대기',
-	payment_confirmed: '입금 확인',
-	approved: '승인 완료',
-	rejected: '반려됨',
+	submitted: 'Submitted',
+	awaiting_payment: 'Awaiting Payment',
+	payment_confirmed: 'Payment Confirmed',
+	approved: 'Approved',
+	rejected: 'Rejected',
 };
 
 function formatDate(value: string | null) {
@@ -63,7 +63,7 @@ function formatDate(value: string | null) {
 		return '—';
 	}
 
-	return new Intl.DateTimeFormat('ko-KR', {
+	return new Intl.DateTimeFormat('en-US', {
 		year: 'numeric',
 		month: '2-digit',
 		day: '2-digit',
@@ -120,8 +120,8 @@ function DashboardLoadingState() {
 			<div className="flex flex-col items-center gap-4 text-center">
 				<div className="size-10 animate-spin rounded-full border-2 border-white/14 border-t-white/80" />
 				<div className="grid gap-1">
-					<p className="text-sm font-medium text-white/86">관리자 화면 불러오는 중</p>
-					<p className="text-xs text-white/48">신청 목록과 권한 상태를 확인하고 있습니다.</p>
+					<p className="text-sm font-medium text-white/86">Loading admin workspace</p>
+					<p className="text-xs text-white/48">Checking application data and access status.</p>
 				</div>
 			</div>
 		</div>
@@ -134,7 +134,7 @@ function DashboardMessageState({ title, message, ctaLabel }: { title: string; me
 			<Card className="w-full border-border/60 bg-card/90 backdrop-blur">
 				<CardHeader className="gap-3">
 					<Badge variant="outline" className="w-fit uppercase">
-						관리자 대시보드
+						Admin Dashboard
 					</Badge>
 					<CardTitle className="text-3xl font-semibold tracking-tight">{title}</CardTitle>
 					<CardDescription className="max-w-2xl text-sm leading-6">{message}</CardDescription>
@@ -146,7 +146,7 @@ function DashboardMessageState({ title, message, ctaLabel }: { title: string; me
 						{ctaLabel}
 					</Link>
 					<Badge variant="outline" className="uppercase">
-						정적 경로, RLS 보호
+						Static Route, RLS Protected
 					</Badge>
 				</CardContent>
 			</Card>
@@ -228,10 +228,10 @@ export default function AdminDashboardPanel() {
 		startTransition(async () => {
 			try {
 				await signOutAdmin();
-				toast.success('로그아웃되었습니다.');
+				toast.success('Signed out.');
 				router.replace(ADMIN_LOGIN_PATH);
 			} catch (error) {
-				const message = error instanceof Error ? error.message : '로그아웃에 실패했습니다.';
+				const message = error instanceof Error ? error.message : 'Failed to sign out.';
 				toast.error(message);
 			}
 		});
@@ -258,9 +258,9 @@ export default function AdminDashboardPanel() {
 				});
 
 				setActiveApplication(updated);
-				toast.success(`상태를 ${formatStatusLabel(nextStatus)}로 변경했습니다.`);
+				toast.success(`Status changed to ${formatStatusLabel(nextStatus)}.`);
 			} catch (error) {
-				const message = error instanceof Error ? error.message : '상태 변경에 실패했습니다.';
+				const message = error instanceof Error ? error.message : 'Failed to update status.';
 				toast.error(message);
 			}
 		});
@@ -271,7 +271,7 @@ export default function AdminDashboardPanel() {
 	}
 
 	if (state.kind === 'config-error' || state.kind === 'error') {
-		return <DashboardMessageState title="대시보드를 불러올 수 없습니다" message={state.message} ctaLabel="관리자 로그인으로 이동" />;
+		return <DashboardMessageState title="Unable to load the dashboard" message={state.message} ctaLabel="Go to admin sign-in" />;
 	}
 
 	if (state.kind === 'unauthenticated') {
@@ -280,7 +280,11 @@ export default function AdminDashboardPanel() {
 
 	if (state.kind === 'unauthorized') {
 		return (
-			<DashboardMessageState title="관리자 허용 목록이 필요합니다" message={`${state.email ?? '이 계정'}은 로그인되었지만 admin_users에 활성 행이 없습니다.`} ctaLabel="관리자 로그인으로 이동" />
+			<DashboardMessageState
+				title="Admin allowlist required"
+				message={`${state.email ?? 'This account'} is signed in, but no active row was found in admin_users.`}
+				ctaLabel="Go to admin sign-in"
+			/>
 		);
 	}
 
@@ -327,13 +331,13 @@ export default function AdminDashboardPanel() {
 
 					<SidebarContent>
 						<SidebarGroup>
-							<SidebarGroupLabel>목록</SidebarGroupLabel>
+							<SidebarGroupLabel>Browse</SidebarGroupLabel>
 							<SidebarGroupContent>
 								<SidebarMenu>
 									<SidebarMenuItem>
-										<SidebarMenuButton type="button" isActive tooltip="신청 목록">
+										<SidebarMenuButton type="button" isActive tooltip="Application list">
 											<InboxIcon />
-											<span>신청 목록</span>
+											<span>Application List</span>
 										</SidebarMenuButton>
 										<SidebarMenuBadge>{total}</SidebarMenuBadge>
 									</SidebarMenuItem>
@@ -344,13 +348,13 @@ export default function AdminDashboardPanel() {
 						<SidebarSeparator />
 
 						<SidebarGroup>
-							<SidebarGroupLabel>상태 보기</SidebarGroupLabel>
+							<SidebarGroupLabel>Status</SidebarGroupLabel>
 							<SidebarGroupContent>
 								<SidebarMenu>
 									<SidebarMenuItem>
-										<SidebarMenuButton type="button" isActive={selectedStatus === 'all'} onClick={() => setSelectedStatus('all')} tooltip="전체 신청">
+										<SidebarMenuButton type="button" isActive={selectedStatus === 'all'} onClick={() => setSelectedStatus('all')} tooltip="All applications">
 											<InboxIcon />
-											<span>전체 신청</span>
+											<span>All Applications</span>
 										</SidebarMenuButton>
 										<SidebarMenuBadge>{total}</SidebarMenuBadge>
 									</SidebarMenuItem>
@@ -378,15 +382,15 @@ export default function AdminDashboardPanel() {
 						</div>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<SidebarMenuButton render={<Link href="/" />} tooltip="랜딩 페이지로 이동">
+								<SidebarMenuButton render={<Link href="/" />} tooltip="Go to landing page">
 									<ArrowUpRightIcon />
-									<span>랜딩 페이지</span>
+									<span>Landing Page</span>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<SidebarMenuButton type="button" onClick={handleSignOut} tooltip="로그아웃">
+								<SidebarMenuButton type="button" onClick={handleSignOut} tooltip="Sign out">
 									<LogOutIcon />
-									<span>{isPending ? '로그아웃 중...' : '로그아웃'}</span>
+									<span>{isPending ? 'Signing out...' : 'Sign Out'}</span>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
@@ -400,12 +404,12 @@ export default function AdminDashboardPanel() {
 							<div className="flex items-center gap-5 px-4 py-3 sm:px-5">
 								<SidebarTrigger />
 								<Separator orientation="vertical" className="hidden h-8 sm:block" />
-								<h1 className="text-sm font-semibold tracking-tight text-foreground sm:text-base">Frontier 신청 현황</h1>
+								<h1 className="text-sm font-semibold tracking-tight text-foreground sm:text-base">Frontier Application Overview</h1>
 								<div className="ml-auto flex items-center gap-2">
 									<Badge variant="outline" className="hidden sm:inline-flex">
-										{visibleApplications.length}개 표시 중
+										Showing {visibleApplications.length}
 									</Badge>
-									<Badge variant="outline">읽기 전용</Badge>
+									<Badge variant="outline">Read Only</Badge>
 								</div>
 							</div>
 						</header>
@@ -414,43 +418,43 @@ export default function AdminDashboardPanel() {
 							<section className="grid gap-3 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)]">
 								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
 									<CardHeader className="gap-2">
-										<CardDescription>현재 표시 중인 신청</CardDescription>
+										<CardDescription>Visible applications</CardDescription>
 										<CardTitle className="text-3xl! font-semibold! tracking-tight">{visibleApplications.length}</CardTitle>
 									</CardHeader>
 									<CardContent className="pt-0 text-sm text-muted-foreground">
-										필터 적용 후 전체 {total}건 중 {visibleApplications.length}건을 보여줍니다.
+										Showing {visibleApplications.length} of {total} applications after filters are applied.
 									</CardContent>
 								</Card>
 								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
 									<CardHeader className="gap-2">
-										<CardDescription>다음 확인 필요</CardDescription>
+										<CardDescription>Needs review</CardDescription>
 										<CardTitle className="text-3xl! font-semibold! tracking-tight">{awaitingActionCount}</CardTitle>
 									</CardHeader>
-									<CardContent className="pt-0 text-sm text-muted-foreground">접수됨, 입금 대기, 입금 확인 상태를 합산합니다.</CardContent>
+									<CardContent className="pt-0 text-sm text-muted-foreground">Includes Submitted, Awaiting Payment, and Payment Confirmed.</CardContent>
 								</Card>
 								<Card size="sm" className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
 									<CardHeader className="gap-2">
-										<CardDescription>가장 최근 신청</CardDescription>
+										<CardDescription>Latest submission</CardDescription>
 										<CardTitle className="text-lg! font-semibold! tracking-tight">{formatDate(latestSubmission)}</CardTitle>
 									</CardHeader>
-									<CardContent className="pt-0 text-sm text-muted-foreground">승인 완료 {approvedCount}건</CardContent>
+									<CardContent className="pt-0 text-sm text-muted-foreground">{approvedCount} approved</CardContent>
 								</Card>
 							</section>
 
 							<Card className="border-border/60 bg-card/88 shadow-sm backdrop-blur">
 								<CardHeader className="gap-2">
-									<CardTitle>필터</CardTitle>
-									<CardDescription>이메일, 지갑 주소, 토큰, 신청 id로 검색할 수 있습니다. 상태와 토큰 필터를 함께 써서 목록 범위를 빠르게 줄일 수 있습니다.</CardDescription>
+									<CardTitle>Filters</CardTitle>
+									<CardDescription>Search by email, wallet address, token, or application ID. Combine status and token filters to narrow the list quickly.</CardDescription>
 								</CardHeader>
 								<CardContent className="flex flex-col gap-4">
 									<div className="relative">
 										<SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-										<Input value={query} onChange={event => setQuery(event.target.value)} placeholder="이메일, 지갑 주소, 토큰, 신청 id 검색" className="h-10 bg-background pl-9" />
+										<Input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search email, wallet, token, or application ID" className="h-10 bg-background pl-9" />
 									</div>
 									<div className="flex flex-wrap gap-2">
 										<Button type="button" variant={selectedStatus === 'all' ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedStatus('all')}>
 											<InboxIcon data-icon="inline-start" />
-											전체
+											All
 										</Button>
 										{statusCounts.map(item => (
 											<Button key={item.status} type="button" variant={selectedStatus === item.status ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedStatus(item.status)}>
@@ -461,7 +465,7 @@ export default function AdminDashboardPanel() {
 									</div>
 									<div className="flex flex-wrap gap-2">
 										<Button type="button" variant={selectedToken === 'all' ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedToken('all')}>
-											전체 토큰
+											All Tokens
 										</Button>
 										{tokenCounts.map(item => (
 											<Button key={item.token} type="button" variant={selectedToken === item.token ? 'secondary' : 'ghost'} size="sm" onClick={() => setSelectedToken(item.token)}>
@@ -475,16 +479,16 @@ export default function AdminDashboardPanel() {
 
 							<Card className="border-border/60 bg-card/92 shadow-sm backdrop-blur">
 								<CardHeader className="gap-2">
-									<CardTitle>최근 신청 목록</CardTitle>
-									<CardDescription>신청일, 이메일, 상태를 먼저 읽도록 구성했습니다. 보조 필드는 보이되 목록 밀도를 해치지 않는 선에서 유지합니다.</CardDescription>
+									<CardTitle>Recent applications</CardTitle>
+									<CardDescription>Prioritizes submission date, email, and status, while keeping supporting fields visible without reducing scan density.</CardDescription>
 								</CardHeader>
 								<CardContent className="px-0 sm:px-4">
 									{visibleApplications.length === 0 ? (
 										<div className="px-4 pb-4 sm:px-0 sm:pb-0">
 											<Card size="sm" className="border-dashed border-border/70 bg-muted/30">
 												<CardHeader className="gap-2">
-													<CardTitle>일치하는 항목이 없습니다</CardTitle>
-													<CardDescription>검색어를 지우거나 현재 상태 필터를 바꿔 보세요.</CardDescription>
+													<CardTitle>No matching applications</CardTitle>
+													<CardDescription>Clear the search or change the current filters.</CardDescription>
 												</CardHeader>
 											</Card>
 										</div>
@@ -494,13 +498,13 @@ export default function AdminDashboardPanel() {
 												<Table>
 													<TableHeader>
 														<TableRow>
-															<TableHead className="pl-4 sm:pl-2">신청일</TableHead>
-															<TableHead>신청자</TableHead>
-															<TableHead>상태</TableHead>
-															<TableHead className="hidden lg:table-cell">토큰</TableHead>
-															<TableHead className="hidden xl:table-cell">지갑</TableHead>
-															<TableHead className="hidden 2xl:table-cell">승인 시간</TableHead>
-															<TableHead className="pr-4 text-right sm:pr-2">관리</TableHead>
+															<TableHead className="pl-4 sm:pl-2">Submitted</TableHead>
+															<TableHead>Applicant</TableHead>
+															<TableHead>Status</TableHead>
+															<TableHead className="hidden lg:table-cell">Token</TableHead>
+															<TableHead className="hidden xl:table-cell">Wallet</TableHead>
+															<TableHead className="hidden 2xl:table-cell">Reviewed</TableHead>
+															<TableHead className="pr-4 text-right sm:pr-2">Actions</TableHead>
 														</TableRow>
 													</TableHeader>
 													<TableBody>
@@ -509,7 +513,7 @@ export default function AdminDashboardPanel() {
 																<TableCell className="pl-4 align-top sm:pl-2">
 																	<div className="grid gap-1">
 																		<p className="font-medium leading-5">{formatDate(application.submitted_at)}</p>
-																		<p className="text-xs text-muted-foreground">상태 변경 {formatDate(application.status_changed_at)}</p>
+																		<p className="text-xs text-muted-foreground">Status changed {formatDate(application.status_changed_at)}</p>
 																	</div>
 																</TableCell>
 																<TableCell className="align-top">
@@ -535,7 +539,7 @@ export default function AdminDashboardPanel() {
 																<TableCell className="pr-4 align-top text-right sm:pr-2">
 																	<Button type="button" variant="ghost" size="sm" onClick={() => setActiveApplication(application)}>
 																		<PenLineIcon data-icon="inline-start" />
-																		상태 변경
+																		Change Status
 																	</Button>
 																</TableCell>
 															</TableRow>
@@ -550,7 +554,7 @@ export default function AdminDashboardPanel() {
 														<CardHeader className="gap-2">
 															<div className="flex items-start justify-between gap-3">
 																<div className="grid gap-1">
-																	<CardDescription>신청일</CardDescription>
+																	<CardDescription>Submitted</CardDescription>
 																	<CardTitle className="text-base font-semibold">{formatDate(application.submitted_at)}</CardTitle>
 																</div>
 																<StatusBadge status={application.status} />
@@ -558,27 +562,27 @@ export default function AdminDashboardPanel() {
 														</CardHeader>
 														<CardContent className="flex flex-col gap-3">
 															<div className="grid gap-1">
-																<p className="text-xs tracking-[0.18em] text-muted-foreground">신청자</p>
+																<p className="text-xs tracking-[0.18em] text-muted-foreground">APPLICANT</p>
 																<p className="text-sm font-medium text-foreground">{application.email}</p>
 																<p className="truncate text-xs text-muted-foreground">{application.id}</p>
 															</div>
 															<div className="grid gap-3 sm:grid-cols-2">
 																<div className="grid gap-1">
-																	<p className="text-xs tracking-[0.18em] text-muted-foreground">토큰</p>
+																	<p className="text-xs tracking-[0.18em] text-muted-foreground">TOKEN</p>
 																	<p className="text-sm uppercase text-foreground">{application.payment_token}</p>
 																</div>
 																<div className="grid gap-1">
-																	<p className="text-xs tracking-[0.18em] text-muted-foreground">승인 시간</p>
+																	<p className="text-xs tracking-[0.18em] text-muted-foreground">REVIEWED</p>
 																	<p className="text-sm text-foreground">{formatDate(application.reviewed_at)}</p>
 																</div>
 															</div>
 															<div className="grid gap-1">
-																<p className="text-xs tracking-[0.18em] text-muted-foreground">지갑</p>
+																<p className="text-xs tracking-[0.18em] text-muted-foreground">WALLET</p>
 																<p className="truncate font-mono text-xs text-muted-foreground">{application.wallet_address}</p>
 															</div>
 															<Button type="button" variant="outline" size="sm" onClick={() => setActiveApplication(application)}>
 																<PenLineIcon data-icon="inline-start" />
-																상태 변경
+																Change Status
 															</Button>
 														</CardContent>
 													</Card>
@@ -602,8 +606,10 @@ export default function AdminDashboardPanel() {
 				}}>
 				<DialogContent className="dark max-w-[calc(100%-2rem)] border-white/10 bg-[#1a1a1a] text-white sm:max-w-lg">
 					<DialogHeader>
-						<DialogTitle className="text-white">상태 변경</DialogTitle>
-						<DialogDescription className="text-white/50">{activeApplication ? `${activeApplication.email}의 현재 상태를 변경합니다.` : '선택한 신청의 상태를 변경합니다.'}</DialogDescription>
+						<DialogTitle className="text-white">Change Status</DialogTitle>
+						<DialogDescription className="text-white/50">
+							{activeApplication ? `Update the current status for ${activeApplication.email}.` : 'Update the status for the selected application.'}
+						</DialogDescription>
 					</DialogHeader>
 
 					{activeApplication ? (
@@ -612,9 +618,9 @@ export default function AdminDashboardPanel() {
 								<div className="grid gap-2">
 									<p className="text-sm font-medium text-white">{activeApplication.email}</p>
 									<div className="flex flex-wrap items-center gap-2 text-xs text-white/50">
-										<span>현재 상태</span>
+										<span>Current status</span>
 										<StatusBadge status={activeApplication.status} />
-										<span>최근 변경 {formatDate(activeApplication.status_changed_at)}</span>
+										<span>Last changed {formatDate(activeApplication.status_changed_at)}</span>
 									</div>
 								</div>
 							</div>
@@ -636,14 +642,14 @@ export default function AdminDashboardPanel() {
 					) : null}
 
 					<DialogFooter className="items-center justify-between sm:flex-row sm:justify-between">
-						<p className="text-xs text-white/40">승인 또는 반려로 바꾸면 승인 시간이 자동으로 기록됩니다.</p>
+						<p className="text-xs text-white/40">Changing to Approved or Rejected automatically records the review time.</p>
 						<Button
 							type="button"
 							variant="outline"
 							onClick={() => setActiveApplication(null)}
 							disabled={isUpdatingStatus}
 							className="border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white">
-							닫기
+							Close
 						</Button>
 					</DialogFooter>
 				</DialogContent>
