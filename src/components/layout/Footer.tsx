@@ -23,6 +23,7 @@ export default function Footer() {
 						<p className="text-white/85">DEEPCON Inc.</p>
 						<p>CEO | Kim Dong Seok</p>
 						<p>Business Registration Number | 830-88-03497</p>
+						<p>E-commerce Registration Number | 제2026-서울서초-1620호</p>
 						<p>Address | 1F, 15 Gangnam-daero 89-gil, Seocho-gu, Seoul, Republic of Korea</p>
 						<p>
 							Contact |{' '}
