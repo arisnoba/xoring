@@ -18,7 +18,7 @@ const overlayCopy = [
 	'the deeper you connect.',
 	'',
 	'Meet XORing,',
-	"the world's first social smart ring.",
+	'The World’s First Real Human Social Smart Ring',
 ];
 
 // 앵커 근처 판정 허용 범위
@@ -80,7 +80,8 @@ export default function HeroSection() {
 			gsap.set(overlayText, { opacity: 0, y: 20 });
 
 			if (!prefersReducedMotion && introLogo && introStoreButtons && introRingArtwork) {
-				gsap.timeline()
+				gsap
+					.timeline()
 					.from(introLogo, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' })
 					.from(introRingArtwork, { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'power2.out' }, 0.15)
 					.from(introStoreButtons, { opacity: 0, y: 40, duration: 0.7, ease: 'power2.out' }, 0.3);
@@ -108,9 +109,7 @@ export default function HeroSection() {
 			// scrub: true — Lenis가 스크롤을 당길 때 애니메이션이 자연스럽게 따라옴
 			// snap 없음 — lenis.scrollTo가 정확한 앵커까지 이동 담당
 			const animTl = gsap.timeline();
-			animTl
-				.to(slider, { y: '0%', ease: 'none', duration: 1 }, 0)
-				.to(overlayText, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 0.5);
+			animTl.to(slider, { y: '0%', ease: 'none', duration: 1 }, 0).to(overlayText, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 0.5);
 
 			ScrollTrigger.create({
 				trigger: section,
@@ -118,13 +117,23 @@ export default function HeroSection() {
 				end: () => `+=${window.innerHeight}`,
 				scrub: true,
 				animation: animTl,
-				onUpdate: (self) => {
+				onUpdate: self => {
 					syncHeroHeaderTheme(self.progress > 0.5 ? 'dark' : 'light');
 				},
-				onLeave: () => { isHeroActive.value = false; syncHeroHeaderTheme('dark'); },
-				onLeaveBack: () => { isHeroActive.value = false; syncHeroHeaderTheme('light'); },
-				onEnter: () => { isHeroActive.value = true; },
-				onEnterBack: () => { isHeroActive.value = true; },
+				onLeave: () => {
+					isHeroActive.value = false;
+					syncHeroHeaderTheme('dark');
+				},
+				onLeaveBack: () => {
+					isHeroActive.value = false;
+					syncHeroHeaderTheme('light');
+				},
+				onEnter: () => {
+					isHeroActive.value = true;
+				},
+				onEnterBack: () => {
+					isHeroActive.value = true;
+				},
 			});
 
 			// lenis.scrollTo로 앵커까지 부드럽게 이동 — 이동 중 scrub이 자연스럽게 따라옴
