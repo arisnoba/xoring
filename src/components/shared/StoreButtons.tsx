@@ -1,6 +1,5 @@
-import PlaceholderLink from '@/components/shared/PlaceholderLink';
 import { cn } from '@/lib/utils';
-import { PLACEHOLDER_LINKS } from '@/lib/site';
+import { STORE_LINKS } from '@/lib/site';
 import type { SiteMessages } from '@/lib/i18n';
 
 interface StoreButtonsProps {
@@ -17,7 +16,7 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 	const stores = [
 		{
 			key: 'apple',
-			href: PLACEHOLDER_LINKS.appStore,
+			href: STORE_LINKS.appStore,
 				eyebrow: copy.storeButtons[0].eyebrow,
 				label: copy.storeButtons[0].label,
 			icon: (
@@ -28,7 +27,7 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 		},
 		{
 			key: 'google',
-			href: PLACEHOLDER_LINKS.googlePlay,
+			href: STORE_LINKS.googlePlay,
 				eyebrow: copy.storeButtons[1].eyebrow,
 				label: copy.storeButtons[1].label,
 			icon: (
@@ -43,10 +42,11 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 	return (
 		<div className={cn('flex flex-row gap-3', className)}>
 			{orderedStores.map(store => (
-					<PlaceholderLink
-						key={store.key}
-						href={store.href}
-						alertMessage={copy.comingSoon}
+				<a
+					key={store.key}
+					href={store.href}
+					target="_blank"
+					rel="noopener noreferrer"
 					className={cn(
 						'flex items-center gap-3 px-5 py-3 rounded-full transition-all duration-200 hover:opacity-80 active:scale-[0.97] active:-translate-y-px cursor-pointer',
 						bg,
@@ -58,7 +58,7 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 						<div className="text-[10px] opacity-70 leading-none">{store.eyebrow}</div>
 						<div className="text-sm font-semibold leading-tight">{store.label}</div>
 					</div>
-				</PlaceholderLink>
+				</a>
 			))}
 		</div>
 	);
