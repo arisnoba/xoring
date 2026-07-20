@@ -1,14 +1,24 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { getMessages } from '@/lib/i18n';
 
 export const metadata = {
 	title: 'Privacy Policy | XO RING',
+	alternates: {
+		canonical: '/privacy/',
+		languages: {
+			en: '/privacy/',
+			'zh-CN': '/cn/privacy/',
+		},
+	},
 };
 
 export default function PrivacyPage() {
+	const messages = getMessages('en');
+
 	return (
 		<main id="main-content" className="min-h-screen bg-black text-white relative" data-header-theme="dark">
-			<Header />
+			<Header locale="en" copy={messages.header} />
 
 			<div className="mx-auto max-w-4xl px-4 py-32 pt-40 pb-32 font-sans">
 				<div className="mb-16">
@@ -514,7 +524,7 @@ export default function PrivacyPage() {
 				</div>
 			</div>
 
-			<Footer />
+			<Footer locale="en" copy={messages.footer} />
 		</main>
 	);
 }

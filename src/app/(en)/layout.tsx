@@ -1,45 +1,52 @@
 import type { Metadata, Viewport } from "next";
 import 'lenis/dist/lenis.css';
+import LocaleRedirect from '@/components/providers/LocaleRedirect';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { SITE_URL } from '@/lib/site';
-import "./globals.css";
-import "./globals.scss";
-import "../styles/_typography.scss";
-import "../styles/components/_section-overrides.scss";
+import { getMessages } from '@/lib/i18n';
+import "../globals.css";
+import "../globals.scss";
+import "../../styles/_typography.scss";
+import "../../styles/components/_section-overrides.scss";
+
+const messages = getMessages('en');
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "XORing — Wear Contribution. Create Connection.",
-  description:
-    "A wearable POC device where behavior becomes value and AI comes alive.",
+  title: messages.metadata.title,
+  description: messages.metadata.description,
   applicationName: 'XORing',
-  keywords: ['XORing', 'smart ring', 'wearable', 'social fitness', 'AI agent', 'web3'],
+  keywords: [...messages.metadata.keywords],
   alternates: {
     canonical: '/',
+    languages: {
+      en: '/',
+      'zh-CN': '/cn/',
+      'x-default': '/',
+    },
   },
   openGraph: {
-    title: "XORing — Wear Contribution. Create Connection.",
-    description:
-      "A wearable POC device where behavior becomes value and AI comes alive.",
+    title: messages.metadata.title,
+    description: messages.metadata.description,
     url: SITE_URL,
     siteName: 'XORing',
     locale: 'en_US',
+    alternateLocale: ['zh_CN'],
     type: 'website',
     images: [
       {
         url: '/assets/images/common/ogimage.png',
         width: 1200,
         height: 630,
-        alt: 'XORing social smart ring hero image',
+        alt: messages.metadata.ogImageAlt,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "XORing — Wear Contribution. Create Connection.",
-    description:
-      "A wearable POC device where behavior becomes value and AI comes alive.",
+    title: messages.metadata.title,
+    description: messages.metadata.description,
     images: ['/assets/images/common/ogimage.png'],
   },
   robots: {
@@ -87,11 +94,12 @@ export default function RootLayout({
         <link rel="preload" href="/assets/video/hero-ring-loop.mp4" as="video" type="video/mp4" />
       </head>
       <body className="min-h-full flex flex-col">
+        <LocaleRedirect />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-[calc(var(--safe-area-left)+1rem)] focus:top-[calc(var(--safe-area-top)+1rem)] focus:z-100 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-lg"
         >
-          Skip to main content
+          {messages.common.skipToContent}
         </a>
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
         <Toaster position="top-center" richColors />

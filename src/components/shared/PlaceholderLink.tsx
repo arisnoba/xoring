@@ -1,15 +1,16 @@
 'use client';
 
 import type { AnchorHTMLAttributes, MouseEvent } from 'react';
-import { PLACEHOLDER_ALERT_MESSAGE } from '@/lib/site';
 
-type PlaceholderLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
+type PlaceholderLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+	alertMessage: string;
+};
 
-export default function PlaceholderLink({ onClick, href = '#', ...props }: PlaceholderLinkProps) {
+export default function PlaceholderLink({ alertMessage, onClick, href = '#', ...props }: PlaceholderLinkProps) {
 	const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 		onClick?.(event);
-		window.alert(PLACEHOLDER_ALERT_MESSAGE);
+		window.alert(alertMessage);
 	};
 
 	return <a {...props} href={href} onClick={handleClick} />;

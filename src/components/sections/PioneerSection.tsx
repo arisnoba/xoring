@@ -3,8 +3,10 @@ import RingArtwork from '@/components/shared/RingArtwork';
 import FrontierEditionModalFlow from '@/components/sections/FrontierEditionModalFlow';
 import SectionContainer from '@/components/shared/SectionContainer';
 import { fadeIn, fadeUp, scaleUp } from '@/lib/motion';
+import type { SiteMessages } from '@/lib/i18n';
+import type { Locale } from '@/lib/locale';
 
-export default function PioneerSection() {
+export default function PioneerSection({ copy, frontierCopy, locale }: { copy: SiteMessages['pioneer']; frontierCopy: SiteMessages['frontier']; locale: Locale }) {
 	return (
 		<section id="pioneer" data-header-theme="light" className="relative isolate overflow-hidden bg-[#f6f6f4] text-[#111]">
 			<div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.52),rgba(255,255,255,0.2))]" />
@@ -21,24 +23,23 @@ export default function PioneerSection() {
 
 				<div className="mx-auto max-w-[760px] text-center">
 					<RevealOnScroll variants={fadeUp} delay={0.1}>
-						<h2 className="section-title text-balance text-[#35363a]">Frontier Edition</h2>
+						<h2 className="section-title text-balance text-[#35363a]">{copy.headline}</h2>
 					</RevealOnScroll>
 
 					<RevealOnScroll variants={fadeUp} delay={0.2}>
 						<div className="section-copy mt-10 space-y-8 text-[#202020] text-balance">
-							<p>We are inviting the first 000 pioneers to experience XO Ring before anyone else.</p>
-							<p>A wearable that turns your actions into real value.</p>
-							<p>
-								Not for everyone. <br />
-								No mass production.
-							</p>
+							{copy.paragraphs.map((paragraph, index) => (
+								<p key={`${paragraph}-${index}`}>
+									{paragraph.split('\n').map((line, lineIndex) => <span key={`${line}-${lineIndex}`} className="block">{line}</span>)}
+								</p>
+							))}
 						</div>
 					</RevealOnScroll>
 
 					<div className="mt-12 space-y-4">
 						<RevealOnScroll variants={fadeUp} delay={0.25}>
 							<div className="space-y-4">
-								<p className="text-sm font-normal text-[#9b9b9b] sm:text-base">Limited — 000 Spots</p>
+									<p className="text-sm font-normal text-[#9b9b9b] sm:text-base">{copy.spots}</p>
 								<p className="flex flex-wrap items-end justify-center gap-x-3 gap-y-1 bg-gradient-to-r from-[#999999] to-[#333333] bg-clip-text text-transparent">
 									<span className="text-[clamp(3.2rem,6.2vw,4.75rem)] font-black leading-none tracking-tight">99.9</span>
 									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">USDT</span>
@@ -49,7 +50,7 @@ export default function PioneerSection() {
 							</div>
 						</RevealOnScroll>
 						<RevealOnScroll variants={fadeUp} delay={0.3}>
-							<FrontierEditionModalFlow />
+								<FrontierEditionModalFlow copy={frontierCopy} locale={locale} />
 						</RevealOnScroll>
 					</div>
 				</div>

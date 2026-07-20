@@ -5,22 +5,32 @@ import { Menu, X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-const navLinks = [
-	{ label: 'RING', href: '#ring' },
-	{ label: 'APP', href: '#app' },
-	{ label: 'AIOS', href: '#aios' },
-];
+import type { SiteMessages } from '@/lib/i18n';
+import { getLocalizedPath, LOCALE_PREFERENCE_KEY, type Locale } from '@/lib/locale';
 
 type HeaderTheme = 'light' | 'dark';
 
-export default function Header() {
+export default function Header({ locale, copy }: { locale: Locale; copy: SiteMessages['header'] }) {
 	const lenis = useLenis();
 	const pathname = usePathname();
 	const router = useRouter();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeTheme, setActiveTheme] = useState<HeaderTheme>('light');
+	const homePath = locale === 'cn' ? '/cn' : '/';
+	const homeHref = getLocalizedPath(locale);
+	const isHomePath = pathname === homePath || pathname === `${homePath}/`;
+	const counterpartPath = locale === 'cn' ? pathname.replace(/^\/cn(?=\/|$)/, '') || '/' : pathname;
+	const targetLocale = locale === 'cn' ? 'en' : 'cn';
+	const languageHref = getLocalizedPath(targetLocale, counterpartPath);
+
+	const rememberLocalePreference = () => {
+		try {
+			window.localStorage.setItem(LOCALE_PREFERENCE_KEY, targetLocale);
+		} catch {
+			// Navigation should still work when storage is unavailable.
+		}
+	};
 
 	useEffect(() => {
 		const resolveSectionTheme = (): HeaderTheme => {
@@ -60,8 +70,8 @@ export default function Header() {
 	const scrollTo = (href: string, instant = false) => {
 		setMenuOpen(false);
 
-		if (pathname !== '/') {
-			router.push('/' + href);
+		if (!isHomePath) {
+			router.push(`${homeHref}${href}`);
 			return;
 		}
 
@@ -98,8 +108,8 @@ export default function Header() {
 					onClick={e => {
 						e.preventDefault();
 
-						if (pathname !== '/') {
-							router.push('/');
+						if (!isHomePath) {
+							router.push(homeHref);
 							return;
 						}
 
@@ -115,8 +125,8 @@ export default function Header() {
 				</a>
 
 				{/* Desktop Nav */}
-				<nav className="hidden md:flex items-center gap-8" aria-label="Primary">
-					{navLinks.map(link => (
+				<nav className="hidden md:flex items-center gap-8" aria-label={copy.primaryNavigation}>
+					{copy.nav.map(link => (
 						<button key={link.label} onClick={() => scrollTo(link.href)} className={cn('text-sm font-bold tracking-[0.15em] cursor-pointer', themeTransitionClassName, navClassName)}>
 							{link.label}
 						</button>
@@ -126,15 +136,22 @@ export default function Header() {
 						onClick={() => scrollTo('#pioneer', true)}
 						className={cn('px-6 py-2.5 border-none rounded-full text-sm font-bold tracking-[0.05em] cursor-pointer', themeTransitionClassName, desktopButtonClassName)}
 					>
-						Join Now
+						{copy.joinNow}
 					</button>
+					<a
+						href={languageHref}
+						onClick={rememberLocalePreference}
+						aria-label={copy.languageSwitchLabel}
+						className={cn('text-xs font-bold tracking-[0.12em] underline-offset-4 hover:underline', themeTransitionClassName, navClassName)}>
+						{copy.languageSwitch}
+					</a>
 				</nav>
 
 				{/* Mobile hamburger */}
 				<button
 					className={cn('md:hidden p-2 rounded-lg', themeTransitionClassName, mobileToggleClassName)}
 					onClick={() => setMenuOpen(!menuOpen)}
-					aria-label="Toggle menu"
+					aria-label={copy.toggleMenu}
 					aria-expanded={menuOpen}
 					aria-controls="mobile-menu"
 				>
@@ -145,8 +162,8 @@ export default function Header() {
 			{/* Mobile menu */}
 			{menuOpen && (
 				<div id="mobile-menu" className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-[#e5e5e5] py-6 px-4">
-					<nav className="flex flex-col gap-4" aria-label="Mobile">
-						{navLinks.map(link => (
+					<nav className="flex flex-col gap-4" aria-label={copy.mobileNavigation}>
+						{copy.nav.map(link => (
 							<button key={link.label} onClick={() => scrollTo(link.href)} className="text-sm font-bold tracking-[0.15em] text-[#1d1d1f] hover:text-[#3d3df5] py-2">
 								{link.label}
 							</button>
@@ -155,8 +172,11 @@ export default function Header() {
 							onClick={() => scrollTo('#pioneer', true)}
 							className="mt-2 w-full px-6 py-3 border-none rounded-full bg-[#1d1d1f] text-white text-sm font-bold text-center"
 						>
-							Join Now
+							{copy.joinNow}
 						</button>
+						<a href={languageHref} onClick={rememberLocalePreference} aria-label={copy.languageSwitchLabel} className="py-2 text-center text-sm font-bold tracking-[0.12em] text-[#1d1d1f] underline underline-offset-4">
+							{copy.languageSwitch}
+						</a>
 					</nav>
 				</div>
 			)}

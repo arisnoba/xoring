@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import type { SiteMessages } from '@/lib/i18n';
+import { getLocalizedPath, type Locale } from '@/lib/locale';
 
-export default function Footer() {
+export default function Footer({ locale, copy }: { locale: Locale; copy: SiteMessages['footer'] }) {
 	return (
 		<footer data-header-theme="dark" className="bg-black text-white/65 border-t border-white/10">
 			<div className="footer-section">
@@ -10,30 +12,30 @@ export default function Footer() {
 						<img src="/assets/images/common/logo.svg" alt="XO RING" width={236} height={52} className="h-auto w-[180px] opacity-20 invert" />
 
 						<div className="flex items-center gap-6 text-sm font-medium text-white/50">
-							<Link href="/terms" className="hover:text-white transition-colors duration-300">
-								Terms of Service
+							<Link href={getLocalizedPath(locale, '/terms')} className="hover:text-white transition-colors duration-300">
+								{copy.terms}
 							</Link>
-							<Link href="/privacy" className="hover:text-white transition-colors duration-300">
-								Privacy Policy
+							<Link href={getLocalizedPath(locale, '/privacy')} className="hover:text-white transition-colors duration-300">
+								{copy.privacy}
 							</Link>
 						</div>
 					</div>
 
 					<address className="space-y-2 text-sm font-medium not-italic leading-[1.8] text-white/55">
-						<p className="text-white/85">DEEPCON Inc.</p>
-						<p>CEO | Kim Dong Seok</p>
-						<p>Business Registration Number | 830-88-03497</p>
-						<p>E-commerce Registration Number | 제2026-서울서초-1620호</p>
-						<p>Address | 1F, 15 Gangnam-daero 89-gil, Seocho-gu, Seoul, Republic of Korea</p>
+						<p className="text-white/85">{copy.company}</p>
+						<p>{copy.ceo}</p>
+						<p>{copy.businessNumber}</p>
+						<p>{copy.ecommerceNumber}</p>
+						<p>{copy.address}</p>
 						<p>
-							Contact |{' '}
+							{copy.contact} |{' '}
 							<a href="mailto:info@thedeepcon.com" className="hover:text-white transition-colors duration-300">
 								info@thedeepcon.com
 							</a>
 						</p>
 					</address>
 
-					<p className="text-xs font-medium tracking-[0.08em] text-white/35">© DEEPCON Inc. All Rights Reserved.</p>
+					<p className="text-xs font-medium tracking-[0.08em] text-white/35">{copy.copyright}</p>
 				</div>
 			</div>
 		</footer>

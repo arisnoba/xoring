@@ -11,7 +11,7 @@ interface CardData {
 }
 
 interface ModeCardCarouselProps {
-	cards: CardData[];
+	cards: readonly CardData[];
 	images: string[];
 	variant: 'light' | 'dark';
 }

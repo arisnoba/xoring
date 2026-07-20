@@ -7,19 +7,9 @@ import { useLenis } from 'lenis/react';
 import HeroRingVideo from '@/components/shared/HeroRingVideo';
 import SectionContainer from '@/components/shared/SectionContainer';
 import StoreButtons from '@/components/shared/StoreButtons';
-import { MANIFESTO } from '@/lib/constants';
+import type { SiteMessages } from '@/lib/i18n';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const overlayCopy = [
-	'Not just another smart ring',
-	'that tracks your health.',
-	'The more you breathe and move,',
-	'the deeper you connect.',
-	'',
-	'Meet XORing,',
-	'The World’s First Real Human Social Smart Ring',
-];
 
 // 앵커 근처 판정 허용 범위
 const HERO_SCROLL_TOLERANCE = 80;
@@ -30,7 +20,7 @@ const HERO_WHEEL_MIN_DELTA = 5;
 
 type HeroStage = 'intro' | 'overlay';
 
-export default function HeroSection() {
+export default function HeroSection({ copy, commonCopy }: { copy: SiteMessages['hero']; commonCopy: SiteMessages['common'] }) {
 	const lenis = useLenis();
 	const sectionRef = useRef<HTMLElement>(null);
 	const sliderRef = useRef<HTMLDivElement>(null);
@@ -212,6 +202,7 @@ export default function HeroSection() {
 								</div>
 								<div className="hero-store-buttons flex w-full items-center justify-center">
 									<StoreButtons
+										copy={commonCopy}
 										variant="light"
 										googleFirst
 										className="gap-2 sm:gap-4 flex-row"
@@ -232,16 +223,16 @@ export default function HeroSection() {
 					<SectionContainer className="relative flex h-full min-h-0 items-center justify-center py-0">
 						<div ref={overlayTextRef} className="flex max-w-[860px] flex-col items-center text-center text-white">
 							<h2 className="section-title section-title--hero text-balance text-white">
-								{MANIFESTO.headline.split('\n').map((line, index) => (
-									<span key={line}>
+								{copy.headline.map((line, index) => (
+									<span key={`${line}-${index}`}>
 										{line}
-										{index < MANIFESTO.headline.split('\n').length - 1 && <br />}
+										{index < copy.headline.length - 1 && <br />}
 									</span>
 								))}
 							</h2>
 
 							<p className="hero-section__copy section-copy mt-10 text-balance text-white/92">
-								{overlayCopy.map((line, index) => (
+								{copy.overlay.map((line, index) => (
 									<span key={`${line}-${index}`}>
 										{line || <span className="block h-5" aria-hidden="true" />}
 										{line && <br />}

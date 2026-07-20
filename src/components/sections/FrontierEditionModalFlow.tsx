@@ -11,20 +11,20 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { getSupabaseBrowserClient, hasSupabaseBrowserConfig } from '@/lib/supabase/client';
+import type { SiteMessages } from '@/lib/i18n';
+import { getLocalizedPath, type Locale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
 
 const TOKEN_OPTIONS = [
 	{
 		key: 'usdt',
 		label: '99.9 USDT',
-		walletLabel: 'USDT Wallet Address',
 		amount: '99.9 USDT',
 		wallet: '0x0000-REPLACE-USDT-WALLET',
 	},
 	{
 		key: 'aios',
 		label: '9999 AIOS',
-		walletLabel: 'AIOS Wallet Address',
 		amount: '9999 AIOS',
 		wallet: '0x0000-REPLACE-AIOS-WALLET',
 	},
@@ -37,12 +37,6 @@ type FormErrors = Partial<Record<FormField, string>>;
 
 const FRONTIER_MODAL_VISUAL_SRC = '/assets/images/popup/kv.png';
 const FRONTIER_MODAL_BACKGROUND_SRC = '/assets/images/popup/bg.jpg';
-const FRONTIER_MODAL_VISUAL_ALT = 'XO RING Frontier Edition banner';
-const WARNING_TEXT = 'We are not responsible for issues caused by incorrect wallet addresses or transfers to different wallets. Please double-check before sending.';
-const EMAIL_HELPER = 'This email will be used for token exchange updates and shipping communication, so please make sure it is entered accurately.';
-const WALLET_HELPER = 'Your wallet address will only be used for whitelist registration and token transfer after final review.';
-const CONSENT_TEXT =
-	'I agree to provide my email address and Web3 wallet address in order to participate in the XORing service, and I consent to the use of this information for network participation, service provision, and related communications. I also understand that this service is not an investment product and that no profits are guaranteed.';
 const FRONTIER_APPLICATION_FUNCTION_NAME = 'frontier-application-submit';
 const FRONTIER_TERMS_VERSION = '2026-03-12';
 const FRONTIER_PRIVACY_VERSION = '2026-03-12';
@@ -67,40 +61,40 @@ function normalizeWalletAddress(value: string) {
 	return value.trim();
 }
 
-function validateEmail(value: string) {
+function validateEmail(value: string, copy: SiteMessages['frontier']) {
 	if (!value) {
-		return 'Please enter your email address.';
+		return copy.validation.emailRequired;
 	}
 
 	if (!EMAIL_PATTERN.test(value)) {
-		return 'Please enter a valid email address.';
+		return copy.validation.emailInvalid;
 	}
 
 	return undefined;
 }
 
-function validateWalletAddress(value: string) {
+function validateWalletAddress(value: string, copy: SiteMessages['frontier']) {
 	if (!value) {
-		return 'Please enter your wallet address.';
+		return copy.validation.walletRequired;
 	}
 
 	if (!EVM_WALLET_PATTERN.test(value)) {
-		return 'Please enter a valid EVM wallet address starting with 0x.';
+		return copy.validation.walletInvalid;
 	}
 
 	return undefined;
 }
 
-function validateApplicationForm({ email, walletAddress, agreed }: { email: string; walletAddress: string; agreed: boolean }) {
+function validateApplicationForm({ email, walletAddress, agreed }: { email: string; walletAddress: string; agreed: boolean }, copy: SiteMessages['frontier']) {
 	return {
-		email: validateEmail(normalizeEmail(email)),
-		walletAddress: validateWalletAddress(normalizeWalletAddress(walletAddress)),
-		agreed: agreed ? undefined : 'You must agree to the Terms of Service and Privacy Policy to continue.',
+		email: validateEmail(normalizeEmail(email), copy),
+		walletAddress: validateWalletAddress(normalizeWalletAddress(walletAddress), copy),
+		agreed: agreed ? undefined : copy.validation.agreementRequired,
 	} satisfies FormErrors;
 }
 
-async function parseFunctionError(error: unknown) {
-	const fallbackMessage = error instanceof Error ? error.message : 'Failed to submit your application. Please try again.';
+async function parseFunctionError(error: unknown, copy: SiteMessages['frontier'], locale: Locale) {
+	const fallbackMessage = locale === 'cn' ? copy.validation.submitFailed : error instanceof Error ? error.message : copy.validation.submitFailed;
 
 	if (typeof error === 'object' && error !== null && 'context' in error) {
 		const context = (error as { context?: unknown }).context;
@@ -113,7 +107,7 @@ async function parseFunctionError(error: unknown) {
 
 			if (payload?.error) {
 				return {
-					message: payload.error,
+					message: locale === 'cn' ? (payload.field === 'email' ? copy.validation.emailInvalid : payload.field === 'walletAddress' ? copy.validation.walletInvalid : copy.validation.submitFailed) : payload.error,
 					field: payload.field,
 				};
 			}
@@ -125,11 +119,11 @@ async function parseFunctionError(error: unknown) {
 	};
 }
 
-async function submitFrontierApplication({ email, walletAddress, selectedToken }: { email: string; walletAddress: string; selectedToken: TokenKey }) {
+async function submitFrontierApplication({ email, walletAddress, selectedToken, copy, locale }: { email: string; walletAddress: string; selectedToken: TokenKey; copy: SiteMessages['frontier']; locale: Locale }) {
 	const client = getSupabaseBrowserClient();
 
 	if (!client || !hasSupabaseBrowserConfig()) {
-		throw new FrontierApplicationSubmitError('Application submission is not available right now. Please try again later.');
+		throw new FrontierApplicationSubmitError(copy.validation.unavailable);
 	}
 
 	const { error } = await client.functions.invoke(FRONTIER_APPLICATION_FUNCTION_NAME, {
@@ -143,12 +137,12 @@ async function submitFrontierApplication({ email, walletAddress, selectedToken }
 	});
 
 	if (error) {
-		const parsedError = await parseFunctionError(error);
+		const parsedError = await parseFunctionError(error, copy, locale);
 		throw new FrontierApplicationSubmitError(parsedError.message, parsedError.field);
 	}
 }
 
-function CopyField({ label, value, placeholder }: { label?: string; value: string; placeholder?: string }) {
+function CopyField({ label, value, placeholder, copy }: { label?: string; value: string; placeholder?: string; copy: SiteMessages['frontier'] }) {
 	const displayValue = value || '';
 
 	const handleCopy = async () => {
@@ -156,9 +150,9 @@ function CopyField({ label, value, placeholder }: { label?: string; value: strin
 
 		try {
 			await navigator.clipboard.writeText(displayValue);
-			toast.success('Wallet address copied.');
+			toast.success(copy.copySuccess);
 		} catch {
-			toast.error('Copy failed. Please try again.');
+			toast.error(copy.copyFailed);
 		}
 	};
 
@@ -174,7 +168,7 @@ function CopyField({ label, value, placeholder }: { label?: string; value: strin
 					onClick={handleCopy}
 					disabled={!displayValue}
 					className="rounded-full border-[#dedede] bg-white text-[#757575] hover:bg-white hover:text-[#111]"
-					aria-label={label ? `${label} copy` : 'Copy wallet address'}>
+					aria-label={label ? `${label} ${copy.copySuffix}` : copy.copyWallet}>
 					<Copy />
 				</Button>
 			</div>
@@ -182,7 +176,7 @@ function CopyField({ label, value, placeholder }: { label?: string; value: strin
 	);
 }
 
-function DialogCloseButton({ onClick, inverted = false }: { onClick: () => void; inverted?: boolean }) {
+function DialogCloseButton({ onClick, copy, inverted = false }: { onClick: () => void; copy: SiteMessages['frontier']; inverted?: boolean }) {
 	return (
 		<Button
 			type="button"
@@ -190,7 +184,7 @@ function DialogCloseButton({ onClick, inverted = false }: { onClick: () => void;
 			size="icon-sm"
 			onClick={onClick}
 			className={cn('absolute right-4 top-4 z-20 rounded-full', inverted ? 'bg-white/6 text-white/78 hover:bg-white/10 hover:text-white' : 'text-[#cfcfcf] hover:text-[#8a8a8a]')}
-			aria-label="Close modal">
+			aria-label={copy.closeModal}>
 			<X />
 		</Button>
 	);
@@ -198,6 +192,8 @@ function DialogCloseButton({ onClick, inverted = false }: { onClick: () => void;
 
 function FrontierApplicationModal({
 	open,
+	copy,
+	locale,
 	selectedToken,
 	email,
 	walletAddress,
@@ -213,6 +209,8 @@ function FrontierApplicationModal({
 	onSubmit,
 }: {
 	open: boolean;
+	copy: SiteMessages['frontier'];
+	locale: Locale;
 	selectedToken: TokenKey;
 	email: string;
 	walletAddress: string;
@@ -248,11 +246,11 @@ function FrontierApplicationModal({
 				<div className="relative bg-white">
 					<div className="relative overflow-hidden bg-[#0c1116] bg-cover bg-center p-4" style={{ backgroundImage: `url(${FRONTIER_MODAL_BACKGROUND_SRC})` }}>
 						<div className="relative z-10 mx-auto w-full">
-							<Image src={FRONTIER_MODAL_VISUAL_SRC} alt={FRONTIER_MODAL_VISUAL_ALT} width={2710} height={1280} className="h-auto w-full" unoptimized priority />
+							<Image src={FRONTIER_MODAL_VISUAL_SRC} alt={copy.bannerAlt} width={2710} height={1280} className="h-auto w-full" unoptimized priority />
 						</div>
 					</div>
 
-					<DialogCloseButton onClick={() => onOpenChange(false)} inverted />
+					<DialogCloseButton onClick={() => onOpenChange(false)} copy={copy} inverted />
 				</div>
 
 				<div className="px-5 pb-5 pt-5 text-[#111] sm:px-6 sm:pb-6 sm:pt-6">
@@ -264,7 +262,7 @@ function FrontierApplicationModal({
 						}}>
 						<div className="flex flex-col gap-2">
 							<div className="flex flex-col gap-3">
-								<p className="text-left text-base font-semibold leading-normal text-[#222]">1. Please select the token you would like to exchange</p>
+								<p className="text-left text-base font-semibold leading-normal text-[#222]">{copy.selectToken}</p>
 								<div className="inline-flex rounded-full bg-[#f0f0f0] p-1">
 									{TOKEN_OPTIONS.map(option => {
 										const isSelected = option.key === selectedToken;
@@ -288,17 +286,17 @@ function FrontierApplicationModal({
 							<div className="flex flex-col gap-3 rounded-[18px] border border-[#a200ff] px-4 py-4">
 								<div className="flex flex-col gap-1.5">
 									<p className="text-left text-sm font-semibold leading-normal text-[#222]">
-										Copy the wallet address below and send the specified token. You will receive confirmation and next steps via email within 5 days.
+										{copy.transferGuide}
 									</p>
-									<CopyField value={selectedTokenOption.wallet} />
+									<CopyField value={selectedTokenOption.wallet} copy={copy} />
 								</div>
-								<p className="text-left text-sm font-medium leading-normal text-amber-500">{WARNING_TEXT}</p>
+								<p className="text-left text-sm font-medium leading-normal text-amber-500">{copy.warning}</p>
 							</div>
 						</div>
 
 						<div className="flex flex-col gap-3">
 							<label className="text-left text-base font-semibold leading-normal text-[#222]" htmlFor="frontier-email">
-								2. Please enter the email address to bind with your official account.
+								{copy.emailLabel}
 							</label>
 							<Input
 								id="frontier-email"
@@ -312,12 +310,12 @@ function FrontierApplicationModal({
 									errors.email ? 'ring-1 ring-[#ff5f5f]' : ''
 								)}
 							/>
-							<p className={cn('text-left text-sm font-medium leading-normal', errors.email ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.email ?? EMAIL_HELPER}</p>
+							<p className={cn('text-left text-sm font-medium leading-normal', errors.email ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.email ?? copy.emailHelper}</p>
 						</div>
 
 						<div className="flex flex-col gap-3">
 							<label className="text-left text-base font-semibold leading-normal text-[#222]" htmlFor="frontier-wallet">
-								3. Please enter your wallet address for whitelist registration and token transfer.
+								{copy.walletLabel}
 							</label>
 							<Input
 								id="frontier-wallet"
@@ -331,7 +329,7 @@ function FrontierApplicationModal({
 									errors.walletAddress ? 'ring-1 ring-[#ff5f5f]' : ''
 								)}
 							/>
-							<p className={cn('text-left text-sm font-medium leading-normal', errors.walletAddress ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.walletAddress ?? WALLET_HELPER}</p>
+							<p className={cn('text-left text-sm font-medium leading-normal', errors.walletAddress ? 'text-[#ff5f5f]' : 'text-amber-500')}>{errors.walletAddress ?? copy.walletHelper}</p>
 						</div>
 
 						<label className="flex items-start gap-3 rounded-[16px] bg-[#f7f7f7] px-4 py-4 text-left" htmlFor="frontier-agreement">
@@ -342,22 +340,22 @@ function FrontierApplicationModal({
 								className="mt-0.5 size-[18px] rounded-[5px] border-[#cfcfcf] data-checked:border-[#8f00ff] data-checked:bg-[#8f00ff]"
 							/>
 							<span className="text-sm leading-[1.6] text-[#555]">
-								{CONSENT_TEXT} For more details, please refer to the{' '}
-								<Link href="/terms" target="_blank" rel="noreferrer" className="font-semibold text-[#222] underline underline-offset-2">
-									Terms of Service
+								{copy.consent} {copy.consentPrefix}{' '}
+								<Link href={getLocalizedPath(locale, '/terms')} target="_blank" rel="noreferrer" className="font-semibold text-[#222] underline underline-offset-2">
+									{copy.terms}
 								</Link>{' '}
-								and{' '}
-								<Link href="/privacy" target="_blank" rel="noreferrer" className="font-semibold text-[#222] underline underline-offset-2">
-									Privacy Policy
+								{copy.and}{' '}
+								<Link href={getLocalizedPath(locale, '/privacy')} target="_blank" rel="noreferrer" className="font-semibold text-[#222] underline underline-offset-2">
+									{copy.privacy}
 								</Link>{' '}
-								below.
+								{copy.consentSuffix}
 							</span>
 						</label>
 						{errors.agreed ? <p className="text-left text-sm font-medium leading-normal text-[#ff5f5f]">{errors.agreed}</p> : null}
 						{submitError ? <p className="rounded-[14px] bg-[#fff1f1] px-4 py-3 text-left text-sm font-medium leading-normal text-[#d93025]">{submitError}</p> : null}
 
 						<Button type="submit" disabled={isSubmitting} className="h-12 rounded-full bg-[#222] text-sm font-semibold text-white hover:bg-[#222]/92 disabled:bg-[#bcbcbc]">
-							{isSubmitting ? 'Submitting...' : 'OK'}
+							{isSubmitting ? copy.submitting : copy.confirm}
 						</Button>
 					</form>
 				</div>
@@ -366,7 +364,7 @@ function FrontierApplicationModal({
 	);
 }
 
-function FrontierCompletionModal({ open, selectedToken, onOpenChange }: { open: boolean; selectedToken: TokenKey; onOpenChange: (open: boolean) => void }) {
+function FrontierCompletionModal({ open, selectedToken, copy, onOpenChange }: { open: boolean; selectedToken: TokenKey; copy: SiteMessages['frontier']; onOpenChange: (open: boolean) => void }) {
 	const lenis = useLenis();
 
 	useEffect(() => {
@@ -389,34 +387,34 @@ function FrontierCompletionModal({ open, selectedToken, onOpenChange }: { open: 
 				showCloseButton={false}
 				scrollable
 				className="relative max-w-2xl gap-0 overflow-hidden rounded-[30px] border-none bg-white p-0 text-left shadow-[0_28px_100px_rgba(0,0,0,0.34)]">
-				<DialogCloseButton onClick={() => onOpenChange(false)} />
+				<DialogCloseButton onClick={() => onOpenChange(false)} copy={copy} />
 				<div className="px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
 					<div className="flex flex-col gap-5">
 						<div className="flex flex-col gap-4 text-center">
 							<DialogTitle className="mx-auto text-balance text-[2rem] font-black leading-[0.95] tracking-[-0.04em] text-[#2f2f31] sm:text-[2.35rem] pt-5 pb-3">
-								Your Frontier Edition application is complete.
+								{copy.completeTitle}
 							</DialogTitle>
 							<DialogDescription className="mx-auto text-balance text-base leading-[1.65] text-[#555]">
-								<span className="block">Please send the token to the designated wallet below within 3 days.</span>
+								<span className="block">{copy.completeIntro}</span>
 								<span className="mt-8 block">
-									<span className="font-bold">Allocation is confirmed on a first-come</span>
+									<span className="font-bold">{copy.completeFirstComeStrong}</span>
 									<br />
-									first-served basis upon successful transfer to the specified address.
+									{copy.completeFirstComeRest}
 								</span>
-								<span className="mt-8 block">After verification of your application and transfer, an email will be sent to request your shipping address for XO Ring.</span>
+								<span className="mt-8 block">{copy.completeShipping}</span>
 							</DialogDescription>
 						</div>
 
 						<div className="flex flex-col gap-4 mt-5">
 							<p className="mx-auto text-center text-balance text-sm font-bold leading-normal text-[#ff2d2d]">
-								Here is your wallet address again. <br />
-								Please make sure it matches the selected token and send the exact amount.
+								{copy.completeWarning[0]} <br />
+								{copy.completeWarning[1]}
 							</p>
-							<CopyField label={`${selectedTokenOption.walletLabel} — ${selectedTokenOption.amount}`} value={selectedTokenOption.wallet} />
+							<CopyField label={`${copy.walletLabels[selectedToken]} — ${selectedTokenOption.amount}`} value={selectedTokenOption.wallet} copy={copy} />
 						</div>
 
 						<Button type="button" onClick={() => onOpenChange(false)} className="h-12 rounded-full bg-[#222] text-sm font-semibold text-white hover:bg-[#222]/92">
-							OK
+							{copy.confirm}
 						</Button>
 					</div>
 				</div>
@@ -425,7 +423,7 @@ function FrontierCompletionModal({ open, selectedToken, onOpenChange }: { open: 
 	);
 }
 
-export default function FrontierEditionModalFlow() {
+export default function FrontierEditionModalFlow({ copy, locale }: { copy: SiteMessages['frontier']; locale: Locale }) {
 	const [modalStep, setModalStep] = useState<ModalStep>(null);
 	const [selectedToken, setSelectedToken] = useState<TokenKey>('usdt');
 	const [email, setEmail] = useState('');
@@ -449,7 +447,7 @@ export default function FrontierEditionModalFlow() {
 		setEmail(value);
 		setErrors(current => ({
 			...current,
-			email: validateEmail(normalizeEmail(value)),
+			email: validateEmail(normalizeEmail(value), copy),
 		}));
 		setSubmitError(null);
 	};
@@ -458,7 +456,7 @@ export default function FrontierEditionModalFlow() {
 		setWalletAddress(value);
 		setErrors(current => ({
 			...current,
-			walletAddress: validateWalletAddress(normalizeWalletAddress(value)),
+			walletAddress: validateWalletAddress(normalizeWalletAddress(value), copy),
 		}));
 		setSubmitError(null);
 	};
@@ -495,7 +493,7 @@ export default function FrontierEditionModalFlow() {
 			email,
 			walletAddress,
 			agreed,
-		});
+		}, copy);
 
 		setErrors(nextErrors);
 		setSubmitError(null);
@@ -511,6 +509,8 @@ export default function FrontierEditionModalFlow() {
 				email,
 				walletAddress,
 				selectedToken,
+				copy,
+				locale,
 			});
 			setErrors({});
 			setModalStep('complete');
@@ -529,7 +529,7 @@ export default function FrontierEditionModalFlow() {
 				return;
 			}
 
-			setSubmitError('Failed to submit your application. Please try again.');
+			setSubmitError(copy.validation.submitFailed);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -541,11 +541,13 @@ export default function FrontierEditionModalFlow() {
 				type="button"
 				onClick={() => setModalStep('application')}
 				className="h-[50px] min-w-[206px] cursor-pointer rounded-full border border-[rgba(36,36,36,0.25)] bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] px-6 text-base font-semibold leading-none text-white shadow-[0_0_35.5px_rgba(0,0,0,0.06)] hover:bg-[linear-gradient(90deg,#0f0f0f_0%,#313131_100%)] hover:brightness-110">
-				Join Now
+				{copy.joinNow}
 			</Button>
 
 			<FrontierApplicationModal
 				open={modalStep === 'application'}
+				copy={copy}
+				locale={locale}
 				selectedToken={selectedToken}
 				email={email}
 				walletAddress={walletAddress}
@@ -561,7 +563,7 @@ export default function FrontierEditionModalFlow() {
 				onSubmit={handleSubmit}
 			/>
 
-			<FrontierCompletionModal open={modalStep === 'complete'} selectedToken={selectedToken} onOpenChange={handleCompletionOpenChange} />
+			<FrontierCompletionModal open={modalStep === 'complete'} selectedToken={selectedToken} copy={copy} onOpenChange={handleCompletionOpenChange} />
 		</>
 	);
 }

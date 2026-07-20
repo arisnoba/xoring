@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionContainer from '@/components/shared/SectionContainer';
 import RevealOnScroll from '@/components/shared/RevealOnScroll';
 import { fadeUp, scaleUp } from '@/lib/motion';
+import type { SiteMessages } from '@/lib/i18n';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +19,7 @@ const FRAME_SOURCES = Array.from({ length: FRAME_COUNT }, (_, index) => `/assets
 const SCROLL_SECTION_HEIGHT = 'h-[200vh]';
 const FRAME_SCRUB = 0.1;
 
-export default function TwoModesSection() {
+export default function TwoModesSection({ copy }: { copy: SiteMessages['twoModes'] }) {
 	const sectionRef = useRef<HTMLElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const oIndicatorRef = useRef<HTMLDivElement>(null);
@@ -121,8 +122,9 @@ export default function TwoModesSection() {
 					<RevealOnScroll variants={fadeUp}>
 						<div className="max-w-[860px] text-center">
 							<p className="text-balance section-title font-black">
-								<span className="block">One ring,</span>
-								<span className="block">Two Modes.</span>
+								{copy.headline.map((line, index) => (
+									<span key={`${line}-${index}`} className="block">{line}</span>
+								))}
 							</p>
 						</div>
 					</RevealOnScroll>
@@ -149,14 +151,13 @@ export default function TwoModesSection() {
 								<Image src="/assets/images/common/icon-o.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'brightness(0) invert(1)' }} />
 							</span>
 							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)] text-white">
-								<span className="block">Connect with</span>
-								<span className="block">the world</span>
+								{copy.social.map((line, index) => <span key={`${line}-${index}`} className="block">{line}</span>)}
 							</span>
 						</div>
 
 						<div className="flex h-[64px] w-[64px] flex-col items-center gap-2 text-center text-white md:gap-3 sm:h-[80px] sm:w-[80px] md:h-[116px] md:w-[116px]" aria-hidden="true">
 							<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
-							<span className="block whitespace-nowrap text-[0.65rem] font-medium text-white/95 sm:text-[0.8rem] md:text-[1.05rem]">Twist to switch</span>
+							<span className="block whitespace-nowrap text-[0.65rem] font-medium text-white/95 sm:text-[0.8rem] md:text-[1.05rem]">{copy.switchLabel}</span>
 							<span className="block h-5 w-px bg-white/80 sm:h-7 md:h-9" />
 						</div>
 
@@ -165,8 +166,7 @@ export default function TwoModesSection() {
 								<Image src="/assets/images/common/icon-x.svg" alt="" aria-hidden="true" width={116} height={116} className="mode-icon h-auto w-full" style={{ filter: 'none' }} />
 							</span>
 							<span className="mode-text block text-balance text-[0.75rem] font-medium leading-[1.15] sm:text-[0.9rem] md:text-[clamp(1.1rem,1.7vw,1.5rem)]" style={{ opacity: 0.45 }}>
-								<span className="block">Focus on</span>
-								<span className="block">yourself</span>
+								{copy.private.map((line, index) => <span key={`${line}-${index}`} className="block">{line}</span>)}
 							</span>
 						</div>
 					</RevealOnScroll>
