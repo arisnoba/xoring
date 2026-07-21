@@ -28,9 +28,13 @@ export default function StoreButtons({ className, variant = 'dark', googleFirst 
 		{
 			key: 'google',
 			href: STORE_LINKS.googlePlay,
-				eyebrow: copy.storeButtons[1].eyebrow,
-				label: copy.storeButtons[1].label,
-			icon: (
+			eyebrow: copy.storeButtons[1].eyebrow,
+			label: copy.storeButtons[1].label,
+			icon: copy.storeButtons[1].key === 'android' ? (
+				<svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+					<path d="M7.15 8.25h9.7l-.82-1.42 1.42-.82-.7-1.21-1.48.85A6.38 6.38 0 0 0 12 4.75c-1.19 0-2.31.33-3.27.9L7.25 4.8l-.7 1.21 1.42.82-.82 1.42ZM9.5 7.1a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM6.5 9.5h11v8.25c0 .97-.78 1.75-1.75 1.75H15v2a1 1 0 1 1-2 0v-2h-2v2a1 1 0 1 1-2 0v-2h-.75c-.97 0-1.75-.78-1.75-1.75V9.5Zm-2 1a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0v-5a1 1 0 0 1 1-1Zm15 0a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0v-5a1 1 0 0 1 1-1Z" />
+				</svg>
+			) : (
 				<svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
 					<path d="M3.18 23.76c.33.18.7.22 1.06.1l12.74-7.36-2.76-2.76-11.04 9.94v.08zm-1.46-1.42c-.09-.2-.13-.43-.13-.68V2.34c0-.25.04-.48.13-.68L13.5 12 1.72 22.34zM20.43 10.17l-2.62-1.52-3.08 3.07 3.08 3.08 2.65-1.53c.76-.44.76-1.66-.03-2.1zM4.24.14C3.88.02 3.51.06 3.18.24l11.04 9.93 2.76-2.76L4.24.14z" />
 				</svg>

@@ -216,11 +216,11 @@ const englishMessages = {
   pioneer: {
     headline: "Frontier Edition",
     paragraphs: [
-      "We are inviting the first 000 pioneers to experience XO Ring before anyone else.",
+      "We are inviting the first 10,000 pioneers to experience XO Ring before anyone else.",
       "A wearable that turns your actions into real value.",
       "Not for everyone.\nNo mass production.",
     ],
-    spots: "Limited — 000 Spots",
+    spots: "Limited — 10,000 Spots",
   },
   policy: {
     title: "Policy & Community Guidelines",
@@ -330,8 +330,8 @@ const chineseMessages = {
     skipToContent: "跳转到主要内容",
     comingSoon: "即将上线, 敬请期待",
     storeButtons: [
-      { key: "apple", eyebrow: "下载自", label: "App Store" },
-      { key: "google", eyebrow: "立即获取", label: "Google Play" },
+      { key: "apple", eyebrow: "立即获取", label: "iOS" },
+      { key: "android", eyebrow: "立即获取", label: "安卓" },
     ],
   },
   header: {
@@ -348,24 +348,23 @@ const chineseMessages = {
     languageSwitchLabel: "查看英文网站",
   },
   hero: {
-    headline: ["超越自我, ", "连接彼此"],
+    headline: ["超越自我", "连接彼此"],
     overlay: [
-      "不只是一枚",
-      "记录健康的智能戒指",
-      "你每一次呼吸与行动, ",
-      "都让彼此连接得更深",
+      "不只是一枚记录健康的智能戒指",
+      "你每一次呼吸、行动",
+      "都让彼此连接更深",
       "",
-      "认识 XORing, ",
+      "认识XORing",
       "全球首款真正连接真人社交的智能戒指",
     ],
   },
   beyondScreen: {
     headline: "走出屏幕",
     paragraphs: [
-      ["当我们每天长时间注视屏幕, ", "社交媒体上的形象真的代表你吗？"],
+      ["当你每天长时间注视屏幕", "社交媒体上的形象真的代表你吗？"],
       [
         "XORing 为此而生, ",
-        "帮助你找回那个常被无数数字身份",
+        "帮助你找回那个已被无数数字身份",
         "遮蔽的真实自我",
       ],
       [
@@ -376,7 +375,7 @@ const chineseMessages = {
     ],
   },
   twoModes: {
-    headline: ["一枚戒指, ", "两种模式"],
+    headline: ["一枚戒指", "两种模式"],
     social: ["连接", "整个世界"],
     private: ["专注", "真实自我"],
     switchLabel: "旋转切换",
@@ -384,13 +383,13 @@ const chineseMessages = {
   socialMode: {
     badge: "社交模式",
     ringAlt: "XORing 社交模式",
-    headline: ["互联世界, ", "尽在指尖"],
+    headline: ["互联世界", "尽在指尖"],
     subtext: "真正的社交网络不在屏幕里, 而在共同的节奏与呼吸之间",
     cards: [
       {
         title: "伙伴匹配",
         description:
-          "XO 会实时为你匹配生活方式和运动习惯相近的用户对方就在附近时, 轻碰戒指即可互动；相隔较远时, 也能通过应用连接并一起运动",
+          "XO 会实时为你匹配生活方式和运动习惯相近的用户。对方就在附近时, 轻碰戒指即可互动；相隔较远时, 也能通过应用连接并一起运动",
       },
       {
         title: "同频社群",
@@ -400,7 +399,7 @@ const chineseMessages = {
       {
         title: "情侣模式",
         description:
-          "即使生活忙碌, 也能安心了解彼此的状态这不是监控, 而是在完全尊重双方意愿的前提下, 温和地分享日常",
+          "即使生活忙碌, 也能安心了解彼此的状态。这不是监控, 而是在完全尊重双方意愿的前提下, 温和地分享日常",
       },
       {
         title: "位置共享",
@@ -418,22 +417,22 @@ const chineseMessages = {
       {
         title: "数据保护",
         description:
-          "你的个人健康数据始终属于你先进的加密技术确保未经明确同意, 生物特征与活动数据绝不会被共享",
+          "你的个人健康数据始终属于你。先进的加密技术确保未经明确同意, 生物特征与活动数据绝不会被共享",
       },
       {
         title: "独立训练",
         description:
-          "深度专注模式会静音社交通知记录每一次动作、每一次心跳和每一次呼吸, 只留下你与目标",
+          "深度专注模式会静音社交通知。记录每一次动作、每一次心跳和每一次呼吸, 只留下你与目标",
       },
       {
         title: "专注模式",
         description:
-          "屏蔽干扰, 进入深度专注状态XO Ring 会关注你的认知负荷, 并在注意力偏移时温和提醒",
+          "屏蔽干扰, 进入深度专注状态。XO Ring 会关注你的认知负荷, 并在注意力偏移时温和提醒",
       },
       {
         title: "钥匙与支付",
         description:
-          "将戒指作为安全钥匙和支付设备轻触即可解锁或支付, 顺畅、安全且始终触手可及",
+          "将戒指作为安全钥匙和支付设备。轻触即可解锁或支付, 顺畅、安全且始终触手可及",
       },
     ],
   },
@@ -469,7 +468,7 @@ const chineseMessages = {
   },
   application: {
     eyebrow: "应用",
-    headline: ["所有体验, ", "尽在掌中"],
+    headline: ["所有体验", "尽在掌中"],
     description: [
       "你的所有 XORing 数据都会无缝同步到应用",
       "即使没有戒指, 也可以使用应用",
@@ -478,7 +477,7 @@ const chineseMessages = {
     imageAlt: "移动应用界面",
   },
   poc: {
-    eyebrow: "AIOS · PoC",
+    eyebrow: "运动能量",
     headline: "汗水的价值",
     intro:
       "步行与奔跑流下的汗水会转化为真实价值, 让你的时间与坚持得到公平回报",
@@ -488,7 +487,7 @@ const chineseMessages = {
     cards: [
       {
         title: "从 PoW 到 PoC",
-        body: "计算机消耗能源挖矿的时代正在过去你的脚步与汗水将成为新的真实价值",
+        body: "计算机消耗能源挖矿的时代正在过去。你的脚步与汗水将成为新的真实价值",
       },
       {
         title: "行动即价值",
@@ -507,18 +506,18 @@ const chineseMessages = {
     headline: ["Web3.0 时代的", "全新身份"],
     paragraphs: [
       "它不只是一台智能设备",
-      "XORing 是你的全新数字身份, 证明你是庞大 AI 生态系统中的核心成员",
-      "记录行动, 让日常习惯转化为非凡价值\n从你的指尖开始体验",
+      "XORing是你的全新数字身份\n证明你是庞大AI生态系统中的核心成员",
+      "记录行动，让日常习惯转化为非凡价值\n从你的指尖开始体验",
     ],
   },
   pioneer: {
     headline: "先锋限量版",
     paragraphs: [
-      "我们正在邀请首批 000 位先锋, 抢先体验 XO Ring",
+      "我们正在邀请首批 10,000 位先锋, 抢先体验 XO Ring",
       "一款让你的行动转化为真实价值的可穿戴设备",
       "并非人人可得\n不做大规模量产",
     ],
-    spots: "限量 000 个名额",
+    spots: "限量 10,000 个名额",
   },
   policy: {
     title: "政策与社区准则",
