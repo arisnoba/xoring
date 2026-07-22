@@ -221,6 +221,7 @@ const englishMessages = {
       "Not for everyone.\nNo mass production.",
     ],
     spots: "Limited — 10,000 Spots",
+    tokenUnit: "AIOS",
   },
   policy: {
     title: "Policy & Community Guidelines",
@@ -462,7 +463,7 @@ const chineseMessages = {
       {
         title: "AI 行为智能体",
         description:
-          "“再消耗 400 千卡即可获得奖励”它会设定活动目标, 并在达成后发放 PoC 代币奖励",
+          "“再消耗 400 千卡即可获得 AI 积分” 它会设定活动目标，并在达成后发放 AI 积分",
       },
     ],
   },
@@ -483,11 +484,11 @@ const chineseMessages = {
       "步行与奔跑流下的汗水会转化为真实价值, 让你的时间与坚持得到公平回报",
     activityImageAlt: "活动数据界面",
     proof: "如果计算机可以通过解决复杂问题证明价值, 那么人的行动同样可以",
-    steps: ["佩戴 XORing", "采集活动数据", "贡献证明", "获取 AIOS"],
+    steps: ["佩戴 XORing", "采集活动数据", "数据贡献", "获得 AI 积分"],
     cards: [
       {
-        title: "从 PoW 到 PoC",
-        body: "计算机消耗能源挖矿的时代正在过去。你的脚步与汗水将成为新的真实价值",
+        title: "从算力时代到 AI 数据时代",
+        body: "计算机依赖算力创造价值的时代正在改变。你的脚步与汗水将成为新的数据价值",
       },
       {
         title: "行动即价值",
@@ -499,14 +500,14 @@ const chineseMessages = {
       },
     ],
     outro:
-      "仅使用 XORing 应用也能证明你的价值；佩戴戒指则可采集更丰富的数据并提升奖励",
+      "仅使用 XORing 应用也能记录你的数据贡献；佩戴戒指则可采集更丰富的数据并提升 AI 积分",
     phoneAlt: "XO 应用界面",
   },
   web3: {
-    headline: ["Web3.0 时代的", "全新身份"],
+    headline: ["AI 时代的全新身份"],
     paragraphs: [
       "它不只是一台智能设备",
-      "XORing是你的全新数字身份\n证明你是庞大AI生态系统中的核心成员",
+      "XORing 是你的全新数字身份\n连接 AI 数据网络的重要参与者",
       "记录行动，让日常习惯转化为非凡价值\n从你的指尖开始体验",
     ],
   },
@@ -518,6 +519,7 @@ const chineseMessages = {
       "并非人人可得\n不做大规模量产",
     ],
     spots: "限量 10,000 个名额",
+    tokenUnit: "AI POINT",
   },
   policy: {
     title: "政策与社区准则",

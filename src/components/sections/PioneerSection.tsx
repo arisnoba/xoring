@@ -45,7 +45,7 @@ export default function PioneerSection({ copy, frontierCopy, locale }: { copy: S
 									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">USDT</span>
 									<span className="pb-1 text-[clamp(3rem,5.8vw,4.5rem)] font-thin leading-none text-[#666666]">/</span>
 									<span className="text-[clamp(3.2rem,6.2vw,4.75rem)] font-black leading-none tracking-tight">9,999</span>
-									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">AIOS</span>
+									<span className="pb-2 text-[clamp(1.6rem,2.5vw,2.25rem)] font-black leading-none">{copy.tokenUnit}</span>
 								</p>
 							</div>
 						</RevealOnScroll>
